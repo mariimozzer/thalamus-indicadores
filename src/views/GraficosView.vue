@@ -1,10 +1,10 @@
 <template>
     <div class="form-check cabecalho">
-        <button class="botoes" @click="getClienteAno(), getTicketsAno(), getProdutosAno()">
+        <button v-b-tooltip.hover title="Ano inteiro!" class="botoes" @click="getClienteAno(), getTicketsAno(), getProdutosAno()">
             <i class="bi bi-calendar-minus"></i>
         </button>
         <div v-for="i in nomeDosMeses" :key="i">
-            <input @change="igualameses(), getClienteMes(), getTicketsMes(), getProdutosMes()" type="radio" class="btn-check"
+            <input @change="igualameses(), getClienteMes(), getTicketsMes(), getProdutosMes()" type="radio" class="btn-check botoes"
                 name="options-base" :id=i.id :value=i.id v-model="mes" autocomplete="off">
             <label style="font-family:Verdana; margin-left: 0.5rem;" class="btn botoes" :for=i.id>{{ i.nome }}</label>
         </div>
@@ -13,7 +13,7 @@
 
 
         <div class="card mb-3" style="max-width: 100%; border: 1px solid rgb(0, 0, 0); margin-top: 4rem;">
-            <div @click="mostrarComercial()" style="background-color: rgb(255, 153, 0, 0.863);" 
+            <div @click="mostrarComercial()" style="background-color: rgba(255, 153, 0, 0.863);"
             class="card-header titulo"><i id="iconeComercial" style="margin-right: 0.5rem;" 
                 class="bi bi-arrow-right"></i>Comercial</div>
             <div id="Comercial" style="display: none;">
