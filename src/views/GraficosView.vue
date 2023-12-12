@@ -1,4 +1,6 @@
 <template>
+<body>
+    
     <div class="form-check cabecalho">
         <button v-b-tooltip.hover title="Ano inteiro!" class="botoes" @click="getClienteAno(), getTicketsAno(), getProdutosAno()">
             <i class="bi bi-calendar-minus"></i>
@@ -6,14 +8,15 @@
         <div v-for="i in nomeDosMeses" :key="i">
             <input @change="igualameses(), getClienteMes(), getTicketsMes(), getProdutosMes()" type="radio" class="btn-check botoes"
                 name="options-base" :id=i.id :value=i.id v-model="mes" autocomplete="off">
-            <label style="font-family:Verdana; margin-left: 0.5rem;" class="btn botoes" :for=i.id>{{ i.nome }}</label>
+            <label style="color: rgba(255, 255, 255, 1);margin-left: 0.5rem; font-size: large;" class="btn botoes" :for=i.id>{{ i.nome }}</label>
         </div>
     </div>
-    <div style="display: flex;flex-flow: column ;width: 100%;padding: 1rem;">
 
-
+        <div style="display: flex;flex-flow: column ;width: 100%;padding: 1rem;">
+            
+            
         <div class="card mb-3" style="max-width: 100%; border: 1px solid rgb(0, 0, 0); margin-top: 4rem;">
-            <div @click="mostrarComercial()" style="background-color: rgba(255, 153, 0, 0.863);"
+            <div @click="mostrarComercial()" style="background-color: rgba(255, 167, 38, 1);"
             class="card-header titulo"><i id="iconeComercial" style="margin-right: 0.5rem;" 
                 class="bi bi-arrow-right"></i>Comercial</div>
             <div id="Comercial" style="display: none;">
@@ -28,36 +31,38 @@
 
 
         <div class="card mb-3" style="max-width: 100%; border: 1px solid rgb(0, 0, 0);">
-            <div @click="mostrarFinanceiro()" style="background-color: rgba(26, 206, 35, 0.863);"
-                class="card-header titulo"><i id="iconeFinanceiro" style="margin-right: 0.5rem;"
+            <div @click="mostrarFinanceiro()" style="background-color: rgba(129, 199, 132, 1);"
+            class="card-header titulo"><i id="iconeFinanceiro" style="margin-right: 0.5rem;"
                     class="bi bi-arrow-right"></i>Financeiro</div>
             <div id="Financeiro" style="display: none;">
                 <canvas id="ChartTickets"></canvas>
             </div>
         </div>
 
+        
         <div class="card mb-3" style="max-width: 100%; border: 1px solid rgb(0, 0, 0);">
-            <div @click="mostrarProdução()" style="background-color: rgba(250, 0, 0, 0.863);"
+            <div @click="mostrarProdução()" style="background-color: rgba(244, 67, 54, 1);"
                 class="card-header titulo"><i id="iconeProdução" style="margin-right: 0.5rem;"
                     class="bi bi-arrow-right"></i>Produção</div>
             <div id="Produção" style="display: none;">
                 <canvas id=""></canvas>
             </div>
         </div>
+        
 
         <div class="card mb-3" style="max-width: 100%; border: 1px solid rgb(0, 0, 0);">
-            <div @click="mostrarInjeção()" style="background-color: rgb(0, 158, 250);"
+            <div @click="mostrarInjeção()" style="background-color: rgba(66, 165, 245, 1);"
                 class="card-header titulo"><i id="iconeInjeção" style="margin-right: 0.5rem;"
                     class="bi bi-arrow-right"></i>Injeção</div>
-            <div id="Injeção" style="display: none;">
+                    <div id="Injeção" style="display: none;">
                 <canvas id=""></canvas>
             </div>
         </div>
-
+        
 
 
     </div>
-
+    
     <div style="overflow: auto" class="modal-mask" v-if="showModal" @click="fecharModalFora">
         <div style="max-height: 70%" class="modal-container">
             <div class="conteudomodal">
@@ -73,6 +78,7 @@
             </div>
         </div>
     </div>
+</body>
 </template>
 
 <script>
@@ -301,8 +307,8 @@ export default {
                         data: this.dataGrafico,
                         type: 'line',
                         label: 'Clientes Conquistados',
-                        backgroundColor: 'rgb(255, 123, 0)',
-                        borderColor: 'rgb(255, 123, 0)',
+                        backgroundColor: 'rgba(255, 167, 38, 1)',
+                        borderColor: 'rgba(255, 167, 38, 1)',
                         borderWidth: 2,
                         tension: 0.3,
                         pointRadius: 2.2,
@@ -344,8 +350,8 @@ export default {
                         data: this.dataGrafico,
                         type: 'line',
                         label: 'Clientes Conquistados',
-                        backgroundColor: 'rgb(255, 123, 0)',
-                        borderColor: 'rgb(255, 123, 0)',
+                        backgroundColor: 'rgba(255, 167, 38, 1)',
+                        borderColor: 'rgba(255, 167, 38, 1)',
                         borderWidth: 1.5,
                         tension: 0.3,
                         pointRadius: 2.2,
@@ -438,8 +444,8 @@ export default {
                         data: this.dataGraficoTickets,
                         type: 'line',
                         label: 'Tickets',
-                        backgroundColor: 'rgba(26, 206, 35, 0.863)',
-                        borderColor: 'rgb(26, 206, 35)',
+                        backgroundColor: 'rgba(129, 199, 132, 1)',
+                        borderColor: 'rgba(129, 199, 132, 1)',
                         borderWidth: 2,
                         tension: 0.3,
                         pointRadius: 2.2,
@@ -481,8 +487,8 @@ export default {
                         data: this.dataGraficoTickets,
                         type: 'line',
                         label: 'Tickets',
-                        backgroundColor: 'rgb(26, 206, 35)',
-                        borderColor: 'rgb(26, 206, 35)',
+                        backgroundColor: 'rgba(129, 199, 132, 1)',
+                        borderColor: 'rgba(129, 199, 132, 1)',
                         borderWidth: 1.5,
                         tension: 0.3,
                         pointRadius: 2.2,
@@ -567,8 +573,8 @@ export default {
                         data: this.dataGraficoProdutos,
                         type: 'line',
                         label: 'Tickets',
-                        backgroundColor: 'rgb(255, 123, 0)',
-                        borderColor: 'rgb(255, 123, 0)',
+                        backgroundColor: 'rgba(255, 167, 38, 1)',
+                        borderColor: 'rgba(255, 167, 38, 1)',
                         borderWidth: 2,
                         tension: 0.3,
                         pointRadius: 2.2,
@@ -610,8 +616,8 @@ export default {
                         data: this.dataGraficoProdutos,
                         type: 'line',
                         label: 'Produtos Vendidos',
-                        backgroundColor: 'rgb(255, 123, 0)',
-                        borderColor: 'rgb(255, 123, 0)',
+                        backgroundColor: 'rgba(255, 167, 38, 1)',
+                        borderColor: 'rgba(255, 167, 38, 1)',
                         borderWidth: 1.5,
                         tension: 0.3,
                         pointRadius: 2.2,
@@ -696,8 +702,6 @@ canvas {
 .titulo {
     color: white;
     font-size: larger;
-    font-family: Verdana;
-    border-bottom: 1px solid rgb(0, 0, 0);
 }
 
 .titulo:hover {
@@ -706,12 +710,14 @@ canvas {
     box-shadow: rgba(26, 26, 26, 0.200) 3px 3px 6px 0px inset, rgba(26, 26, 26, 0.200) -3px -3px 6px 1px inset;
 }
 button {
+    color: rgba(255, 255, 255, 1);
     background-color: transparent;
     border: none;
     font-size: larger;
 }
 
 .cabecalho {
+    color: rgba(255, 255, 255, 1);
     display: flex;
     flex-flow: row;
     align-content: center;
@@ -720,7 +726,7 @@ button {
     width: 100%;
     position: fixed;
     z-index: 999999;
-    background-color: white;
+    background-color: rgba(33, 37, 41, 1);
     border-bottom: 1px solid black;
 }
 
