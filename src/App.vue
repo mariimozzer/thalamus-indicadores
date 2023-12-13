@@ -9,7 +9,7 @@
 <style>
 body {
     font-family: 'montserrat', sans-serif;
-    background-color: rgb(196, 196, 196) !important;
+    background-color: rgba(234, 234, 234, 1) !important;
     
 }
 </style>
