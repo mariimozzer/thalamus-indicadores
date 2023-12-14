@@ -1,6 +1,6 @@
 <template>
 <body>
-    
+    <!-- CRIA UM CABEÇALHO PARA SELEÇÃO DE MÊS E UM BOTÃO PARA EXIBIR O ANO TODO -->
     <div class="form-check cabecalho">
         <button v-b-tooltip.hover title="Ano inteiro!" class="botoes" @click="getClienteAno(), getTicketsAno(), getProdutosAno()">
             <i class="bi bi-calendar-minus"></i>
@@ -12,9 +12,9 @@
         </div>
     </div>
 
+
+    <!-- CRIA DIV'S COM CANVAS QUE SERÃO PREENCHIDOS COM OS GRAFICOS GERADOS NOS METHODS SENDO IDENTIFICADOS POR ID -->
         <div style="display: flex;flex-flow: column ;width: 100%;padding: 1rem;">
-            
-            
         <div class="card mb-3" style="max-width: 100%; border: 1px solid rgb(0, 0, 0); margin-top: 4rem;">
             <div @click="mostrarComercial()" style="background-color: rgba(255, 167, 38, 1);"
             class="card-header titulo"><i id="iconeComercial" style="margin-right: 0.5rem;" 
@@ -210,6 +210,7 @@ export default {
         this.getProdutosAno()
     },
     methods: {
+        // FUNÇÃO PARA OCULTAR/MOSTRAR E MODIFICAR O ICONE DA DIV EM QUE ESTÁ O GRAFICO
         mostrarComercial() {
             if (document.getElementById('Comercial').style.display != "none") {
                 document.getElementById('Comercial').style.display = "none";
@@ -270,19 +271,20 @@ export default {
                 this.showModalSprint = false;
             }
         },
-
+// OS DADOS TEMPORAIS VEM DO END POINT EM FORMATO DE SEMANA DO ANO, ESTÁ FUNÇÃO DIZ A QUAL MES A SEMANA CORRESPONDE
         calcularMesDaSemana() {
             const data = new Date(this.ano, 0, 1);
             data.setDate(data.getDate() + (this.semana - 1) * 7);
             this.mesSemana = data.getMonth() + 1;
         },
-
+// IGUALA OS MESES PARA QUANDO O BOTÃO DO MES QUE ESTÁ NO CABEÇALHO SEJA CLICADO TODOS OS GRAFICOS MOSTREM O MES SELECIONADO
         igualameses() {
             this.mesTickets = this.mes;
             this.mesProdutos = this.mes
         },
-
+// GERA UM GRÁFICO
         getClienteMes() {
+            // PUXA OS DADOS DO BACKEND PASSANDO MES E ANO
             axios.post('http://192.168.0.6:8000/api/omie/oportunidade/cliente-conquistado', {
                 mes: this.mes,
                 ano: this.ano,
@@ -292,6 +294,7 @@ export default {
                     this.dados.forEach((item) => {
                         item.semana = item.semana.toString().substring(4);
                     });
+
                     this.labels = this.dados.map((item) => item.semana);
                     this.dataGrafico = this.dados.map((item) => item.regSemana);
                     this.datasets = [];
@@ -323,32 +326,37 @@ export default {
         },
 
         getClienteAno() {
+            // PUXA OS DADOS PASSANDO APENAS ANO
             this.mes = ""
             axios.post('http://192.168.0.6:8000/api/omie/oportunidade/cliente-conquistado', {
                 ano: this.ano,
             })
                 .then((response) => {
                     this.dados = response.data;
+                    // RETIRA AS 4 PRIMEIRAS LETRAS QUE SÃO O ANO, DEIXANDO APENAS AS DUAS ULTIMAS QUE SÃO A SEMANA DO ANO
                     this.dados.forEach((item) => {
                         item.semana = item.semana.toString().substring(4);
                     });
-
+                    // CRIA UMA SEGUNDA ARRAY E CONVERTE AS STRINGS EM NUMEROS INTEIROS
                     this.dadosFormatadosC = this.dados.map((item) => parseInt(item.semana, 10));
+                    //TRANSFORMA O NUMERO DA SEMANA NO NUMERO DO MES QUE ELA CORRESPONDE: EXEMPLO 04(SEMANA 04) RETORNA 01(JANEIRO)
                     this.dadosFormatadosC = this.dadosFormatadosC.map((semana) => {
                         const data = new Date(this.ano, 0, 1);
                         data.setDate(data.getDate() + (semana - 1) * 7);
                         return data.getMonth() + 1;
                     });
+                    // TRANASFORMA OS NUMEROS DOS MESES EM STRINGS COM OS NOMES DOS MESES
                     this.dadosFormatadosC = this.dadosFormatadosC.map((numero) => this.nomesDosMesessemid[numero - 1])
 
 
+                    // DEFINE AS VARIAVEIS NECESSARIAS PARA CONSTRUIR O GRÁFICO: LABELS, DATASETS
+                    this.dataGrafico = this.dados.map((item) => item.regSemana);
 
                     this.labels = this.dadosFormatadosC
-                    this.dataGrafico = this.dados.map((item) => item.regSemana);
                     this.datasets = [];
                     this.datasets.push({
                         data: this.dataGrafico,
-                        type: 'line',
+                        type: 'bar',
                         label: 'Clientes Conquistados',
                         backgroundColor: 'rgba(255, 167, 38, 1)',
                         borderColor: 'rgba(255, 167, 38, 1)',
@@ -357,18 +365,19 @@ export default {
                         pointRadius: 2.2,
                         pointHoverRadius: 5,
                     })
-
+                    // CHAMA A FUNÇÃO QUE CRIA O GRÁFICO
                     this.renderChartClientes()
                 })
                 .catch((error) => {
                     console.error(error);
                 });
         },
-
+        //CRIA O GRÁFICO BASEANDO NAS VÁRIAVEIS DEFINIDAS NA FUNÇÃO QUE CHAMOU ESTÁ
         renderChartClientes() {
+            // DEFINE O CANVA QUE O GRÁFICO SERÁ GERADO
             const canvas = document.getElementById('ChartClientes');
             const ctx = canvas.getContext('2d');
-
+            // LIMPA O CANVA CASO ELE ESTEJA PREENCHIDO (PREVENÇÃO DE ERRO)
             if (canvas.chart) {
                 canvas.chart.destroy();
             }
@@ -393,6 +402,7 @@ export default {
                             }
                         }
                     },
+                    // FUNÇÃO ENTRA EM AÇÃO AO CLICAR EM ALGUM DADO DO GRÁFICO
                     onClick: (e) => {
                         if (this.mes == "") {
                             const canvasPosition = getRelativePosition(e, canvas.chart);
