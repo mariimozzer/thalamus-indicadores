@@ -10,21 +10,31 @@
                 name="options-base" :id=i.id :value=i.id v-model="mes" autocomplete="off">
             <label style="color: rgba(255, 255, 255, 1);margin-left: 0.5rem; font-size: large;" class="btn botoes" :for=i.id>{{ i.nome }}</label>
         </div>
+        <select class="botoes ano" v-model="ano" @change="getProdutosAno(), getClienteAno(), getTicketsAno()"
+                    style="width: 4rem; margin-left: 2em ;border: none; background-color: rgba(33, 37, 41, 1)">
+                    <option>2023</option>
+                    <option>2024</option>
+                </select>
+                <select @change="getClienteAno(), getProdutosAno(), getTicketsAno()" v-model="tipodegrafico" name="TipodeGrafico" id="tipo" class="botoes ano" style="width: 4rem;border: none; background-color: rgba(33, 37, 41, 1)">
+                    <option value="bar">Barra</option>
+                    <option value="line">Linha</option>
+                </select>
     </div>
-
-
+    
     <!-- CRIA DIV'S COM CANVAS QUE SERÃO PREENCHIDOS COM OS GRAFICOS GERADOS NOS METHODS SENDO IDENTIFICADOS POR ID -->
         <div style="display: flex;flex-flow: column ;width: 100%;padding: 1rem;">
         <div class="card mb-3" style="max-width: 100%; border: 1px solid rgb(0, 0, 0); margin-top: 4rem;">
             <div @click="mostrarComercial()" style="background-color: rgba(255, 167, 38, 1);"
             class="card-header titulo"><i id="iconeComercial" style="margin-right: 0.5rem;" 
-                class="bi bi-arrow-right"></i>Comercial</div>
+                class="bi bi-arrow-right"></i>Comercial
+            </div>
             <div id="Comercial" style="display: none;">
+
                 <canvas id="ChartClientes"></canvas>
                 <canvas id="ChartProdutos"></canvas>
                 <select v-model="familiaProdutos" @change="getProdutosAno()"
                     style="width: 10rem; margin: 0.2rem 0 0.5rem 1rem; border-radius: 10px;">
-                    <option v-for=" p in listaProdutos" :key="p">{{ p.familia_nome }}</option>
+                    <option v-for=" p in listaProdutos" :key="p">{{ capitalize(p.familia_nome) }}</option>
                 </select>
             </div>
         </div>
@@ -89,6 +99,7 @@ import { getRelativePosition } from 'chart.js/helpers';
 export default {
     data() {
         return {
+            tipodegrafico: "bar",
             listaProdutos: [
                 {
                     "familia_nome": "ACESSÓRIOS"
@@ -160,7 +171,7 @@ export default {
                     "familia_nome": "TABLET"
                 }
             ],
-            familiaProdutos: "ACESSÓRIOS",
+            familiaProdutos: "Acessórios",
             dadosFormatadosC: [],
             dadosFormatadosT: [],
             dadosFormatadosP: [],
@@ -190,8 +201,8 @@ export default {
             { "id": 11, "nome": 'Novembro' },
             { "id": 12, "nome": 'Dezembro' }],
             nomesDosMesessemid: [
-                "Jan", "Fev", "Mar", "Abr", "Mai", "Jun",
-                "Jul", "Ago", "Set", "Out", "Nov", "Dez"
+                "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+                "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
             ],
             dataGrafico: {},
             dataGraficoTickets: {},
@@ -220,6 +231,7 @@ export default {
                 document.getElementById('iconeComercial').className = "bi bi-arrow-return-right"
             }
         },
+
         mostrarFinanceiro() {
             if (document.getElementById('Financeiro').style.display != "none") {
                 document.getElementById('Financeiro').style.display = "none";
@@ -229,6 +241,7 @@ export default {
                 document.getElementById('iconeFinanceiro').className = "bi bi-arrow-return-right"
             }
         },
+
         mostrarProdução() {
             if (document.getElementById('Produção').style.display != "none") {
                 document.getElementById('Produção').style.display = "none";
@@ -238,6 +251,7 @@ export default {
                 document.getElementById('iconeProdução').className = "bi bi-arrow-return-right"
             }
         },
+
         mostrarInjeção() {
             if (document.getElementById('Injeção').style.display != "none") {
                 document.getElementById('Injeção').style.display = "none";
@@ -247,6 +261,7 @@ export default {
                 document.getElementById('iconeInjeção').className = "bi bi-arrow-return-right"
             }
         },
+
         abrirModal() {
             this.clientes = "",
                 axios.post('http://192.168.0.6:8000/api/omie/oportunidade/cliente-conquistado/detalhe', {
@@ -271,17 +286,24 @@ export default {
                 this.showModalSprint = false;
             }
         },
+
 // OS DADOS TEMPORAIS VEM DO END POINT EM FORMATO DE SEMANA DO ANO, ESTÁ FUNÇÃO DIZ A QUAL MES A SEMANA CORRESPONDE
         calcularMesDaSemana() {
             const data = new Date(this.ano, 0, 1);
             data.setDate(data.getDate() + (this.semana - 1) * 7);
             this.mesSemana = data.getMonth() + 1;
         },
+
+        capitalize(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+        },
+
 // IGUALA OS MESES PARA QUANDO O BOTÃO DO MES QUE ESTÁ NO CABEÇALHO SEJA CLICADO TODOS OS GRAFICOS MOSTREM O MES SELECIONADO
         igualameses() {
             this.mesTickets = this.mes;
             this.mesProdutos = this.mes
         },
+
 // GERA UM GRÁFICO
         getClienteMes() {
             // PUXA OS DADOS DO BACKEND PASSANDO MES E ANO
@@ -295,7 +317,12 @@ export default {
                         item.semana = item.semana.toString().substring(4);
                     });
 
-                    this.labels = this.dados.map((item) => item.semana);
+                    this.dadosFormatadosC = this.dados.map((item) => parseInt(item.semana, 10));
+
+                    this.labels = this.dadosFormatadosC.map((value, index) => {
+                    return `${index + 1}º semana`;
+                    });
+
                     this.dataGrafico = this.dados.map((item) => item.regSemana);
                     this.datasets = [];
                     this.datasets.push({
@@ -325,38 +352,74 @@ export default {
                 });
         },
 
+        // getClienteAno() {
+        //     // PUXA OS DADOS PASSANDO APENAS ANO
+        //     this.mes = ""
+        //     axios.post('http://192.168.0.6:8000/api/omie/oportunidade/cliente-conquistado', {
+        //         ano: this.ano,
+        //     })
+        //         .then((response) => {
+        //             this.dados = response.data;
+        //             // RETIRA AS 4 PRIMEIRAS LETRAS QUE SÃO O ANO, DEIXANDO APENAS AS DUAS ULTIMAS QUE SÃO A SEMANA DO ANO
+        //             this.dados.forEach((item) => {
+        //                 item.semana = item.semana.toString().substring(4);
+        //             });
+        //             // CRIA UMA SEGUNDA ARRAY E CONVERTE AS STRINGS EM NUMEROS INTEIROS
+        //             this.dadosFormatadosC = this.dados.map((item) => parseInt(item.semana, 10));
+        //             //TRANSFORMA O NUMERO DA SEMANA NO NUMERO DO MES QUE ELA CORRESPONDE: EXEMPLO 04(SEMANA 04) RETORNA 01(JANEIRO)
+        //             this.dadosFormatadosC = this.dadosFormatadosC.map((semana) => {
+        //                 const data = new Date(this.ano, 0, 1);
+        //                 data.setDate(data.getDate() + (semana - 1) * 7);
+        //                 return data.getMonth() + 1;
+        //             });
+        //             // TRANASFORMA OS NUMEROS DOS MESES EM STRINGS COM OS NOMES DOS MESES
+        //             this.dadosFormatadosC = this.dadosFormatadosC.map((numero) => this.nomesDosMesessemid[numero - 1])
+
+
+        //             // DEFINE AS VARIAVEIS NECESSARIAS PARA CONSTRUIR O GRÁFICO: LABELS, DATASETS
+        //             this.dataGrafico = this.dados.map((item) => item.regSemana);
+
+        //             this.labels = this.dadosFormatadosC
+        //             this.datasets = [];
+        //             this.datasets.push({
+        //                 data: this.dataGrafico,
+        //                 type: 'bar',
+        //                 label: 'Clientes Conquistados',
+        //                 backgroundColor: 'rgba(255, 167, 38, 1)',
+        //                 borderColor: 'rgba(255, 167, 38, 1)',
+        //                 borderWidth: 1.5,
+        //                 tension: 0.3,
+        //                 pointRadius: 2.2,
+        //                 pointHoverRadius: 5,
+        //             })
+        //             // CHAMA A FUNÇÃO QUE CRIA O GRÁFICO
+        //             this.renderChartClientes()
+        //         })
+        //         .catch((error) => {
+        //             console.error(error);
+        //         });
+        // },
+
+//CRIA O GRÁFICO BASEANDO NAS VÁRIAVEIS DEFINIDAS NA FUNÇÃO QUE CHAMOU ESTA
+        
         getClienteAno() {
-            // PUXA OS DADOS PASSANDO APENAS ANO
             this.mes = ""
-            axios.post('http://192.168.0.6:8000/api/omie/oportunidade/cliente-conquistado', {
+            axios.post('http://192.168.0.6:8000/api/omie/oportunidade/cliente-conquistado-mes', {
                 ano: this.ano,
             })
                 .then((response) => {
                     this.dados = response.data;
-                    // RETIRA AS 4 PRIMEIRAS LETRAS QUE SÃO O ANO, DEIXANDO APENAS AS DUAS ULTIMAS QUE SÃO A SEMANA DO ANO
-                    this.dados.forEach((item) => {
-                        item.semana = item.semana.toString().substring(4);
-                    });
-                    // CRIA UMA SEGUNDA ARRAY E CONVERTE AS STRINGS EM NUMEROS INTEIROS
-                    this.dadosFormatadosC = this.dados.map((item) => parseInt(item.semana, 10));
-                    //TRANSFORMA O NUMERO DA SEMANA NO NUMERO DO MES QUE ELA CORRESPONDE: EXEMPLO 04(SEMANA 04) RETORNA 01(JANEIRO)
-                    this.dadosFormatadosC = this.dadosFormatadosC.map((semana) => {
-                        const data = new Date(this.ano, 0, 1);
-                        data.setDate(data.getDate() + (semana - 1) * 7);
-                        return data.getMonth() + 1;
-                    });
-                    // TRANASFORMA OS NUMEROS DOS MESES EM STRINGS COM OS NOMES DOS MESES
-                    this.dadosFormatadosC = this.dadosFormatadosC.map((numero) => this.nomesDosMesessemid[numero - 1])
-
-
+                    
+                    this.dadosFormatadosC = this.dados.map((item) => item.mes);
                     // DEFINE AS VARIAVEIS NECESSARIAS PARA CONSTRUIR O GRÁFICO: LABELS, DATASETS
-                    this.dataGrafico = this.dados.map((item) => item.regSemana);
+                    this.labels = this.dados.map((item) => item.mes);
+                    this.labels = this.labels.map((numero) => this.nomesDosMesessemid[numero - 1])
 
-                    this.labels = this.dadosFormatadosC
+                    this.dataGrafico = this.dados.map((item) => item.valor);
                     this.datasets = [];
                     this.datasets.push({
                         data: this.dataGrafico,
-                        type: 'bar',
+                        type: this.tipodegrafico,
                         label: 'Clientes Conquistados',
                         backgroundColor: 'rgba(255, 167, 38, 1)',
                         borderColor: 'rgba(255, 167, 38, 1)',
@@ -372,7 +435,7 @@ export default {
                     console.error(error);
                 });
         },
-        //CRIA O GRÁFICO BASEANDO NAS VÁRIAVEIS DEFINIDAS NA FUNÇÃO QUE CHAMOU ESTÁ
+
         renderChartClientes() {
             // DEFINE O CANVA QUE O GRÁFICO SERÁ GERADO
             const canvas = document.getElementById('ChartClientes');
@@ -408,16 +471,14 @@ export default {
                             const canvasPosition = getRelativePosition(e, canvas.chart);
                             const dataX = canvas.chart.scales.x.getValueForPixel(canvasPosition.x);
 
-                            this.semana = this.dados[dataX]
-                            this.semana = this.semana.semana
-                            this.calcularMesDaSemana();
-                            this.mes = this.mesSemana;
+                            this.mes = this.dadosFormatadosC[dataX]
                             this.getClienteMes();
                         } else {
                             const canvasPosition = getRelativePosition(e, canvas.chart);
                             const dataX = canvas.chart.scales.x.getValueForPixel(canvasPosition.x);
 
-                            this.semana = this.dados[dataX]
+                            this.semana = "";
+                            this.semana = this.dados[dataX];
                             this.semana = this.semana.semana
 
                             this.abrirModal()
@@ -428,7 +489,7 @@ export default {
         },
 
         getTicketsMes() {
-            this.mesTickets = this.mes
+            this.mes = this.mesTickets;
             axios.post('http://192.168.0.6:8000/api/omie/oportunidade/ticket', {
                 mes: this.mesTickets,
                 ano: this.ano,
@@ -472,30 +533,29 @@ export default {
 
         getTicketsAno() {
             this.mesTickets = ""
-            axios.post('http://192.168.0.6:8000/api/omie/oportunidade/ticket', {
+            axios.post('http://192.168.0.6:8000/api/omie/oportunidade/ticket-mes', {
                 ano: this.ano,
             })
                 .then((response) => {
                     this.dadosTickets = response.data;
-                    this.dadosTickets.forEach((item) => {
-                        item.semana = item.semana.toString().substring(4);
-                    });
 
-
-                    this.dadosFormatadosT = this.dadosTickets.map((item) => parseInt(item.semana, 10));
-                    this.dadosFormatadosT = this.dadosFormatadosT.map((semana) => {
-                        const data = new Date(this.ano, 0, 1);
-                        data.setDate(data.getDate() + (semana - 1) * 7);
-                        return data.getMonth() + 1;
-                    });
-                    this.dadosFormatadosT = this.dadosFormatadosT.map((numero) => this.nomesDosMesessemid[numero - 1])
-
+                    this.dadosFormatadosT = this.dadosTickets.map((item) => item.mes)
                     this.labelsTickets = this.dadosFormatadosT
-                    this.dataGraficoTickets = this.dadosTickets.map((item) => item.regSemana);
+                    this.labelsTickets = this.labelsTickets.map((numero) => this.nomesDosMesessemid[numero - 1])
+
+                    this.dataGraficoTickets = this.dadosTickets.map((item) => item.regMes);
                     this.datasetsTickets = [];
                     this.datasetsTickets.push({
-                        data: this.dataGraficoTickets,
                         type: 'line',
+                        label: 'Meta',
+                        backgroundColor: 'black',
+                        borderColor: 'black',
+                        pointRadius: 0,
+                        borderWidth: 1,
+                        data: [1000000, 1000000, 1000000, 1000000, 1000000,1000000,1000000,1000000,1000000,1000000,1000000,1000000]
+                    },{
+                        data: this.dataGraficoTickets,
+                        type: this.tipodegrafico,
                         label: 'Tickets',
                         backgroundColor: 'rgba(129, 199, 132, 1)',
                         borderColor: 'rgba(129, 199, 132, 1)',
@@ -544,10 +604,7 @@ export default {
                             const canvasPosition = getRelativePosition(e, canvas.chart);
                             const dataX = canvas.chart.scales.x.getValueForPixel(canvasPosition.x);
 
-                            this.semana = this.dados[dataX]
-                            this.semana = this.semana.semana
-                            this.calcularMesDaSemana();
-                            this.mes = this.mesSemana;
+                            this.mesTickets = this.dadosFormatadosT[dataX]
                             this.getTicketsMes();
                         }
                     }
@@ -600,31 +657,20 @@ export default {
 
         getProdutosAno() {
             this.mesProdutos = ""
-            axios.post('http://192.168.0.6:8000/api/indicador/produto-vendido', {
+            axios.post('http://192.168.0.6:8000/api/indicador/produto-vendido-mes', {
                 nome: this.familiaProdutos,
                 ano: this.ano,
             })
                 .then((response) => {
                     this.dadosProdutos = response.data
-                    this.dadosProdutos.forEach((item) => {
-                        item.semana = item.semana.toString().substring(4);
-                    });
-
-
-                    this.dadosFormatadosP = this.dadosProdutos.map((item) => parseInt(item.semana, 10));
-                    this.dadosFormatadosP = this.dadosFormatadosP.map((semana) => {
-                        const data = new Date(this.ano, 0, 1);
-                        data.setDate(data.getDate() + (semana - 1) * 7);
-                        return data.getMonth() + 1;
-                    });
-                    this.dadosFormatadosP = this.dadosFormatadosP.map((numero) => this.nomesDosMesessemid[numero - 1])
-
+                    this.dadosFormatadosP = this.dadosProdutos.map((item) => item.mes)
                     this.labelsProdutos = this.dadosFormatadosP
-                    this.dataGraficoProdutos = this.dadosProdutos.map((item) => item.regSemana);
+                    this.labelsProdutos = this.labelsProdutos.map((numero) => this.nomesDosMesessemid[numero - 1])
+                    this.dataGraficoProdutos = this.dadosProdutos.map((item) => item.regMes);
                     this.datasetsProdutos = [];
                     this.datasetsProdutos.push({
                         data: this.dataGraficoProdutos,
-                        type: 'line',
+                        type: this.tipodegrafico,
                         label: 'Produtos Vendidos',
                         backgroundColor: 'rgba(255, 167, 38, 1)',
                         borderColor: 'rgba(255, 167, 38, 1)',
@@ -675,10 +721,7 @@ export default {
                             const canvasPosition = getRelativePosition(e, canvas.chart);
                             const dataX = canvas.chart.scales.x.getValueForPixel(canvasPosition.x);
 
-                            this.semana = this.dadosProdutos[dataX]
-                            this.semana = this.semana.semana
-                            this.calcularMesDaSemana();
-                            this.mesProdutos = this.mesSemana;
+                            this.mesProdutos = this.dadosFormatadosP[dataX]
                             this.getProdutosMes();
                         }
                     }
@@ -725,6 +768,13 @@ button {
     border: none;
     font-size: larger;
 }
+
+.ano {
+    color: rgba(255, 255, 255, 1);
+    background-color: transparent;
+    border: none;
+    font-size: larger;
+ }
 
 .cabecalho {
     color: rgba(255, 255, 255, 1);
