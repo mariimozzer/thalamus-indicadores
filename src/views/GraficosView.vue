@@ -11,14 +11,21 @@
             <label style="color: rgba(255, 255, 255, 1);margin-left: 0.5rem; font-size: large;" class="btn botoes" :for=i.id>{{ i.nome }}</label>
         </div>
         <select class="botoes ano" v-model="ano" @change="getProdutosAno(), getClienteAno(), getTicketsAno()"
-                    style="width: 4rem; margin-left: 2em ;border: none; background-color: rgba(33, 37, 41, 1)">
+                    style="width: 4rem; margin-left: 0.5em;margin-right: 0.5em  ;border: none; background-color: rgba(33, 37, 41, 1)">
                     <option>2023</option>
                     <option>2024</option>
-                </select>
-                <select @change="getClienteAno(), getProdutosAno(), getTicketsAno()" v-model="tipodegrafico" name="TipodeGrafico" id="tipo" class="botoes ano" style="width: 4rem;border: none; background-color: rgba(33, 37, 41, 1)">
-                    <option value="bar">Barra</option>
-                    <option value="line">Linha</option>
-                </select>
+        </select>
+        <div style="border-left: solid 1px white;">
+            <input @change="getClienteAno(), getProdutosAno(), getTicketsAno()" type="radio" class="btn-check botoes"
+                    name="tipodegrafico" id="barra" value="bar" v-model="tipodegrafico" autocomplete="off">
+                    <label style="color: rgba(255, 255, 255, 1);margin-left: 0.5rem; font-size: medium;" class="btn botoes" for="barra"><i class="bi bi-bar-chart-line-fill"></i></label>
+                    
+            <input @change="getClienteAno(), getProdutosAno(), getTicketsAno()" type="radio" class="btn-check botoes"
+                    name="tipodegrafico" id="linha" value="line" v-model="tipodegrafico" autocomplete="off">
+                    <label style="color: rgba(255, 255, 255, 1);margin-left: 0.5rem; font-size: medium;" class="btn botoes" for="linha"><i class="bi bi-graph-up"></i></label>
+        </div>
+
+
     </div>
     
     <!-- CRIA DIV'S COM CANVAS QUE SERÃO PREENCHIDOS COM OS GRAFICOS GERADOS NOS METHODS SENDO IDENTIFICADOS POR ID -->
@@ -335,7 +342,7 @@ export default {
                         data: [10, 10, 10, 10, 10]
                     }, {
                         data: this.dataGrafico,
-                        type: 'line',
+                        type: this.tipodegrafico,
                         label: 'Clientes Conquistados',
                         backgroundColor: 'rgba(255, 167, 38, 1)',
                         borderColor: 'rgba(255, 167, 38, 1)',
@@ -513,7 +520,7 @@ export default {
                         data: [1000000, 1000000, 1000000, 1000000, 1000000]
                     }, {
                         data: this.dataGraficoTickets,
-                        type: 'line',
+                        type: this.tipodegrafico,
                         label: 'Tickets',
                         backgroundColor: 'rgba(129, 199, 132, 1)',
                         borderColor: 'rgba(129, 199, 132, 1)',
@@ -638,7 +645,7 @@ export default {
                         data: [100, 100, 100, 100, 100]
                     }, {
                         data: this.dataGraficoProdutos,
-                        type: 'line',
+                        type: this.tipodegrafico,
                         label: 'Tickets',
                         backgroundColor: 'rgba(255, 167, 38, 1)',
                         borderColor: 'rgba(255, 167, 38, 1)',
