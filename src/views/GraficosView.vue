@@ -1,101 +1,189 @@
 <template>
-<body>
-    <!-- CRIA UM CABEÇALHO PARA SELEÇÃO DE MÊS E UM BOTÃO PARA EXIBIR O ANO TODO -->
-    <div class="form-check cabecalho">
-        <button v-b-tooltip.hover title="Ano inteiro!" class="botoes" @click="getClienteAno(), getTicketsAno(), getProdutosAno()">
-            <i class="bi bi-calendar-minus"></i>
-        </button>
-        <div v-for="i in nomeDosMeses" :key="i">
-            <input @change="igualameses(), getClienteMes(), getTicketsMes(), getProdutosMes()" type="radio" class="btn-check botoes"
-                name="options-base" :id=i.id :value=i.id v-model="mes" autocomplete="off">
-            <label style="color: rgba(255, 255, 255, 1);margin-left: 0.5rem; font-size: large;" class="btn botoes" :for=i.id>{{ i.nome }}</label>
-        </div>
-        <select class="botoes ano" v-model="ano" @change="getProdutosAno(), getClienteAno(), getTicketsAno()"
-                    style="width: 4rem; margin-left: 0.5em;margin-right: 0.5em  ;border: none; background-color: rgba(33, 37, 41, 1)">
-                    <option>2023</option>
-                    <option>2024</option>
-        </select>
-        <div style="border-left: solid 1px white;">
-            <input @change="getClienteAno(), getProdutosAno(), getTicketsAno()" type="radio" class="btn-check botoes"
-                    name="tipodegrafico" id="barra" value="bar" v-model="tipodegrafico" autocomplete="off">
-                    <label style="color: rgba(255, 255, 255, 1);margin-left: 0.5rem; font-size: medium;" class="btn botoes" for="barra"><i class="bi bi-bar-chart-line-fill"></i></label>
-                    
-            <input @change="getClienteAno(), getProdutosAno(), getTicketsAno()" type="radio" class="btn-check botoes"
-                    name="tipodegrafico" id="linha" value="line" v-model="tipodegrafico" autocomplete="off">
-                    <label style="color: rgba(255, 255, 255, 1);margin-left: 0.5rem; font-size: medium;" class="btn botoes" for="linha"><i class="bi bi-graph-up"></i></label>
-        </div>
-
-
-    </div>
-    
-    <!-- CRIA DIV'S COM CANVAS QUE SERÃO PREENCHIDOS COM OS GRAFICOS GERADOS NOS METHODS SENDO IDENTIFICADOS POR ID -->
-        <div style="display: flex;flex-flow: column ;width: 100%;padding: 1rem;">
-        <div class="card mb-3" style="max-width: 100%; border: 1px solid rgb(0, 0, 0); margin-top: 4rem;">
-            <div @click="mostrarComercial()" style="background-color: rgba(255, 167, 38, 1);"
-            class="card-header titulo"><i id="iconeComercial" style="margin-right: 0.5rem;" 
-                class="bi bi-arrow-right"></i>Comercial
+    <body>
+        <!-- CRIA UM CABEÇALHO PARA SELEÇÃO DE MÊS E UM BOTÃO PARA EXIBIR O ANO TODO -->
+        <div class="form-check cabecalho">
+            <button v-b-tooltip.hover title="Ano inteiro!" class="botoes"
+                @click="getClienteAno(), getTicketsAno(), getProdutosAno()">
+                <i class="bi bi-calendar-minus"></i>
+            </button>
+            <div v-for="i in nomeDosMeses" :key="i">
+                <input @change="igualameses(), getClienteMes(), getTicketsMes(), getProdutosMes()" type="radio"
+                    class="btn-check botoes" name="options-base" :id=i.id :value=i.id v-model="mes" autocomplete="off">
+                <label style="color: rgba(255, 255, 255, 1);margin-left: 0.5rem; font-size: large;" class="btn botoes"
+                    :for=i.id>{{ i.nome }}</label>
             </div>
-            <div id="Comercial" style="display: none;">
+            <select class="botoes ano" v-model="ano" @change="getProdutosAno(), getClienteAno(), getTicketsAno()"
+                style="width: 4rem; margin-left: 0.5em;margin-right: 0.5em  ;border: none; background-color: rgba(33, 37, 41, 1)">
+                <option>2023</option>
+                <option>2024</option>
+            </select>
+            <div style="border-left: solid 1px white;">
+                <input @change="getClienteAno(), getProdutosAno(), getTicketsAno()" type="radio" class="btn-check botoes"
+                    name="tipodegrafico" id="barra" value="bar" v-model="tipodegrafico" autocomplete="off">
+                <label style="color: rgba(255, 255, 255, 1);margin-left: 0.5rem; font-size: medium;" class="btn botoes"
+                    for="barra"><i class="bi bi-bar-chart-line-fill"></i></label>
 
-                <canvas id="ChartClientes"></canvas>
-                <canvas id="ChartProdutos"></canvas>
-                <select v-model="familiaProdutos" @change="getProdutosAno()"
+                <input @change="getClienteAno(), getProdutosAno(), getTicketsAno()" type="radio" class="btn-check botoes"
+                    name="tipodegrafico" id="linha" value="line" v-model="tipodegrafico" autocomplete="off">
+                <label style="color: rgba(255, 255, 255, 1);margin-left: 0.5rem; font-size: medium;" class="btn botoes"
+                    for="linha"><i class="bi bi-graph-up"></i></label>
+            </div>
+
+        </div>
+
+        <!-- CRIA DIV'S COM CANVAS QUE SERÃO PREENCHIDOS COM OS GRAFICOS GERADOS NOS METHODS SENDO IDENTIFICADOS POR ID -->
+        <div style="display: flex;flex-flow: column ;width: 100%;padding: 1rem;">
+            <div class="card mb-3" style="max-width: 100%; border: 1px solid rgb(0, 0, 0); margin-top: 4rem;">
+                <div @click="mostrarComercial()" style="background-color: rgba(255, 167, 38, 1);"
+                    class="card-header titulo"><i id="iconeComercial" style="margin-right: 0.5rem;"
+                        class="bi bi-arrow-right"></i>Comercial
+                </div>
+                <div id="Comercial" style="display: none;">
+
+                    <!-- Using value -->
+                    <BButton v-b-toggle="'collapse'" class="m-1"
+                        style="width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px;">
+                        <i style="color: black; font-size: 15px;" class="bi bi-info-circle-fill"></i>
+                    </BButton>
+
+                    <!-- Element to collapse -->
+                    <BCollapse id="collapse" class="position-absolute" style="margin-left: 4rem; margin-top: 0.2rem;">
+                        <BCard>
+                            <div style="max-width: 23rem;">
+                                <b>Fórmula:</b> Soma das oportunidade no status de "conquistados" por mês. <br>
+                                <b>Polaridade:</b> Quanto maior, melhor. <br>
+                                <b>Fonte:</b> OMIE > CRM > Oportunidades. <br>
+                                <b>Descrição:</b> Quantidade de oportunidades que foram conquistadas em determinado mês.<br>
+                            </div>
+                        </BCard>
+                            
+                    </BCollapse>
+
+                    <canvas id="ChartClientes"></canvas>
+
+                    <!-- Detalhes -->
+                    <BButton v-b-toggle="'collapse-2'" class="m-1"
+                        style="width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px;">
+                        <i style="color: black; font-size: 15px;" class="bi bi-info-circle-fill"></i>
+                    </BButton>
+
+                    <!-- Element to collapse -->
+                    <BCollapse id="collapse-2" class="position-absolute" style="margin-left: 4rem; margin-top: 16rem">
+                        <BCard>
+                            <div style="max-width: 23rem;">
+                                <b>Fórmula:</b> Soma da quantidade de itens vendidos em um mês. <br>
+                                <b>Polaridade:</b> Quanto maior, melhor. <br>
+                                <b>Fonte:</b> OMIE > Produtos > Pedido-Compra e Codigo de etapa é igual a "faturado". <br>
+                                <b>Descrição:</b> Quantidade de produtos vendidos em um mês.<br>
+                            </div>
+                        </BCard>
+                            
+                    </BCollapse>
+
+
+                    <canvas id="ChartProdutos"></canvas>
+                    <select v-model="familiaProdutos" @change="getProdutosAno()"
                     style="width: 10rem; margin: 0.2rem 0 0.5rem 1rem; border-radius: 10px;">
                     <option v-for=" p in listaProdutos" :key="p">{{ capitalize(p.familia_nome) }}</option>
                 </select>
+
+                <BButton v-b-toggle="'collapse-3'" class="m-1"
+                        style="width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px;">
+                        <i style="color: black; font-size: 15px;" class="bi bi-info-circle-fill"></i>
+                    </BButton>
+
+                    <!-- Element to collapse -->
+                    <BCollapse id="collapse-3" class="position-absolute" style="margin-left: 4rem; margin-top: 32rem">
+                        <BCard>
+                            <div style="max-width: 23rem;">
+                                <b>Fórmula:</b> Soma das oportunidades quando o motivo é igual a "oportunidade conquistada". <br>
+                                <b>Polaridade:</b> Quanto maior, melhor. <br>
+                                <b>Fonte:</b> OMIE > Oportunidade quando tipo é igual a cliente novo, cliente reciclado e cliente recorrente. <br>
+                                <b>Descrição:</b> Quantidade de oportunidades conquistas classificadas por tipo de cliente.<br>
+                            </div>
+                        </BCard>
+                            
+                    </BCollapse>
+
+                <canvas id="ChartClientesAlcancados"></canvas>
+
+
+                </div>
+            </div>
+
+<!-- 
+            <div class="card mb-3" style="max-width: 100%; border: 1px solid rgb(0, 0, 0);">
+                <div @click="mostrarFinanceiro()" style="background-color: rgba(129, 199, 132, 1);"
+                    class="card-header titulo"><i id="iconeFinanceiro" style="margin-right: 0.5rem;"
+                        class="bi bi-arrow-right"></i>Financeiro</div>
+                <div id="Financeiro" style="display: none;">
+                    <div v-b-tooltip.hover.right title="my title" style="width: fit-content; margin-left: 1rem;">
+                        <i style="color: black; font-size: small;" class="bi bi-info-circle-fill"></i>
+                    </div>
+
+                    <canvas id="ChartTickets"></canvas>
+                </div>
+            </div> -->
+
+
+            <div class="card mb-3" style="max-width: 100%; border: 1px solid rgb(0, 0, 0);">
+                <div @click="mostrarProdução()" style="background-color: rgba(244, 67, 54, 1);" class="card-header titulo">
+                    <i id="iconeProdução" style="margin-right: 0.5rem;" class="bi bi-arrow-right"></i>Produção
+                </div>
+                <div id="Produção" style="display: none;">
+                    <BButton v-b-toggle="'collapse-4'" class="m-1"
+                        style="width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px;">
+                        <i style="color: black; font-size: 15px;" class="bi bi-info-circle-fill"></i>
+                    </BButton>
+
+                    <!-- Element to collapse -->
+                    <BCollapse id="collapse-4" class="position-absolute" style="margin-left: 4rem; margin-top: 1rem">
+                        <BCard>
+                            <div style="max-width: 23rem;">
+                                <b>Fórmula:</b> Quantidade de produtos acabados (excluido o tipo: 'conjunto') e etapa = disponível / 22. <br>
+                                <b>Polaridade:</b> Quanto maior, melhor. <br>
+                                <b>Fonte:</b> OMIE > Produção > Produto acabado. <br>
+                                <b>Descrição:</b> Quantidade de produtos acabados feitos diariamente.<br>
+                            </div>
+                        </BCard>
+                            
+                    </BCollapse>
+                    <!-- Quantidade Diaria de Produtos Acabados -->
+                    <canvas id="ChartQuantidadeDiariaPA"></canvas>
+                </div>
+            </div>
+
+
+            <!-- <div class="card mb-3" style="max-width: 100%; border: 1px solid rgb(0, 0, 0);">
+                <div @click="mostrarInjeção()" style="background-color: rgba(66, 165, 245, 1);" class="card-header titulo">
+                    <i id="iconeInjeção" style="margin-right: 0.5rem;" class="bi bi-arrow-right"></i>Injeção
+                </div>
+                <div id="Injeção" style="display: none;">
+                    <canvas id=""></canvas>
+                </div>
+            </div> -->
+
+
+
+        </div>
+
+        <div style="overflow: auto" class="modal-mask" v-if="showModal" @click="fecharModalFora">
+            <div style="max-height: 70%" class="modal-container">
+                <div class="conteudomodal">
+                    <h1 style="text-align: center;">Clientes:
+                        <hr>
+                    </h1>
+                    <ul>
+                        <li style="margin-top: 0.5rem;margin-right: 1rem;" v-for="c in clientes" :key="c">
+                            {{ c }}
+                        </li>
+                    </ul>
+
+                </div>
             </div>
         </div>
 
-
-        <div class="card mb-3" style="max-width: 100%; border: 1px solid rgb(0, 0, 0);">
-            <div @click="mostrarFinanceiro()" style="background-color: rgba(129, 199, 132, 1);"
-            class="card-header titulo"><i id="iconeFinanceiro" style="margin-right: 0.5rem;"
-                    class="bi bi-arrow-right"></i>Financeiro</div>
-            <div id="Financeiro" style="display: none;">
-                <canvas id="ChartTickets"></canvas>
-            </div>
-        </div>
-
-        
-        <div class="card mb-3" style="max-width: 100%; border: 1px solid rgb(0, 0, 0);">
-            <div @click="mostrarProdução()" style="background-color: rgba(244, 67, 54, 1);"
-                class="card-header titulo"><i id="iconeProdução" style="margin-right: 0.5rem;"
-                    class="bi bi-arrow-right"></i>Produção</div>
-            <div id="Produção" style="display: none;">
-                <canvas id=""></canvas>
-            </div>
-        </div>
-        
-
-        <div class="card mb-3" style="max-width: 100%; border: 1px solid rgb(0, 0, 0);">
-            <div @click="mostrarInjeção()" style="background-color: rgba(66, 165, 245, 1);"
-                class="card-header titulo"><i id="iconeInjeção" style="margin-right: 0.5rem;"
-                    class="bi bi-arrow-right"></i>Injeção</div>
-                    <div id="Injeção" style="display: none;">
-                <canvas id=""></canvas>
-            </div>
-        </div>
-        
-
-
-    </div>
-    
-    <div style="overflow: auto" class="modal-mask" v-if="showModal" @click="fecharModalFora">
-        <div style="max-height: 70%" class="modal-container">
-            <div class="conteudomodal">
-                <h1 style="text-align: center;">Clientes:
-                    <hr>
-                </h1>
-                <ul>
-                    <li style="margin-top: 0.5rem;margin-right: 1rem;" v-for="c in clientes" :key="c">
-                        {{ c }}
-                    </li>
-                </ul>
-
-            </div>
-        </div>
-    </div>
-</body>
+    </body>
 </template>
 
 <script>
@@ -276,7 +364,7 @@ export default {
                 })
                     .then((response) => {
                         this.clientes = response.data;
-                        this.clientes = this.clientes.map((item) => item.cDesOp);
+                        this.clientes = this.clientes.map((item) => item.cDesOp.slice(1).slice);
                         console.log(response);
                         console.log(this.clientes);
                     })
@@ -294,7 +382,7 @@ export default {
             }
         },
 
-// OS DADOS TEMPORAIS VEM DO END POINT EM FORMATO DE SEMANA DO ANO, ESTÁ FUNÇÃO DIZ A QUAL MES A SEMANA CORRESPONDE
+        // OS DADOS TEMPORAIS VEM DO END POINT EM FORMATO DE SEMANA DO ANO, ESTÁ FUNÇÃO DIZ A QUAL MES A SEMANA CORRESPONDE
         calcularMesDaSemana() {
             const data = new Date(this.ano, 0, 1);
             data.setDate(data.getDate() + (this.semana - 1) * 7);
@@ -302,16 +390,16 @@ export default {
         },
 
         capitalize(str) {
-        return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+            return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
         },
 
-// IGUALA OS MESES PARA QUANDO O BOTÃO DO MES QUE ESTÁ NO CABEÇALHO SEJA CLICADO TODOS OS GRAFICOS MOSTREM O MES SELECIONADO
+        // IGUALA OS MESES PARA QUANDO O BOTÃO DO MES QUE ESTÁ NO CABEÇALHO SEJA CLICADO TODOS OS GRAFICOS MOSTREM O MES SELECIONADO
         igualameses() {
             this.mesTickets = this.mes;
             this.mesProdutos = this.mes
         },
 
-// GERA UM GRÁFICO
+        // GERA UM GRÁFICO
         getClienteMes() {
             // PUXA OS DADOS DO BACKEND PASSANDO MES E ANO
             axios.post('http://192.168.0.6:8000/api/omie/oportunidade/cliente-conquistado', {
@@ -327,7 +415,7 @@ export default {
                     this.dadosFormatadosC = this.dados.map((item) => parseInt(item.semana, 10));
 
                     this.labels = this.dadosFormatadosC.map((value, index) => {
-                    return `${index + 1}º semana`;
+                        return `${index + 1}º semana`;
                     });
 
                     this.dataGrafico = this.dados.map((item) => item.regSemana);
@@ -407,8 +495,8 @@ export default {
         //         });
         // },
 
-//CRIA O GRÁFICO BASEANDO NAS VÁRIAVEIS DEFINIDAS NA FUNÇÃO QUE CHAMOU ESTA
-        
+        //CRIA O GRÁFICO BASEANDO NAS VÁRIAVEIS DEFINIDAS NA FUNÇÃO QUE CHAMOU ESTA
+
         getClienteAno() {
             this.mes = ""
             axios.post('http://192.168.0.6:8000/api/omie/oportunidade/cliente-conquistado-mes', {
@@ -416,7 +504,7 @@ export default {
             })
                 .then((response) => {
                     this.dados = response.data;
-                    
+
                     this.dadosFormatadosC = this.dados.map((item) => item.mes);
                     // DEFINE AS VARIAVEIS NECESSARIAS PARA CONSTRUIR O GRÁFICO: LABELS, DATASETS
                     this.labels = this.dados.map((item) => item.mes);
@@ -424,10 +512,21 @@ export default {
 
                     this.dataGrafico = this.dados.map((item) => item.valor);
                     this.datasets = [];
-                    this.datasets.push({
+                    this.datasets.push(
+                        {
+                            data: [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30],
+                            type: 'line',
+                            label: 'Meta',
+                            backgroundColor: 'rgba(0, 0, 0, 1)',
+                            borderColor: 'rgba(0, 0, 0, 1)',
+                            borderWidth: 1.5,
+                            tension: 0.3,
+                            pointRadius: 0,
+                            pointHoverRadius: 0,
+                        }, {
                         data: this.dataGrafico,
                         type: this.tipodegrafico,
-                        label: 'Clientes Conquistados',
+                        label: 'Propostas Comerciais Viabilizadas',
                         backgroundColor: 'rgba(255, 167, 38, 1)',
                         borderColor: 'rgba(255, 167, 38, 1)',
                         borderWidth: 1.5,
@@ -435,7 +534,6 @@ export default {
                         pointRadius: 2.2,
                         pointHoverRadius: 5,
                     })
-                    // CHAMA A FUNÇÃO QUE CRIA O GRÁFICO
                     this.renderChartClientes()
                 })
                 .catch((error) => {
@@ -559,8 +657,8 @@ export default {
                         borderColor: 'black',
                         pointRadius: 0,
                         borderWidth: 1,
-                        data: [1000000, 1000000, 1000000, 1000000, 1000000,1000000,1000000,1000000,1000000,1000000,1000000,1000000]
-                    },{
+                        data: [1000000, 1000000, 1000000, 1000000, 1000000, 1000000, 1000000, 1000000, 1000000, 1000000, 1000000, 1000000]
+                    }, {
                         data: this.dataGraficoTickets,
                         type: this.tipodegrafico,
                         label: 'Tickets',
@@ -678,7 +776,7 @@ export default {
                     this.datasetsProdutos.push({
                         data: this.dataGraficoProdutos,
                         type: this.tipodegrafico,
-                        label: 'Produtos Vendidos',
+                        label: 'Quantidade de Produtos Vendidos',
                         backgroundColor: 'rgba(255, 167, 38, 1)',
                         borderColor: 'rgba(255, 167, 38, 1)',
                         borderWidth: 1.5,
@@ -746,19 +844,22 @@ export default {
     transition: 50ms linear;
     transform: scale(1.1);
 }
+
 .conteudomodal {
-    display: flex; 
-    flex-flow: column; 
-    background-color: rgb(255, 255, 255); 
-    height: fit-content; 
+    display: flex;
+    flex-flow: column;
+    background-color: rgb(255, 255, 255);
+    height: fit-content;
     width: fit-content;
-    padding: 1rem; 
+    padding: 1rem;
     border-radius: 10px;
 }
+
 canvas {
     max-width: 100%;
     max-height: 200px;
 }
+
 .titulo {
     color: white;
     font-size: larger;
@@ -769,6 +870,7 @@ canvas {
     transition: 50ms linear;
     box-shadow: rgba(26, 26, 26, 0.200) 3px 3px 6px 0px inset, rgba(26, 26, 26, 0.200) -3px -3px 6px 1px inset;
 }
+
 button {
     color: rgba(255, 255, 255, 1);
     background-color: transparent;
@@ -781,7 +883,7 @@ button {
     background-color: transparent;
     border: none;
     font-size: larger;
- }
+}
 
 .cabecalho {
     color: rgba(255, 255, 255, 1);
@@ -812,6 +914,8 @@ button {
     scroll-behavior: auto;
 }
 
+
 ::-webkit-scrollbar {
     width: 0px;
-}</style>
+}
+</style>
