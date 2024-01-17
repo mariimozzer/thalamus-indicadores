@@ -56,7 +56,7 @@
                                 <b>Descrição:</b> Quantidade de oportunidades que foram conquistadas em determinado mês.<br>
                             </div>
                         </BCard>
-                            
+
                     </BCollapse>
 
                     <canvas id="ChartClientes"></canvas>
@@ -77,17 +77,17 @@
                                 <b>Descrição:</b> Quantidade de produtos vendidos em um mês.<br>
                             </div>
                         </BCard>
-                            
+
                     </BCollapse>
 
 
                     <canvas id="ChartProdutos"></canvas>
                     <select v-model="familiaProdutos" @change="getProdutosAno()"
-                    style="width: 10rem; margin: 0.2rem 0 0.5rem 1rem; border-radius: 10px;">
-                    <option v-for=" p in listaProdutos" :key="p">{{ capitalize(p.familia_nome) }}</option>
-                </select>
+                        style="width: 10rem; margin: 0.2rem 0 0.5rem 1rem; border-radius: 10px;">
+                        <option v-for=" p in listaProdutos" :key="p">{{ capitalize(p.familia_nome) }}</option>
+                    </select>
 
-                <BButton v-b-toggle="'collapse-3'" class="m-1"
+                    <BButton v-b-toggle="'collapse-3'" class="m-1"
                         style="width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px;">
                         <i style="color: black; font-size: 15px;" class="bi bi-info-circle-fill"></i>
                     </BButton>
@@ -96,22 +96,25 @@
                     <BCollapse id="collapse-3" class="position-absolute" style="margin-left: 4rem; margin-top: 32rem">
                         <BCard>
                             <div style="max-width: 23rem;">
-                                <b>Fórmula:</b> Soma das oportunidades quando o motivo é igual a "oportunidade conquistada". <br>
+                                <b>Fórmula:</b> Soma das oportunidades quando o motivo é igual a "oportunidade conquistada".
+                                <br>
                                 <b>Polaridade:</b> Quanto maior, melhor. <br>
-                                <b>Fonte:</b> OMIE > Oportunidade quando tipo é igual a cliente novo, cliente reciclado e cliente recorrente. <br>
-                                <b>Descrição:</b> Quantidade de oportunidades conquistas classificadas por tipo de cliente.<br>
+                                <b>Fonte:</b> OMIE > Oportunidade quando tipo é igual a cliente novo, cliente reciclado e
+                                cliente recorrente. <br>
+                                <b>Descrição:</b> Quantidade de oportunidades conquistas classificadas por tipo de
+                                cliente.<br>
                             </div>
                         </BCard>
-                            
+
                     </BCollapse>
 
-                <canvas id="ChartClientesAlcancados"></canvas>
+                    <canvas id="ChartClientesAlcancados"></canvas>
 
 
                 </div>
             </div>
 
-<!-- 
+            <!-- 
             <div class="card mb-3" style="max-width: 100%; border: 1px solid rgb(0, 0, 0);">
                 <div @click="mostrarFinanceiro()" style="background-color: rgba(129, 199, 132, 1);"
                     class="card-header titulo"><i id="iconeFinanceiro" style="margin-right: 0.5rem;"
@@ -140,13 +143,14 @@
                     <BCollapse id="collapse-4" class="position-absolute" style="margin-left: 4rem; margin-top: 1rem">
                         <BCard>
                             <div style="max-width: 23rem;">
-                                <b>Fórmula:</b> Quantidade de produtos acabados (excluido o tipo: 'conjunto') e etapa = disponível / 22. <br>
+                                <b>Fórmula:</b> Quantidade de produtos acabados (excluido o tipo: 'conjunto') e etapa =
+                                disponível / 22. <br>
                                 <b>Polaridade:</b> Quanto maior, melhor. <br>
                                 <b>Fonte:</b> OMIE > Produção > Produto acabado. <br>
                                 <b>Descrição:</b> Quantidade de produtos acabados feitos diariamente.<br>
                             </div>
                         </BCard>
-                            
+
                     </BCollapse>
                     <!-- Quantidade Diaria de Produtos Acabados -->
                     <canvas id="ChartQuantidadeDiariaPA"></canvas>
@@ -195,78 +199,52 @@ export default {
     data() {
         return {
             tipodegrafico: "bar",
-            listaProdutos: [
-                {
-                    "familia_nome": "ACESSÓRIOS"
-                },
-                {
-                    "familia_nome": "ADAPTADOR"
-                },
-                {
-                    "familia_nome": "Autocolantes"
-                },
-                {
-                    "familia_nome": "BASES"
-                },
-                {
-                    "familia_nome": "BRAÇO"
-                },
-                {
-                    "familia_nome": "CABOS"
-                },
-                {
-                    "familia_nome": "CASE"
-                },
-                {
-                    "familia_nome": "CONJUNTO"
-                },
-                {
-                    "familia_nome": "CONVERSOR"
-                },
-                {
-                    "familia_nome": "DOCK"
-                },
-                {
-                    "familia_nome": "Eletroeletrônicos"
-                },
-                {
-                    "familia_nome": "HUB"
-                },
-                {
-                    "familia_nome": "Importados"
-                },
-                {
-                    "familia_nome": "Injetados Externos"
-                },
-                {
-                    "familia_nome": "Injetados Internos"
-                },
-                {
-                    "familia_nome": "Montados"
-                },
-                {
-                    "familia_nome": "Peça Mecânica"
-                },
-                {
-                    "familia_nome": "PLUG"
-                },
-                {
-                    "familia_nome": "Preparados"
-                },
-                {
-                    "familia_nome": "PROJETO"
-                },
-                {
-                    "familia_nome": "Resinados"
-                },
-                {
-                    "familia_nome": "SUPORTES"
-                },
-                {
-                    "familia_nome": "TABLET"
-                }
-            ],
-            familiaProdutos: "Acessórios",
+            listaProdutos: [{
+                "familia_nome": "ACESSÓRIOS"
+            },
+            {
+                "familia_nome": "ADAPTADOR"
+            },
+            {
+                "familia_nome": "BASES"
+            },
+            {
+                "familia_nome": "BRAÇO"
+            },
+            {
+                "familia_nome": "CABOS"
+            },
+            {
+                "familia_nome": "CASE"
+            },
+            {
+                "familia_nome": "CASE 9-10,1\""
+            },
+            {
+                "familia_nome": "CONVERSOR"
+            },
+            {
+                "familia_nome": "DOCK"
+            },
+            {
+                "familia_nome": "HUB"
+            },
+            {
+                "familia_nome": "PLUG"
+            },
+            {
+                "familia_nome": "PROJETO"
+            },
+            {
+                "familia_nome": "SUPORTES"
+            },
+            {
+                "familia_nome": "TABLET"
+            },
+            {
+                "familia_nome": "TODOS"
+            }],
+            familiaProdutos: "Todos",
             dadosFormatadosC: [],
             dadosFormatadosT: [],
             dadosFormatadosP: [],
@@ -359,12 +337,12 @@ export default {
 
         abrirModal() {
             this.clientes = "",
-                axios.post('http://192.168.0.6:8000/api/omie/oportunidade/cliente-conquistado/detalhe', {
+                axios.post('http://192.168.0.6:8000/api/omie/oportunidade/proposta-viabilizada/detalhe', {
                     anoSemana: this.ano + this.semana,
                 })
                     .then((response) => {
                         this.clientes = response.data;
-                        this.clientes = this.clientes.map((item) => item.cDesOp.slice(1).slice);
+                        this.clientes = this.clientes.map((item) => item.cDesOp.slice(1).slice(0, -1));
                         console.log(response);
                         console.log(this.clientes);
                     })
@@ -402,7 +380,7 @@ export default {
         // GERA UM GRÁFICO
         getClienteMes() {
             // PUXA OS DADOS DO BACKEND PASSANDO MES E ANO
-            axios.post('http://192.168.0.6:8000/api/omie/oportunidade/cliente-conquistado', {
+            axios.post('http://192.168.0.6:8000/api/omie/oportunidade/proposta-viabilizada', {
                 mes: this.mes,
                 ano: this.ano,
             })
@@ -499,7 +477,7 @@ export default {
 
         getClienteAno() {
             this.mes = ""
-            axios.post('http://192.168.0.6:8000/api/omie/oportunidade/cliente-conquistado-mes', {
+            axios.post('http://192.168.0.6:8000/api/omie/oportunidade/proposta-viabilizada-mes', {
                 ano: this.ano,
             })
                 .then((response) => {
@@ -761,6 +739,7 @@ export default {
         },
 
         getProdutosAno() {
+
             this.mesProdutos = ""
             axios.post('http://192.168.0.6:8000/api/indicador/produto-vendido-mes', {
                 nome: this.familiaProdutos,
@@ -917,5 +896,4 @@ button {
 
 ::-webkit-scrollbar {
     width: 0px;
-}
-</style>
+}</style>
