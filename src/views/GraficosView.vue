@@ -45,7 +45,7 @@
 
                     <!-- Using value -->
                     <div style="margin-top: 1rem;">
-                        <div style="padding: 0.5rem;">
+                        <div >
                             <BButton v-b-toggle="'collapse'" class="m-1"
                                 style=" position: absolute;width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px;">
                                 <i style="color: black; font-size: 15px;" class="bi bi-info-circle-fill"></i>
@@ -69,7 +69,7 @@
                         <canvas id="ChartPropostaComercial"></canvas>
                     </div>
                     <div style="margin-top: 1rem;">
-                        <div style="padding: 0.5rem;">
+                        <div style="padding-bottom: 0.5rem;">
                             <!-- Detalhes -->
                             <BButton v-b-toggle="'collapse-2'" class="m-1"
                                 style="position: absolute;width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px; margin-bottom: 0.5rem;">
@@ -100,7 +100,7 @@
                     </div>
 
                     <div style="margin-top: 1rem;">
-                        <div style="padding: 0.5rem;">
+                        <div>
                             <BButton v-b-toggle.collapse-3 class="m-1" id="descrição3"
                                 style="position: absolute ;width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px">
                                 <i style="color: black; font-size: 15px;" class="bi bi-info-circle-fill"></i>
