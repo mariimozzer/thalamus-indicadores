@@ -7,8 +7,10 @@
                 <i class="bi bi-calendar-minus"></i>
             </button>
             <div v-for="i in nomeDosMeses" :key="i">
-                <input @change="igualameses(), getPropostaComercialMes(), getTicketsMes(), getProdutosMes(),getClienteMes(), getProdutosAcabadosMes()" type="radio"
-                    class="btn-check botoes" name="options-base" :id=i.id :value=i.id v-model="mes" autocomplete="off">
+                <input
+                    @change="igualameses(), getPropostaComercialMes(), getTicketsMes(), getProdutosMes(), getClienteMes(), getProdutosAcabadosMes()"
+                    type="radio" class="btn-check botoes" name="options-base" :id=i.id :value=i.id v-model="mes"
+                    autocomplete="off">
                 <label style="color: rgba(255, 255, 255, 1);margin-left: 0.5rem; font-size: large;" class="btn botoes"
                     :for=i.id>{{ i.nome }}</label>
             </div>
@@ -19,15 +21,17 @@
                 <option>2024</option>
             </select>
             <div style="border-left: solid 1px white;">
-                <input @change="getPropostaComercialAno(), getProdutosAno(), getTicketsAno(), getClienteAno(), getProdutosAcabadosAno()" type="radio"
-                    class="btn-check botoes" name="tipodegrafico" id="barra" value="bar" v-model="tipodegrafico"
-                    autocomplete="off">
+                <input
+                    @change="getPropostaComercialAno(), getProdutosAno(), getTicketsAno(), getClienteAno(), getProdutosAcabadosAno()"
+                    type="radio" class="btn-check botoes" name="tipodegrafico" id="barra" value="bar"
+                    v-model="tipodegrafico" autocomplete="off">
                 <label style="color: rgba(255, 255, 255, 1);margin-left: 0.5rem; font-size: medium;" class="btn botoes"
                     for="barra"><i class="bi bi-bar-chart-line-fill"></i></label>
 
-                <input @change="getPropostaComercialAno(), getProdutosAno(), getTicketsAno(), getClienteAno(), getProdutosAcabadosAno()" type="radio"
-                    class="btn-check botoes" name="tipodegrafico" id="linha" value="line" v-model="tipodegrafico"
-                    autocomplete="off">
+                <input
+                    @change="getPropostaComercialAno(), getProdutosAno(), getTicketsAno(), getClienteAno(), getProdutosAcabadosAno()"
+                    type="radio" class="btn-check botoes" name="tipodegrafico" id="linha" value="line"
+                    v-model="tipodegrafico" autocomplete="off">
                 <label style="color: rgba(255, 255, 255, 1);margin-left: 0.5rem; font-size: medium;" class="btn botoes"
                     for="linha"><i class="bi bi-graph-up"></i></label>
             </div>
@@ -37,15 +41,24 @@
         <!-- CRIA DIV'S COM CANVAS QUE SERÃO PREENCHIDOS COM OS GRAFICOS GERADOS NOS METHODS SENDO IDENTIFICADOS POR ID -->
         <div style="display: flex;flex-flow: column ;width: 100%;padding: 1rem;">
             <div class="card mb-3" style="max-width: 100%; border: 1px solid rgb(0, 0, 0); margin-top: 4rem;">
-                <div @click="mostrarComercial()" style="background-color: #db6363;"
-                    class="card-header titulo"><i id="iconeComercial" style="margin-right: 0.5rem;"
-                        class="bi bi-arrow-right"></i>Comercial
+                <div @click="mostrarComercial()" style="background-color: #3571CD;" class="card-header titulo"><i
+                        id="iconeComercial" style="margin-right: 0.5rem;" class="bi bi-arrow-right"></i>Comercial
                 </div>
                 <div id="Comercial" style="display: none;">
 
-                    <!-- Using value -->
-                    <div style="margin-top: 1rem;">
-                        <div >
+
+
+                    <div class="form-check form-switch" style="margin-left: 0.5rem;">
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked
+                            @change="mostrarGrafico('canvaPropostaComercial')">
+                        <label class="form-check-label" for="flexSwitchCheckChecked">Propostas Comerciais</label>
+                    </div>
+
+                    <transition name="fade">
+                    </transition>
+                    
+                    <div style="margin-top: 1rem;" id="canvaPropostaComercial">
+                        <div>
                             <BButton v-b-toggle="'collapse'" class="m-1"
                                 style=" position: absolute;width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px;">
                                 <i style="color: black; font-size: 15px;" class="bi bi-info-circle-fill"></i>
@@ -66,9 +79,17 @@
 
                         </BCollapse>
 
+
                         <canvas id="ChartPropostaComercial"></canvas>
                     </div>
-                    <div style="margin-top: 1rem;">
+
+                    <div class="form-check form-switch" style="margin-left: 0.5rem;">
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked"
+                            @change="mostrarGrafico('ProdutosVendido')">
+                        <label class="form-check-label" for="flexSwitchCheckChecked">Produtos Vendidos</label>
+                    </div>
+
+                    <div style="margin-top: 1rem; display: none;" id="ProdutosVendido" >
                         <div style="padding-bottom: 0.5rem;">
                             <!-- Detalhes -->
                             <BButton v-b-toggle="'collapse-2'" class="m-1"
@@ -99,7 +120,14 @@
                         </select>
                     </div>
 
-                    <div style="margin-top: 1rem;">
+                    <div class="form-check form-switch" style="margin-left: 0.5rem;">
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked"
+                            @change="mostrarGrafico('Clientes')">
+                        <label class="form-check-label" for="flexSwitchCheckChecked">Clientes</label>
+                    </div>
+
+
+                    <div style="margin-top: 1rem; display: none;" id="Clientes">
                         <div>
                             <BButton v-b-toggle.collapse-3 class="m-1" id="descrição3"
                                 style="position: absolute ;width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px">
@@ -107,12 +135,12 @@
                             </BButton>
                         </div>
 
-                        <BCollapse id="collapse-3" class="position-absolute"
-                            style="margin-left: 4rem;">
+                        <BCollapse id="collapse-3" class="position-absolute" style="margin-left: 4rem;">
                             <BCard>
                                 <div style="max-width: 30rem; max-height: min-content;">
                                     <b>Fórmula:</b> Soma das oportunidades quando o motivo é igual a "oportunidade
-                                    conquistada" e tipo corresponde a "Cliente novo", "Cliente reciclado" e "Cliente recorrente".
+                                    conquistada" e tipo corresponde a "Cliente novo", "Cliente reciclado" e "Cliente
+                                    recorrente".
                                     <br>
                                     <b>Polaridade:</b> Quanto maior, melhor. <br>
                                     <b>Fonte:</b> OMIE > Oportunidade quando tipo é igual a Cliente novo,
@@ -153,37 +181,47 @@
                 </div>
                 <div id="Produção" style="display: none;">
 
-                    <div style="margin-top: 1rem;">
+                    <div class="form-check form-switch" style="margin-left: 0.5rem;">
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked
+                            @change="mostrarGrafico('ProdutosAcabados')" >
+                            <!-- "show = !show" -->
+                        <label class="form-check-label" for="flexSwitchCheckChecked">Produção Diária</label>
+                    </div>
+
+                    <transition name="slide-fade">
+                    <div style="margin-top: 1rem;" id="ProdutosAcabados">
+                        <!-- v-if="show == true" -->
                         <div style="margin-bottom: 1rem;">
-                    <BButton v-b-toggle="'collapse-4'" class="m-1"
-                        style="position: absolute;width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px;">
-                        <i style="color: black; font-size: 15px;" class="bi bi-info-circle-fill"></i>
-                    </BButton>
-                    </div>
+                            <BButton v-b-toggle="'collapse-4'" class="m-1"
+                                style="position: absolute;width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px;">
+                                <i style="color: black; font-size: 15px;" class="bi bi-info-circle-fill"></i>
+                            </BButton>
+                        </div>
 
-                    <!-- Element to collapse -->
-                    <BCollapse id="collapse-4" class="position-absolute" style="margin-left: 4rem; margin-top: 1rem">
-                        <BCard>
-                            <div style="max-width: 23rem;">
-                                <b>Fórmula:</b> Quantidade de produtos acabados (excluido o tipo: 'conjunto') e etapa =
-                                disponível / 22. <br>
-                                <b>Polaridade:</b> Quanto maior, melhor. <br>
-                                <b>Fonte:</b> OMIE > Produção > Produto acabado. <br>
-                                <b>Descrição:</b> Quantidade de produtos acabados feitos diariamente.<br>
-                            </div>
-                        </BCard>
+                        <!-- Element to collapse -->
+                        <BCollapse id="collapse-4" class="position-absolute" style="margin-left: 4rem; margin-top: 1rem">
+                            <BCard>
+                                <div style="max-width: 23rem;">
+                                    <b>Fórmula:</b> Quantidade de produtos acabados (excluido o tipo: 'conjunto') e etapa =
+                                    disponível / 22. <br>
+                                    <b>Polaridade:</b> Quanto maior, melhor. <br>
+                                    <b>Fonte:</b> OMIE > Produção > Produto acabado. <br>
+                                    <b>Descrição:</b> Quantidade de produtos acabados feitos diariamente.<br>
+                                </div>
+                            </BCard>
 
-                    </BCollapse>
-                    </div>
-                    <!-- Quantidade Diaria de Produtos Acabados -->
-
-
-                    <canvas id="ChartProdutosAcabados"></canvas>
-
-                    <select v-model="produto" @change="getProdutosAcabadosAno()"
-                            style="width: 10rem; margin: 0.2rem 0 0.5rem 1rem; border-radius: 10px;">
-                            <option v-for=" p in listaProdutos" :key="p">{{ capitalize(p.familia_nome) }}</option>
-                        </select>
+                        </BCollapse>
+                        <!-- Quantidade Diaria de Produtos Acabados -->
+                        
+                        
+                        <canvas id="ChartProdutosAcabados"></canvas>
+                        
+                        <select v-model="produto" @change="getProdutosAcabadosAno()"
+                        style="width: 10rem; margin: 0.2rem 0 0.5rem 1rem; border-radius: 10px;">
+                        <option v-for=" p in listaProdutos" :key="p">{{ capitalize(p.familia_nome) }}</option>
+                    </select>
+                </div>
+                </transition>
                 </div>
             </div>
 
@@ -228,6 +266,7 @@ import { getRelativePosition } from 'chart.js/helpers';
 export default {
     data() {
         return {
+            show: true,
             tipodegrafico: "bar",
             listaProdutos: [{
                 "familia_nome": "ACESSÓRIOS"
@@ -287,6 +326,7 @@ export default {
             data: "",
             dataX: "",
             mes: "",
+            mesPropostasViabilizadas: "",
             mesTickets: "",
             mesProdutos: "",
             ano: "2023",
@@ -345,9 +385,15 @@ export default {
     },
     methods: {
 
-        mostrarDetalhes3() {
-            document.getElementById('descrição3').click();
-        },
+         mostrarGrafico(id) {
+             var element = document.getElementById(id);
+             if (element.style.display == "none") {
+                 element.style.display = ""
+             } else {
+                 element.style.display = "none"
+             }
+         },
+
         // FUNÇÃO PARA OCULTAR/MOSTRAR E MODIFICAR O ICONE DA DIV EM QUE ESTÁ O GRAFICO
         mostrarComercial() {
             if (document.getElementById('Comercial').style.display != "none") {
@@ -430,14 +476,16 @@ export default {
             this.mesTickets = this.mes;
             this.mesProdutos = this.mes;
             this.mesCliente = this.mes;
-            this.mesProdutosAcabados = this.mes
+            this.mesProdutosAcabados = this.mes;
+            this.mesPropostasViabilizadas = this.mes
         },
 
         // GERA UM GRÁFICO
         getPropostaComercialMes() {
             // PUXA OS DADOS DO BACKEND PASSANDO MES E ANO
+            this.mes = this.mesPropostasViabilizadas
             axios.post('http://192.168.0.6:8000/api/omie/oportunidade/proposta-viabilizada', {
-                mes: this.mes,
+                mes: this.mesPropostasViabilizadas,
                 ano: this.ano,
             })
                 .then((response) => {
@@ -466,8 +514,8 @@ export default {
                         data: this.dataGrafico,
                         type: this.tipodegrafico,
                         label: 'Propostas Comerciais Viabilizadas',
-                        backgroundColor: '#db6363',
-                        borderColor: '#db6363',
+                        backgroundColor: '#3571CD',
+                        borderColor: '#3571CD',
                         borderWidth: 2,
                         tension: 0.3,
                         pointRadius: 2.2,
@@ -483,6 +531,7 @@ export default {
 
         getPropostaComercialAno() {
             this.mes = ""
+            this.mesPropostasViabilizadas = ""
             axios.post('http://192.168.0.6:8000/api/omie/oportunidade/proposta-viabilizada-mes', {
                 ano: this.ano,
             })
@@ -511,8 +560,8 @@ export default {
                         data: this.dataGrafico,
                         type: this.tipodegrafico,
                         label: 'Propostas Comerciais Viabilizadas',
-                        backgroundColor: '#db6363',
-                        borderColor: '#db6363',
+                        backgroundColor: '#3571CD',
+                        borderColor: '#3571CD',
                         borderWidth: 1.5,
                         tension: 0.3,
                         pointRadius: 2.2,
@@ -558,11 +607,11 @@ export default {
                     },
                     // FUNÇÃO ENTRA EM AÇÃO AO CLICAR EM ALGUM DADO DO GRÁFICO
                     onClick: (e) => {
-                        if (this.mes == "") {
+                        if (this.mesPropostasViabilizadas == "") {
                             const canvasPosition = getRelativePosition(e, canvas.chart);
                             const dataX = canvas.chart.scales.x.getValueForPixel(canvasPosition.x);
 
-                            this.mes = this.dadosFormatadosC[dataX]
+                            this.mesPropostasViabilizadas = this.dadosFormatadosC[dataX]
                             this.getPropostaComercialMes();
                         } else {
                             const canvasPosition = getRelativePosition(e, canvas.chart);
@@ -820,6 +869,7 @@ export default {
 
         getClienteMes() {
             // PUXA OS DADOS DO BACKEND PASSANDO MES E ANO
+            this.mes = this.mesCliente
             axios.post('http://192.168.0.6:8000/api/omie/oportunidade/cliente-alcancado', {
                 mes: this.mesCliente,
                 ano: this.ano,
@@ -846,8 +896,8 @@ export default {
                             data: this.dataGraficoClientesNovos,
                             type: this.tipodegrafico,
                             label: 'Clientes Novos',
-                            backgroundColor: '#001449',
-                            borderColor: '#001449',
+                            backgroundColor: '#3571cd',
+                            borderColor: '#3571cd',
                             borderWidth: 1.5,
                             tension: 0.3,
                             pointRadius: 2.2,
@@ -856,8 +906,8 @@ export default {
                         data: this.dataGraficoClientesRecorrente,
                         type: this.tipodegrafico,
                         label: 'Clientes Recorrentes',
-                        backgroundColor: '#005bc5',
-                        borderColor: '#005bc5',
+                        backgroundColor: '#1d467b',
+                        borderColor: '#1d467b',
                         borderWidth: 1.5,
                         tension: 0.3,
                         pointRadius: 2.2,
@@ -867,8 +917,8 @@ export default {
                             data: this.dataGraficoClientesReciclado,
                             type: this.tipodegrafico,
                             label: 'Clientes Reciclados',
-                            backgroundColor: '#3571cd',
-                            borderColor: '#3571cd',
+                            backgroundColor: '#001449',
+                            borderColor: '#001449',
                             borderWidth: 1.5,
                             tension: 0.3,
                             pointRadius: 2.2,
@@ -903,8 +953,8 @@ export default {
                             data: this.dataGraficoClientesNovos,
                             type: this.tipodegrafico,
                             label: 'Clientes Novos',
-                            backgroundColor: '#001449',
-                            borderColor: '#001449',
+                            backgroundColor: '#3571CD',
+                            borderColor: '#3571CD',
                             borderWidth: 1.5,
                             tension: 0.3,
                             pointRadius: 2.2,
@@ -913,8 +963,8 @@ export default {
                         data: this.dataGraficoClientesRecorrente,
                         type: this.tipodegrafico,
                         label: 'Clientes Recorrentes',
-                        backgroundColor: '#005bc5',
-                        borderColor: '#005bc5',
+                        backgroundColor: '#1d467b',
+                        borderColor: '#1d467b',
                         borderWidth: 1.5,
                         tension: 0.3,
                         pointRadius: 2.2,
@@ -924,8 +974,8 @@ export default {
                             data: this.dataGraficoClientesReciclado,
                             type: this.tipodegrafico,
                             label: 'Clientes Reciclados',
-                            backgroundColor: '#3571cd',
-                            borderColor: '#3571cd',
+                            backgroundColor: '#001449',
+                            borderColor: '#001449',
                             borderWidth: 1.5,
                             tension: 0.3,
                             pointRadius: 2.2,
@@ -969,24 +1019,26 @@ export default {
                             }
                         },
                     },
-                     onClick: (e) => {
-                        const canvasPosition = getRelativePosition(e, canvas.chart);
+                    onClick: (e) => {
+                        if (this.mesCliente == "") {
+                            const canvasPosition = getRelativePosition(e, canvas.chart);
                             const dataX = canvas.chart.scales.x.getValueForPixel(canvasPosition.x);
 
                             this.mesCliente = this.dadosFormatadosC[dataX]
                             this.getClienteMes();
+                        }
 
-                     }
+                    }
                 },
             });
         },
 
         getProdutosAcabadosMes() {
-
+            this.mes = this.mesProdutosAcabados
             axios.post('http://192.168.0.6:8000/api/indicador/produto-produzido', {
                 mes: this.mesProdutosAcabados,
                 ano: this.ano,
-                produto : this.produto
+                produto: this.produto
             })
                 .then((response) => {
                     this.dadosProdutosAcabados = response.data;
@@ -1015,10 +1067,11 @@ export default {
                             tension: 0.3,
                             pointRadius: 2.2,
                             pointHoverRadius: 5,
+                            hidden: true
                         }, {
                         data: this.dataGraficoProdutosAcabadosMediaDia,
                         type: this.tipodegrafico,
-                        label: 'Média Diária',
+                        label: 'Produção Diária',
                         backgroundColor: '#fc4b2a',
                         borderColor: '#fc4b2a',
                         borderWidth: 1.5,
@@ -1037,7 +1090,7 @@ export default {
             this.mesProdutosAcabados = ""
             axios.post('http://192.168.0.6:8000/api/indicador/produto-produzido', {
                 ano: this.ano,
-                produto : this.produto
+                produto: this.produto
             })
                 .then((response) => {
                     this.dadosProdutosAcabados = response.data;
@@ -1061,10 +1114,11 @@ export default {
                             tension: 0.3,
                             pointRadius: 2.2,
                             pointHoverRadius: 5,
+                            hidden: true
                         }, {
                         data: this.dataGraficoProdutosAcabadosMediaDia,
                         type: this.tipodegrafico,
-                        label: 'Média Diária',
+                        label: 'Produção Diária',
                         backgroundColor: '#fc4b2a',
                         borderColor: '#fc4b2a',
                         borderWidth: 1.5,
@@ -1110,17 +1164,21 @@ export default {
                             }
                         },
                     },
-                      onClick: (e) => {
-                         const canvasPosition = getRelativePosition(e, canvas.chart);
-                             const dataX = canvas.chart.scales.x.getValueForPixel(canvasPosition.x);
+                    onClick: (e) => {
+                        if (this.mesProdutosAcabados == "") {
+                            const canvasPosition = getRelativePosition(e, canvas.chart);
+                            const dataX = canvas.chart.scales.x.getValueForPixel(canvasPosition.x);
 
-                             this.mesProdutosAcabados = this.dadosFormatadosProdutosAcabados[dataX]
-                             this.getProdutosAcabadosMes();
+                            this.mesProdutosAcabados = this.dadosFormatadosProdutosAcabados[dataX]
+                            this.getProdutosAcabadosMes();
+                        }
 
-                      }
+                    }
                 },
             });
         },
+
+
 
     }
 }
@@ -1199,6 +1257,18 @@ button {
     align-items: center;
     justify-content: center;
     scroll-behavior: auto;
+}
+
+.slide-fade-enter-active {
+  transition: all .3s ease;
+}
+.slide-fade-leave-active {
+  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active em versões anteriores a 2.1.8 */ {
+  transform: translateX(10px);
+  opacity: 0;
 }
 
 ::-webkit-scrollbar {
