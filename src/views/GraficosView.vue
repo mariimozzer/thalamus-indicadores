@@ -7,7 +7,7 @@
                 <i class="bi bi-calendar-minus"></i>
             </button>
             <div v-for="i in nomeDosMeses" :key="i">
-                <input @change="igualameses(), getPropostaComercialMes(), getTicketsMes(), getProdutosMes()" type="radio"
+                <input @change="igualameses(), getPropostaComercialMes(), getTicketsMes(), getProdutosMes(),getClienteMes()" type="radio"
                     class="btn-check botoes" name="options-base" :id=i.id :value=i.id v-model="mes" autocomplete="off">
                 <label style="color: rgba(255, 255, 255, 1);margin-left: 0.5rem; font-size: large;" class="btn botoes"
                     :for=i.id>{{ i.nome }}</label>
@@ -37,7 +37,7 @@
         <!-- CRIA DIV'S COM CANVAS QUE SERÃO PREENCHIDOS COM OS GRAFICOS GERADOS NOS METHODS SENDO IDENTIFICADOS POR ID -->
         <div style="display: flex;flex-flow: column ;width: 100%;padding: 1rem;">
             <div class="card mb-3" style="max-width: 100%; border: 1px solid rgb(0, 0, 0); margin-top: 4rem;">
-                <div @click="mostrarComercial()" style="background-color: rgba(255, 167, 38, 1);"
+                <div @click="mostrarComercial()" style="background-color: #ff3d00;"
                     class="card-header titulo"><i id="iconeComercial" style="margin-right: 0.5rem;"
                         class="bi bi-arrow-right"></i>Comercial
                 </div>
@@ -95,7 +95,7 @@
                         <canvas id="ChartProdutos"></canvas>
                         <select v-model="familiaProdutos" @change="getProdutosAno()"
                             style="width: 10rem; margin: 0.2rem 0 0.5rem 1rem; border-radius: 10px;">
-                            <option v-for=" p in listaProdutos" :key="p">{{ p.familia_nome }}</option>
+                            <option v-for=" p in listaProdutos" :key="p">{{ capitalize(p.familia_nome) }}</option>
                         </select>
                     </div>
 
@@ -107,7 +107,7 @@
                             </BButton>
                         </div>
 
-                        <BCollapse :visible="this.visibilidadeDetalhe3" id="collapse-3" class="position-absolute"
+                        <BCollapse id="collapse-3" class="position-absolute"
                             style="margin-left: 4rem;">
                             <BCard>
                                 <div style="max-width: 30rem; max-height: min-content;">
@@ -124,6 +124,7 @@
                             </BCard>
 
                         </BCollapse>
+
 
                         <canvas id="ChartClientes"></canvas>
                     </div>
@@ -148,7 +149,7 @@
 
 
             <div class="card mb-3" style="max-width: 100%; border: 1px solid rgb(0, 0, 0);">
-                <div @click="mostrarProdução()" style="background-color: rgba(244, 67, 54, 1);" class="card-header titulo">
+                <div @click="mostrarProdução()" style="background-color: #d50000;" class="card-header titulo">
                     <i id="iconeProdução" style="margin-right: 0.5rem;" class="bi bi-arrow-right"></i>Produção
                 </div>
                 <div id="Produção" style="display: none;">
@@ -172,6 +173,10 @@
                     </BCollapse>
                     <!-- Quantidade Diaria de Produtos Acabados -->
                     <canvas id="ChartQuantidadeDiariaPA"></canvas>
+                    <select v-model="produtoAcabado"
+                            style="width: 10rem; margin: 0.2rem 0 0.5rem 1rem; border-radius: 10px;">
+                            <option v-for=" p in listaProdutos" :key="p">{{ capitalize(p.familia_nome) }}</option>
+                        </select>
                 </div>
             </div>
 
@@ -263,7 +268,8 @@ export default {
                 "familia_nome": "TODOS"
             },
             ],
-            familiaProdutos: "TODOS",
+            produtoAcabado: "Todos",
+            familiaProdutos: "Todos",
             dadosFormatadosC: [],
             dadosFormatadosT: [],
             dadosFormatadosP: [],
@@ -313,8 +319,6 @@ export default {
             dataGraficoClientesRecorrente: [],
             dataGraficoClientesReciclado: [],
             datasetsClientes: [],
-            visibilidadeDetalhe3: false,
-
         }
     },
     mounted() {
@@ -408,7 +412,8 @@ export default {
         // IGUALA OS MESES PARA QUANDO O BOTÃO DO MES QUE ESTÁ NO CABEÇALHO SEJA CLICADO TODOS OS GRAFICOS MOSTREM O MES SELECIONADO
         igualameses() {
             this.mesTickets = this.mes;
-            this.mesProdutos = this.mes
+            this.mesProdutos = this.mes;
+            this.mesCliente = this.mes
         },
 
         // GERA UM GRÁFICO
@@ -444,8 +449,8 @@ export default {
                         data: this.dataGrafico,
                         type: this.tipodegrafico,
                         label: 'Propostas Comerciais Viabilizadas',
-                        backgroundColor: 'rgba(255, 167, 38, 1)',
-                        borderColor: 'rgba(255, 167, 38, 1)',
+                        backgroundColor: '#ff3d00',
+                        borderColor: '#ff3d00',
                         borderWidth: 2,
                         tension: 0.3,
                         pointRadius: 2.2,
@@ -489,8 +494,8 @@ export default {
                         data: this.dataGrafico,
                         type: this.tipodegrafico,
                         label: 'Propostas Comerciais Viabilizadas',
-                        backgroundColor: 'rgba(255, 167, 38, 1)',
-                        borderColor: 'rgba(255, 167, 38, 1)',
+                        backgroundColor: '#ff3d00',
+                        borderColor: '#ff3d00',
                         borderWidth: 1.5,
                         tension: 0.3,
                         pointRadius: 2.2,
@@ -703,8 +708,8 @@ export default {
                         data: this.dataGraficoProdutos,
                         type: this.tipodegrafico,
                         label: 'Quantidade de Produtos Vendidos',
-                        backgroundColor: 'rgba(255, 167, 38, 1)',
-                        borderColor: 'rgba(255, 167, 38, 1)',
+                        backgroundColor: '#ff3d00',
+                        borderColor: '#ff3d00',
                         borderWidth: 2,
                         tension: 0.3,
                         pointRadius: 2.2,
@@ -736,8 +741,8 @@ export default {
                         data: this.dataGraficoProdutos,
                         type: this.tipodegrafico,
                         label: 'Quantidade de Produtos Vendidos',
-                        backgroundColor: 'rgba(255, 167, 38, 1)',
-                        borderColor: 'rgba(255, 167, 38, 1)',
+                        backgroundColor: '#ff3d00',
+                        borderColor: '#ff3d00',
                         borderWidth: 1.5,
                         tension: 0.3,
                         pointRadius: 2.2,
@@ -798,43 +803,60 @@ export default {
 
         getClienteMes() {
             // PUXA OS DADOS DO BACKEND PASSANDO MES E ANO
-            axios.post('http://192.168.0.6:8000/api/omie/oportunidade/proposta-viabilizada', {
-                mes: this.mes,
+            axios.post('http://192.168.0.6:8000/api/omie/oportunidade/cliente-alcancado', {
+                mes: this.mesCliente,
                 ano: this.ano,
             })
                 .then((response) => {
-                    this.dados = response.data;
-                    this.dados.forEach((item) => {
+                    this.dadosClientes = response.data;
+                    this.dadosClientes.forEach((item) => {
                         item.semana = item.semana.toString().substring(4);
                     });
 
-                    this.dadosFormatadosC = this.dados.map((item) => parseInt(item.semana, 10));
+                    this.dadosFormatadosClientes = this.dadosClientes.map((item) => parseInt(item.semana, 10));
 
-                    this.labels = this.dadosFormatadosC.map((value, index) => {
+                    this.labelsclientes = this.dadosFormatadosClientes.map((value, index) => {
                         return `${index + 1}º semana`;
                     });
 
-                    this.dataGrafico = this.dados.map((item) => item.regSemana);
-                    this.datasets = [];
-                    this.datasets.push({
-                        type: 'line',
-                        label: 'Meta',
-                        backgroundColor: 'black',
-                        borderColor: 'black',
-                        pointRadius: 0,
-                        borderWidth: 1,
-                        data: [10, 10, 10, 10, 10]
-                    }, {
-                        data: this.dataGrafico,
+                    this.dataGraficoClientesNovos = this.dadosClientes.map((item) => item.cliente_novo);
+                    this.dataGraficoClientesRecorrente = this.dadosClientes.map((item) => item.cliente_recorrente);
+                    this.dataGraficoClientesReciclado = this.dadosClientes.map((item) => item.cliente_reciclado);
+
+                    this.datasetsClientes = [];
+                    this.datasetsClientes.push(
+                        {
+                            data: this.dataGraficoClientesNovos,
+                            type: this.tipodegrafico,
+                            label: 'Clientes Novos',
+                            backgroundColor: '#001449',
+                            borderColor: '#001449',
+                            borderWidth: 1.5,
+                            tension: 0.3,
+                            pointRadius: 2.2,
+                            pointHoverRadius: 5,
+                        }, {
+                        data: this.dataGraficoClientesRecorrente,
                         type: this.tipodegrafico,
-                        label: 'Clientes Conquistados',
-                        backgroundColor: 'rgba(255, 167, 38, 1)',
-                        borderColor: 'rgba(255, 167, 38, 1)',
-                        borderWidth: 2,
+                        label: 'Clientes Recorrentes',
+                        backgroundColor: '#005bc5',
+                        borderColor: '#005bc5',
+                        borderWidth: 1.5,
                         tension: 0.3,
                         pointRadius: 2.2,
                         pointHoverRadius: 5,
-                    })
+                    },
+                        {
+                            data: this.dataGraficoClientesReciclado,
+                            type: this.tipodegrafico,
+                            label: 'Clientes Reciclados',
+                            backgroundColor: '#17f9ff',
+                            borderColor: '#17f9ff',
+                            borderWidth: 1.5,
+                            tension: 0.3,
+                            pointRadius: 2.2,
+                            pointHoverRadius: 5,
+                        })
 
                     this.renderChartClientes();
                 })
@@ -845,7 +867,7 @@ export default {
 
         getClienteAno() {
             this.mesCliente = ""
-            axios.post('http://192.168.0.6:8000/api/omie/oportunidade/cliente-alcancado-mes', {
+            axios.post('http://192.168.0.6:8000/api/omie/oportunidade/cliente-alcancado', {
                 ano: this.ano,
             })
                 .then((response) => {
@@ -918,8 +940,6 @@ export default {
                     maintainAspectRatio: true,
                     plugins: {
                         legend: {
-                            onHover: this.mostrarDetalhes3,
-                            onLeave: this.mostrarDetalhes3,
                             display: true,
                             labels: {
                                 boxWidth: 15,
@@ -932,14 +952,14 @@ export default {
                             }
                         },
                     },
-                    // onClick: (e) => {
-                    //         const canvasPosition = getRelativePosition(e, canvas.chart);
-                    //         const dataX = canvas.chart.scales.x.getValueForPixel(canvasPosition.x);
+                     onClick: (e) => {
+                        const canvasPosition = getRelativePosition(e, canvas.chart);
+                            const dataX = canvas.chart.scales.x.getValueForPixel(canvasPosition.x);
 
-                    //         this.mesCliente = this.dadosFormatadosClientes[dataX]
-                    //         this.getClienteMes();
+                            this.mesCliente = this.dadosFormatadosC[dataX]
+                            this.getClienteMes();
 
-                    //  }
+                     }
                 },
             });
         },
