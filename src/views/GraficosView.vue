@@ -3,29 +3,29 @@
         <!-- CRIA UM CABEÇALHO PARA SELEÇÃO DE MÊS E UM BOTÃO PARA EXIBIR O ANO TODO -->
         <div class="form-check cabecalho">
             <button v-b-tooltip.hover title="Ano inteiro!" class="botoes"
-                @click="getPropostaComercialAno(), getTicketsAno(), getProdutosAno(), getClienteAno()">
+                @click="getPropostaComercialAno(), getTicketsAno(), getProdutosAno(), getClienteAno(), getClienteAno(), getProdutosAcabadosAno()">
                 <i class="bi bi-calendar-minus"></i>
             </button>
             <div v-for="i in nomeDosMeses" :key="i">
-                <input @change="igualameses(), getPropostaComercialMes(), getTicketsMes(), getProdutosMes(),getClienteMes()" type="radio"
+                <input @change="igualameses(), getPropostaComercialMes(), getTicketsMes(), getProdutosMes(),getClienteMes(), getProdutosAcabadosMes()" type="radio"
                     class="btn-check botoes" name="options-base" :id=i.id :value=i.id v-model="mes" autocomplete="off">
                 <label style="color: rgba(255, 255, 255, 1);margin-left: 0.5rem; font-size: large;" class="btn botoes"
                     :for=i.id>{{ i.nome }}</label>
             </div>
             <select class="botoes ano" v-model="ano"
-                @change="getProdutosAno(), getPropostaComercialAno(), getTicketsAno(), getClienteAno()"
+                @change="getProdutosAno(), getPropostaComercialAno(), getTicketsAno(), getClienteAno(), getProdutosAcabadosAno()"
                 style="width: 4rem; margin-left: 0.5em;margin-right: 0.5em  ;border: none; background-color: rgba(33, 37, 41, 1)">
                 <option>2023</option>
                 <option>2024</option>
             </select>
             <div style="border-left: solid 1px white;">
-                <input @change="getPropostaComercialAno(), getProdutosAno(), getTicketsAno(), getClienteAno()" type="radio"
+                <input @change="getPropostaComercialAno(), getProdutosAno(), getTicketsAno(), getClienteAno(), getProdutosAcabadosAno()" type="radio"
                     class="btn-check botoes" name="tipodegrafico" id="barra" value="bar" v-model="tipodegrafico"
                     autocomplete="off">
                 <label style="color: rgba(255, 255, 255, 1);margin-left: 0.5rem; font-size: medium;" class="btn botoes"
                     for="barra"><i class="bi bi-bar-chart-line-fill"></i></label>
 
-                <input @change="getPropostaComercialAno(), getProdutosAno(), getTicketsAno(), getClienteAno()" type="radio"
+                <input @change="getPropostaComercialAno(), getProdutosAno(), getTicketsAno(), getClienteAno(), getProdutosAcabadosAno()" type="radio"
                     class="btn-check botoes" name="tipodegrafico" id="linha" value="line" v-model="tipodegrafico"
                     autocomplete="off">
                 <label style="color: rgba(255, 255, 255, 1);margin-left: 0.5rem; font-size: medium;" class="btn botoes"
@@ -37,7 +37,7 @@
         <!-- CRIA DIV'S COM CANVAS QUE SERÃO PREENCHIDOS COM OS GRAFICOS GERADOS NOS METHODS SENDO IDENTIFICADOS POR ID -->
         <div style="display: flex;flex-flow: column ;width: 100%;padding: 1rem;">
             <div class="card mb-3" style="max-width: 100%; border: 1px solid rgb(0, 0, 0); margin-top: 4rem;">
-                <div @click="mostrarComercial()" style="background-color: #ff3d00;"
+                <div @click="mostrarComercial()" style="background-color: #db6363;"
                     class="card-header titulo"><i id="iconeComercial" style="margin-right: 0.5rem;"
                         class="bi bi-arrow-right"></i>Comercial
                 </div>
@@ -112,12 +112,11 @@
                             <BCard>
                                 <div style="max-width: 30rem; max-height: min-content;">
                                     <b>Fórmula:</b> Soma das oportunidades quando o motivo é igual a "oportunidade
-                                    conquistada".
+                                    conquistada" e tipo corresponde a "Cliente novo", "Cliente reciclado" e "Cliente recorrente".
                                     <br>
                                     <b>Polaridade:</b> Quanto maior, melhor. <br>
-                                    <b>Fonte:</b> OMIE > Oportunidade quando tipo é igual a PropostaComercial novo,
-                                    PropostaComercial reciclado e
-                                    PropostaComercial recorrente. <br>
+                                    <b>Fonte:</b> OMIE > Oportunidade quando tipo é igual a Cliente novo,
+                                    Cliente reciclado e Cliente recorrente. <br>
                                     <b>Descrição:</b> Quantidade de oportunidades conquistas classificadas por tipo de
                                     Proposta Comercial.<br>
                                 </div>
@@ -153,10 +152,14 @@
                     <i id="iconeProdução" style="margin-right: 0.5rem;" class="bi bi-arrow-right"></i>Produção
                 </div>
                 <div id="Produção" style="display: none;">
+
+                    <div style="margin-top: 1rem;">
+                        <div style="margin-bottom: 1rem;">
                     <BButton v-b-toggle="'collapse-4'" class="m-1"
-                        style="width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px;">
+                        style="position: absolute;width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px;">
                         <i style="color: black; font-size: 15px;" class="bi bi-info-circle-fill"></i>
                     </BButton>
+                    </div>
 
                     <!-- Element to collapse -->
                     <BCollapse id="collapse-4" class="position-absolute" style="margin-left: 4rem; margin-top: 1rem">
@@ -171,9 +174,13 @@
                         </BCard>
 
                     </BCollapse>
+                    </div>
                     <!-- Quantidade Diaria de Produtos Acabados -->
-                    <canvas id="ChartQuantidadeDiariaPA"></canvas>
-                    <select v-model="produtoAcabado"
+
+
+                    <canvas id="ChartProdutosAcabados"></canvas>
+
+                    <select v-model="produto" @change="getProdutosAcabadosAno()"
                             style="width: 10rem; margin: 0.2rem 0 0.5rem 1rem; border-radius: 10px;">
                             <option v-for=" p in listaProdutos" :key="p">{{ capitalize(p.familia_nome) }}</option>
                         </select>
@@ -268,7 +275,7 @@ export default {
                 "familia_nome": "TODOS"
             },
             ],
-            produtoAcabado: "Todos",
+            produto: "Todos",
             familiaProdutos: "Todos",
             dadosFormatadosC: [],
             dadosFormatadosT: [],
@@ -319,6 +326,14 @@ export default {
             dataGraficoClientesRecorrente: [],
             dataGraficoClientesReciclado: [],
             datasetsClientes: [],
+
+            mesProdutosAcabados: "",
+            dadosProdutosAcabados: [],
+            dadosFormatadosProdutosAcabados: [],
+            labelsProdutosAcabados: [],
+            datasetsProdutosAcabados: [],
+            dataGraficoProdutosAcabadosTotal: [],
+            dataGraficoProdutosAcabadosMediaDia: [],
         }
     },
     mounted() {
@@ -326,6 +341,7 @@ export default {
         this.getTicketsAno()
         this.getProdutosAno()
         this.getClienteAno()
+        this.getProdutosAcabadosAno()
     },
     methods: {
 
@@ -413,7 +429,8 @@ export default {
         igualameses() {
             this.mesTickets = this.mes;
             this.mesProdutos = this.mes;
-            this.mesCliente = this.mes
+            this.mesCliente = this.mes;
+            this.mesProdutosAcabados = this.mes
         },
 
         // GERA UM GRÁFICO
@@ -449,8 +466,8 @@ export default {
                         data: this.dataGrafico,
                         type: this.tipodegrafico,
                         label: 'Propostas Comerciais Viabilizadas',
-                        backgroundColor: '#ff3d00',
-                        borderColor: '#ff3d00',
+                        backgroundColor: '#db6363',
+                        borderColor: '#db6363',
                         borderWidth: 2,
                         tension: 0.3,
                         pointRadius: 2.2,
@@ -494,8 +511,8 @@ export default {
                         data: this.dataGrafico,
                         type: this.tipodegrafico,
                         label: 'Propostas Comerciais Viabilizadas',
-                        backgroundColor: '#ff3d00',
-                        borderColor: '#ff3d00',
+                        backgroundColor: '#db6363',
+                        borderColor: '#db6363',
                         borderWidth: 1.5,
                         tension: 0.3,
                         pointRadius: 2.2,
@@ -708,8 +725,8 @@ export default {
                         data: this.dataGraficoProdutos,
                         type: this.tipodegrafico,
                         label: 'Quantidade de Produtos Vendidos',
-                        backgroundColor: '#ff3d00',
-                        borderColor: '#ff3d00',
+                        backgroundColor: '#db6363',
+                        borderColor: '#db6363',
                         borderWidth: 2,
                         tension: 0.3,
                         pointRadius: 2.2,
@@ -741,8 +758,8 @@ export default {
                         data: this.dataGraficoProdutos,
                         type: this.tipodegrafico,
                         label: 'Quantidade de Produtos Vendidos',
-                        backgroundColor: '#ff3d00',
-                        borderColor: '#ff3d00',
+                        backgroundColor: '#db6363',
+                        borderColor: '#db6363',
                         borderWidth: 1.5,
                         tension: 0.3,
                         pointRadius: 2.2,
@@ -850,8 +867,8 @@ export default {
                             data: this.dataGraficoClientesReciclado,
                             type: this.tipodegrafico,
                             label: 'Clientes Reciclados',
-                            backgroundColor: '#17f9ff',
-                            borderColor: '#17f9ff',
+                            backgroundColor: '#3571cd',
+                            borderColor: '#3571cd',
                             borderWidth: 1.5,
                             tension: 0.3,
                             pointRadius: 2.2,
@@ -907,8 +924,8 @@ export default {
                             data: this.dataGraficoClientesReciclado,
                             type: this.tipodegrafico,
                             label: 'Clientes Reciclados',
-                            backgroundColor: '#17f9ff',
-                            borderColor: '#17f9ff',
+                            backgroundColor: '#3571cd',
+                            borderColor: '#3571cd',
                             borderWidth: 1.5,
                             tension: 0.3,
                             pointRadius: 2.2,
@@ -964,6 +981,146 @@ export default {
             });
         },
 
+        getProdutosAcabadosMes() {
+
+            axios.post('http://192.168.0.6:8000/api/indicador/produto-produzido', {
+                mes: this.mesProdutosAcabados,
+                ano: this.ano,
+                produto : this.produto
+            })
+                .then((response) => {
+                    this.dadosProdutosAcabados = response.data;
+                    this.dadosProdutosAcabados.forEach((item) => {
+                        item.semana = item.semana.toString().substring(4);
+                    });
+
+                    this.dadosFormatadosProdutosAcabados = this.dadosProdutosAcabados.map((item) => parseInt(item.semana, 10));
+
+                    this.labelsProdutosAcabados = this.dadosFormatadosProdutosAcabados.map((value, index) => {
+                        return `${index + 1}º semana`;
+                    });
+
+                    this.dataGraficoProdutosAcabadosTotal = this.dadosProdutosAcabados.map((item) => item.total);
+                    this.dataGraficoProdutosAcabadosMediaDia = this.dadosProdutosAcabados.map((item) => item.mediaDia);
+
+                    this.datasetsProdutosAcabados = [];
+                    this.datasetsProdutosAcabados.push(
+                        {
+                            data: this.dataGraficoProdutosAcabadosTotal,
+                            type: this.tipodegrafico,
+                            label: 'Total',
+                            backgroundColor: '#d50000',
+                            borderColor: '#d50000',
+                            borderWidth: 1.5,
+                            tension: 0.3,
+                            pointRadius: 2.2,
+                            pointHoverRadius: 5,
+                        }, {
+                        data: this.dataGraficoProdutosAcabadosMediaDia,
+                        type: this.tipodegrafico,
+                        label: 'Média Diária',
+                        backgroundColor: '#fc4b2a',
+                        borderColor: '#fc4b2a',
+                        borderWidth: 1.5,
+                        tension: 0.3,
+                        pointRadius: 2.2,
+                        pointHoverRadius: 5,
+                    })
+                    this.renderChartProdutosAcabados()
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        },
+
+        getProdutosAcabadosAno() {
+            this.mesProdutosAcabados = ""
+            axios.post('http://192.168.0.6:8000/api/indicador/produto-produzido', {
+                ano: this.ano,
+                produto : this.produto
+            })
+                .then((response) => {
+                    this.dadosProdutosAcabados = response.data;
+
+                    this.dadosFormatadosProdutosAcabados = this.dadosProdutosAcabados.map((item) => item.mes);
+                    this.labelsProdutosAcabados = this.dadosProdutosAcabados.map((item) => item.mes);
+                    this.labelsProdutosAcabados = this.labelsProdutosAcabados.map((numero) => this.nomesDosMesessemid[numero - 1])
+
+                    this.dataGraficoProdutosAcabadosTotal = this.dadosProdutosAcabados.map((item) => item.total);
+                    this.dataGraficoProdutosAcabadosMediaDia = this.dadosProdutosAcabados.map((item) => item.mediaDia);
+
+                    this.datasetsProdutosAcabados = [];
+                    this.datasetsProdutosAcabados.push(
+                        {
+                            data: this.dataGraficoProdutosAcabadosTotal,
+                            type: this.tipodegrafico,
+                            label: 'Total',
+                            backgroundColor: '#d50000',
+                            borderColor: '#d50000',
+                            borderWidth: 1.5,
+                            tension: 0.3,
+                            pointRadius: 2.2,
+                            pointHoverRadius: 5,
+                        }, {
+                        data: this.dataGraficoProdutosAcabadosMediaDia,
+                        type: this.tipodegrafico,
+                        label: 'Média Diária',
+                        backgroundColor: '#fc4b2a',
+                        borderColor: '#fc4b2a',
+                        borderWidth: 1.5,
+                        tension: 0.3,
+                        pointRadius: 2.2,
+                        pointHoverRadius: 5,
+                    })
+                    this.renderChartProdutosAcabados()
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        },
+
+        renderChartProdutosAcabados() {
+            // DEFINE O CANVA QUE O GRÁFICO SERÁ GERADO
+            const canvas = document.getElementById('ChartProdutosAcabados');
+            const ctx = canvas.getContext('2d');
+            // LIMPA O CANVA CASO ELE ESTEJA PREENCHIDO (PREVENÇÃO DE ERRO)
+            if (canvas.chart) {
+                canvas.chart.destroy();
+            }
+
+            canvas.chart = new Chart(ctx, {
+                data: {
+                    labels: this.labelsProdutosAcabados,
+                    datasets: this.datasetsProdutosAcabados,
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            labels: {
+                                boxWidth: 15,
+                                boxHeight: 15,
+                                color: 'rgb(0, 0, 0)',
+                                font: {
+                                    size: 20,
+                                    weight: 'bolder'
+                                }
+                            }
+                        },
+                    },
+                      onClick: (e) => {
+                         const canvasPosition = getRelativePosition(e, canvas.chart);
+                             const dataX = canvas.chart.scales.x.getValueForPixel(canvasPosition.x);
+
+                             this.mesProdutosAcabados = this.dadosFormatadosProdutosAcabados[dataX]
+                             this.getProdutosAcabadosMes();
+
+                      }
+                },
+            });
+        },
 
     }
 }
