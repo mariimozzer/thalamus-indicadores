@@ -41,7 +41,7 @@
         <!-- CRIA DIV'S COM CANVAS QUE SERÃO PREENCHIDOS COM OS GRAFICOS GERADOS NOS METHODS SENDO IDENTIFICADOS POR ID -->
         <div style="display: flex;flex-flow: column ;width: 100%;padding: 1rem;">
             <div class="card mb-3" style="max-width: 100%; border: 1px solid rgb(0, 0, 0); margin-top: 4rem;">
-                <div @click="mostrarComercial()" style="background-color: #3571CD;" class="card-header titulo"><i
+                <div @click="mostrarClasse('Comercial','iconeComercial')" style="background-color: #3571CD;" class="card-header titulo"><i
                         id="iconeComercial" style="margin-right: 0.5rem;" class="bi bi-arrow-right"></i>Comercial
                 </div>
                 <div id="Comercial" style="display: none;">
@@ -85,8 +85,8 @@
 
                     <div class="form-check form-switch" style="margin-left: 0.5rem;">
                         <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked"
-                            @change="mostrarGrafico('ProdutosVendido')">
-                        <label class="form-check-label" for="flexSwitchCheckChecked">Produtos Vendidos</label>
+                            @change="mostrarGrafico('ProdutosVendido')" >
+                        <label class="form-check-label" for="flexSwitchCheckChecked" style="color: black;">Produtos Vendidos</label>
                     </div>
 
                     <div style="margin-top: 1rem; display: none;" id="ProdutosVendido" >
@@ -127,7 +127,7 @@
                     </div>
 
 
-                    <div style="margin-top: 1rem; display: none;" id="Clientes">
+                    <div style="margin-top: 1rem; display: none;" id="Clientes" >
                         <div>
                             <BButton v-b-toggle.collapse-3 class="m-1" id="descrição3"
                                 style="position: absolute ;width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px">
@@ -162,7 +162,7 @@
 
             <!-- 
             <div class="card mb-3" style="max-width: 100%; border: 1px solid rgb(0, 0, 0);">
-                <div @click="mostrarFinanceiro()" style="background-color: rgba(129, 199, 132, 1);"
+                <div @click="mostrarClasse('Financeiro','iconeFinanceiro')" style="background-color: rgba(129, 199, 132, 1);"
                     class="card-header titulo"><i id="iconeFinanceiro" style="margin-right: 0.5rem;"
                         class="bi bi-arrow-right"></i>Financeiro</div>
                 <div id="Financeiro" style="display: none;">
@@ -176,15 +176,14 @@
 
 
             <div class="card mb-3" style="max-width: 100%; border: 1px solid rgb(0, 0, 0);">
-                <div @click="mostrarProdução()" style="background-color: #d50000;" class="card-header titulo">
+                <div @click="mostrarClasse('Produção','iconeProdução')" style="background-color: #d50000;" class="card-header titulo">
                     <i id="iconeProdução" style="margin-right: 0.5rem;" class="bi bi-arrow-right"></i>Produção
                 </div>
                 <div id="Produção" style="display: none;">
 
                     <div class="form-check form-switch" style="margin-left: 0.5rem;">
-                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked
-                            @change="mostrarGrafico('ProdutosAcabados')" >
-                            <!-- "show = !show" -->
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked 
+                            @change="mostrarGrafico('ProdutosAcabados')">
                         <label class="form-check-label" for="flexSwitchCheckChecked">Produção Diária</label>
                     </div>
 
@@ -227,7 +226,7 @@
 
 
             <!-- <div class="card mb-3" style="max-width: 100%; border: 1px solid rgb(0, 0, 0);">
-                <div @click="mostrarInjeção()" style="background-color: rgba(66, 165, 245, 1);" class="card-header titulo">
+                <div @click="mostrarClasse('Injeção','iconeInjeção')" style="background-color: rgba(66, 165, 245, 1);" class="card-header titulo">
                     <i id="iconeInjeção" style="margin-right: 0.5rem;" class="bi bi-arrow-right"></i>Injeção
                 </div>
                 <div id="Injeção" style="display: none;">
@@ -378,7 +377,6 @@ export default {
     },
     mounted() {
         this.getPropostaComercialAno()
-        this.getTicketsAno()
         this.getProdutosAno()
         this.getClienteAno()
         this.getProdutosAcabadosAno()
@@ -390,48 +388,20 @@ export default {
              if (element.style.display == "none") {
                  element.style.display = ""
              } else {
-                 element.style.display = "none"
+                 element.style.display = "none";
              }
          },
 
         // FUNÇÃO PARA OCULTAR/MOSTRAR E MODIFICAR O ICONE DA DIV EM QUE ESTÁ O GRAFICO
-        mostrarComercial() {
-            if (document.getElementById('Comercial').style.display != "none") {
-                document.getElementById('Comercial').style.display = "none";
-                document.getElementById('iconeComercial').className = "bi bi-arrow-right"
+        mostrarClasse(id,icone) {
+            var setor =  document.getElementById(id)
+            var icon = document.getElementById(icone)
+            if (setor.style.display != "none") {
+                setor.style.display = "none";
+                icon.className = "bi bi-arrow-right"
             } else {
-                document.getElementById('Comercial').style.display = "grid"
-                document.getElementById('iconeComercial').className = "bi bi-arrow-return-right"
-            }
-        },
-
-        mostrarFinanceiro() {
-            if (document.getElementById('Financeiro').style.display != "none") {
-                document.getElementById('Financeiro').style.display = "none";
-                document.getElementById('iconeFinanceiro').className = "bi bi-arrow-right"
-            } else {
-                document.getElementById('Financeiro').style.display = "grid"
-                document.getElementById('iconeFinanceiro').className = "bi bi-arrow-return-right"
-            }
-        },
-
-        mostrarProdução() {
-            if (document.getElementById('Produção').style.display != "none") {
-                document.getElementById('Produção').style.display = "none";
-                document.getElementById('iconeProdução').className = "bi bi-arrow-right"
-            } else {
-                document.getElementById('Produção').style.display = "grid"
-                document.getElementById('iconeProdução').className = "bi bi-arrow-return-right"
-            }
-        },
-
-        mostrarInjeção() {
-            if (document.getElementById('Injeção').style.display != "none") {
-                document.getElementById('Injeção').style.display = "none";
-                document.getElementById('iconeInjeção').className = "bi bi-arrow-right"
-            } else {
-                document.getElementById('Injeção').style.display = "grid"
-                document.getElementById('iconeInjeção').className = "bi bi-arrow-return-right"
+                setor.style.display = "grid"
+                icon.className = "bi bi-arrow-return-right"
             }
         },
 
@@ -530,6 +500,9 @@ export default {
         },
 
         getPropostaComercialAno() {
+            if (this.show == false){
+                return
+            }
             this.mes = ""
             this.mesPropostasViabilizadas = ""
             axios.post('http://192.168.0.6:8000/api/omie/oportunidade/proposta-viabilizada-mes', {
@@ -672,6 +645,9 @@ export default {
         },
 
         getTicketsAno() {
+            if (this.show == false){
+                return
+            }
             this.mesTickets = ""
             axios.post('http://192.168.0.6:8000/api/omie/oportunidade/ticket-mes', {
                 ano: this.ano,
@@ -790,7 +766,9 @@ export default {
         },
 
         getProdutosAno() {
-
+            if (this.show == false){
+                return
+            }
             this.mesProdutos = ""
             axios.post('http://192.168.0.6:8000/api/indicador/produto-vendido-mes', {
                 nome: this.familiaProdutos,
@@ -933,6 +911,9 @@ export default {
         },
 
         getClienteAno() {
+            if (this.show == false){
+                return
+            }
             this.mesCliente = ""
             axios.post('http://192.168.0.6:8000/api/omie/oportunidade/cliente-alcancado', {
                 ano: this.ano,
@@ -1087,6 +1068,9 @@ export default {
         },
 
         getProdutosAcabadosAno() {
+            if (this.show == false){
+                return
+            }
             this.mesProdutosAcabados = ""
             axios.post('http://192.168.0.6:8000/api/indicador/produto-produzido', {
                 ano: this.ano,
@@ -1185,6 +1169,7 @@ export default {
 </script>
 
 <style>
+
 .botoes:hover {
     transition: 50ms linear;
     transform: scale(1.1);
@@ -1259,17 +1244,6 @@ button {
     scroll-behavior: auto;
 }
 
-.slide-fade-enter-active {
-  transition: all .3s ease;
-}
-.slide-fade-leave-active {
-  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
-}
-.slide-fade-enter, .slide-fade-leave-to
-/* .slide-fade-leave-active em versões anteriores a 2.1.8 */ {
-  transform: translateX(10px);
-  opacity: 0;
-}
 
 ::-webkit-scrollbar {
     width: 0px;
