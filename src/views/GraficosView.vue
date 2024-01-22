@@ -88,7 +88,6 @@
                             @change="mostrarGrafico('ProdutosVendido')" >
                         <label class="form-check-label" for="flexSwitchCheckChecked" style="color: black;">Produtos Vendidos</label>
                     </div>
-
                     <div style="margin-top: 1rem; display: none;" id="ProdutosVendido" >
                         <div style="padding-bottom: 0.5rem;">
                             <!-- Detalhes -->
@@ -116,7 +115,7 @@
                         <canvas id="ChartProdutos"></canvas>
                         <select v-model="familiaProdutos" @change="getProdutosAno()"
                             style="width: 10rem; margin: 0.2rem 0 0.5rem 1rem; border-radius: 10px;">
-                            <option v-for=" p in listaProdutos" :key="p">{{ capitalize(p.familia_nome) }}</option>
+                            <option v-for=" p in listaProdutos" :key="p">{{ p }}</option>
                         </select>
                     </div>
 
@@ -217,7 +216,7 @@
                         
                         <select v-model="produto" @change="getProdutosAcabadosAno()"
                         style="width: 10rem; margin: 0.2rem 0 0.5rem 1rem; border-radius: 10px;">
-                        <option v-for=" p in listaProdutos" :key="p">{{ capitalize(p.familia_nome) }}</option>
+                        <option v-for=" p in listaProdutos" :key="p">{{ p }}</option>
                     </select>
                 </div>
                 </transition>
@@ -265,54 +264,8 @@ import { getRelativePosition } from 'chart.js/helpers';
 export default {
     data() {
         return {
-            show: true,
             tipodegrafico: "bar",
-            listaProdutos: [{
-                "familia_nome": "ACESSÓRIOS"
-            },
-            {
-                "familia_nome": "ADAPTADOR"
-            },
-            {
-                "familia_nome": "BASES"
-            },
-            {
-                "familia_nome": "BRAÇO"
-            },
-            {
-                "familia_nome": "CABOS"
-            },
-            {
-                "familia_nome": "CASE"
-            },
-            {
-                "familia_nome": "CASE 9-10,1\""
-            },
-            {
-                "familia_nome": "CONVERSOR"
-            },
-            {
-                "familia_nome": "DOCK"
-            },
-            {
-                "familia_nome": "HUB"
-            },
-            {
-                "familia_nome": "PLUG"
-            },
-            {
-                "familia_nome": "PROJETO"
-            },
-            {
-                "familia_nome": "SUPORTES"
-            },
-            {
-                "familia_nome": "TABLET"
-            },
-            {
-                "familia_nome": "TODOS"
-            },
-            ],
+            listaProdutos: [],
             produto: "Todos",
             familiaProdutos: "Todos",
             dadosFormatadosC: [],
@@ -375,15 +328,30 @@ export default {
             dataGraficoProdutosAcabadosMediaDia: [],
         }
     },
-    mounted() {
+    created() {
+        this.definirListaProdutos()
         this.getPropostaComercialAno()
         this.getProdutosAno()
         this.getClienteAno()
         this.getProdutosAcabadosAno()
+        this.definirListaProdutos()
     },
     methods: {
+        definirListaProdutos() {
+            axios.get('http://192.168.0.6:8000/api/buscar/familia-produto-vendido', {
 
-         mostrarGrafico(id) {
+            })
+                .then((response) => {
+                    this.listaProdutos = response.data
+                    this.listaProdutos = this.listaProdutos.map((item) => item.familia_nome.charAt(0).toUpperCase() + item.familia_nome.slice(1).toLowerCase());
+                    this.listaProdutos.push("Todos")
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        },
+
+        mostrarGrafico(id) {
              var element = document.getElementById(id);
              if (element.style.display == "none") {
                  element.style.display = ""
@@ -435,10 +403,6 @@ export default {
             const data = new Date(this.ano, 0, 1);
             data.setDate(data.getDate() + (this.semana - 1) * 7);
             this.mesSemana = data.getMonth() + 1;
-        },
-
-        capitalize(str) {
-            return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
         },
 
         // IGUALA OS MESES PARA QUANDO O BOTÃO DO MES QUE ESTÁ NO CABEÇALHO SEJA CLICADO TODOS OS GRAFICOS MOSTREM O MES SELECIONADO
@@ -500,9 +464,6 @@ export default {
         },
 
         getPropostaComercialAno() {
-            if (this.show == false){
-                return
-            }
             this.mes = ""
             this.mesPropostasViabilizadas = ""
             axios.post('http://192.168.0.6:8000/api/omie/oportunidade/proposta-viabilizada-mes', {
@@ -645,9 +606,6 @@ export default {
         },
 
         getTicketsAno() {
-            if (this.show == false){
-                return
-            }
             this.mesTickets = ""
             axios.post('http://192.168.0.6:8000/api/omie/oportunidade/ticket-mes', {
                 ano: this.ano,
@@ -766,9 +724,6 @@ export default {
         },
 
         getProdutosAno() {
-            if (this.show == false){
-                return
-            }
             this.mesProdutos = ""
             axios.post('http://192.168.0.6:8000/api/indicador/produto-vendido-mes', {
                 nome: this.familiaProdutos,
@@ -911,9 +866,6 @@ export default {
         },
 
         getClienteAno() {
-            if (this.show == false){
-                return
-            }
             this.mesCliente = ""
             axios.post('http://192.168.0.6:8000/api/omie/oportunidade/cliente-alcancado', {
                 ano: this.ano,
@@ -1068,9 +1020,6 @@ export default {
         },
 
         getProdutosAcabadosAno() {
-            if (this.show == false){
-                return
-            }
             this.mesProdutosAcabados = ""
             axios.post('http://192.168.0.6:8000/api/indicador/produto-produzido', {
                 ano: this.ano,
