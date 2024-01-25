@@ -1,7 +1,7 @@
 <template>
     <body>
         <!-- CRIA UM CABEÇALHO PARA SELEÇÃO DE MÊS E UM BOTÃO PARA EXIBIR O ANO TODO -->
-        <div class="form-check cabecalho">
+        <div class="form-check cabecalho" style="align-items: center;">
             <button v-b-tooltip.hover title="Ano inteiro!" class="botoes"
                 @click="getPropostaComercialAno(), getTicketsAno(), getProdutosAno(), getClienteAno(), getClienteAno(), getProdutosAcabadosAno()">
                 <i class="bi bi-calendar-minus"></i>
@@ -22,14 +22,14 @@
             </select>
             <div style="border-left: solid 1px white;">
                 <input
-                    @change="getPropostaComercialAno(), getProdutosAno(), getTicketsAno(), getClienteAno(), getProdutosAcabadosAno()"
+                    @change="getPropostaComercialAno(), getProdutosAno(), getTicketsAno(), getClienteAno(), getProdutosAcabadosAno(), definirListaDeProjetos()"
                     type="radio" class="btn-check botoes" name="tipodegrafico" id="barra" value="bar"
                     v-model="tipodegrafico" autocomplete="off">
                 <label style="color: rgba(255, 255, 255, 1);margin-left: 0.5rem; font-size: medium;" class="btn botoes"
                     for="barra"><i class="bi bi-bar-chart-line-fill"></i></label>
 
                 <input
-                    @change="getPropostaComercialAno(), getProdutosAno(), getTicketsAno(), getClienteAno(), getProdutosAcabadosAno()"
+                    @change="getPropostaComercialAno(), getProdutosAno(), getTicketsAno(), getClienteAno(), getProdutosAcabadosAno(), definirListaDeProjetos()"
                     type="radio" class="btn-check botoes" name="tipodegrafico" id="linha" value="line"
                     v-model="tipodegrafico" autocomplete="off">
                 <label style="color: rgba(255, 255, 255, 1);margin-left: 0.5rem; font-size: medium;" class="btn botoes"
@@ -41,8 +41,9 @@
         <!-- CRIA DIV'S COM CANVAS QUE SERÃO PREENCHIDOS COM OS GRAFICOS GERADOS NOS METHODS SENDO IDENTIFICADOS POR ID -->
         <div style="display: flex;flex-flow: column ;width: 100%;padding: 1rem;">
             <div class="card mb-3" style="max-width: 100%; border: 1px solid rgb(0, 0, 0); margin-top: 4rem;">
-                <div @click="mostrarClasse('Comercial','iconeComercial')" style="background-color: #3571CD;" class="card-header titulo"><i
-                        id="iconeComercial" style="margin-right: 0.5rem;" class="bi bi-arrow-right"></i>Comercial
+                <div @click="mostrarClasse('Comercial', 'iconeComercial')" style="background-color: #3571CD;"
+                    class="card-header titulo"><i id="iconeComercial" style="margin-right: 0.5rem;"
+                        class="bi bi-arrow-right"></i>Comercial
                 </div>
                 <div id="Comercial" style="display: none;">
 
@@ -54,10 +55,7 @@
                         <label class="form-check-label" for="flexSwitchCheckChecked">Propostas Comerciais</label>
                     </div>
 
-                    <transition name="fade">
-                    </transition>
-                    
-                    <div style="margin-top: 1rem;" id="canvaPropostaComercial">
+                    <div id="canvaPropostaComercial">
                         <div>
                             <BButton v-b-toggle="'collapse'" class="m-1"
                                 style=" position: absolute;width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px;">
@@ -66,7 +64,7 @@
                         </div>
 
                         <!-- Element to collapse -->
-                        <BCollapse id="collapse" class="position-absolute" style="margin-left: 4rem; margin-top: 0.2rem;">
+                        <BCollapse id="collapse" class="position-absolute" style="margin-left: 3rem">
                             <BCard>
                                 <div style="max-width: 23rem;">
                                     <b>Fórmula:</b> Soma das oportunidade no status de "conquistados" por mês. <br>
@@ -85,10 +83,11 @@
 
                     <div class="form-check form-switch" style="margin-left: 0.5rem;">
                         <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked"
-                            @change="mostrarGrafico('ProdutosVendido')" >
-                        <label class="form-check-label" for="flexSwitchCheckChecked" style="color: black;">Produtos Vendidos</label>
+                            @change="mostrarGrafico('ProdutosVendido')">
+                        <label class="form-check-label" for="flexSwitchCheckChecked" style="color: black;">Produtos
+                            Vendidos</label>
                     </div>
-                    <div style="margin-top: 1rem; display: none;" id="ProdutosVendido" >
+                    <div style="margin-top: 1rem; display: none;" id="ProdutosVendido">
                         <div style="padding-bottom: 0.5rem;">
                             <!-- Detalhes -->
                             <BButton v-b-toggle="'collapse-2'" class="m-1"
@@ -98,7 +97,7 @@
                         </div>
 
                         <!-- Element to collapse -->
-                        <BCollapse id="collapse-2" class="position-absolute" style="margin-left: 4rem">
+                        <BCollapse id="collapse-2" class="position-absolute" style="margin-left: 3rem">
                             <BCard>
                                 <div style="max-width: 23rem;">
                                     <b>Fórmula:</b> Soma da quantidade de itens vendidos em um mês. <br>
@@ -126,7 +125,7 @@
                     </div>
 
 
-                    <div style="margin-top: 1rem; display: none;" id="Clientes" >
+                    <div style="margin-top: 1rem; display: none;" id="Clientes">
                         <div>
                             <BButton v-b-toggle.collapse-3 class="m-1" id="descrição3"
                                 style="position: absolute ;width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px">
@@ -134,7 +133,7 @@
                             </BButton>
                         </div>
 
-                        <BCollapse id="collapse-3" class="position-absolute" style="margin-left: 4rem;">
+                        <BCollapse id="collapse-3" class="position-absolute" style="margin-left: 3rem;">
                             <BCard>
                                 <div style="max-width: 30rem; max-height: min-content;">
                                     <b>Fórmula:</b> Soma das oportunidades quando o motivo é igual a "oportunidade
@@ -159,70 +158,116 @@
                 </div>
             </div>
 
-            <!-- 
+
             <div class="card mb-3" style="max-width: 100%; border: 1px solid rgb(0, 0, 0);">
-                <div @click="mostrarClasse('Financeiro','iconeFinanceiro')" style="background-color: rgba(129, 199, 132, 1);"
-                    class="card-header titulo"><i id="iconeFinanceiro" style="margin-right: 0.5rem;"
-                        class="bi bi-arrow-right"></i>Financeiro</div>
+                <div @click="mostrarClasse('Financeiro', 'iconeFinanceiro')"
+                    style="background-color: rgba(129, 199, 132, 1);" class="card-header titulo"><i id="iconeFinanceiro"
+                        style="margin-right: 0.5rem;" class="bi bi-arrow-right"></i>Financeiro</div>
                 <div id="Financeiro" style="display: none;">
-                    <div v-b-tooltip.hover.right title="my title" style="width: fit-content; margin-left: 1rem;">
-                        <i style="color: black; font-size: small;" class="bi bi-info-circle-fill"></i>
+
+                    <div class="form-check form-switch" style="margin-left: 0.5rem;">
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked
+                            @change="mostrarGrafico('Projetos')">
+                        <label class="form-check-label" for="flexSwitchCheckChecked">Custo de projetos</label>
                     </div>
 
-                    <canvas id="ChartTickets"></canvas>
+                    <transition name="slide-fade">
+                        <div id="Projetos">
+                            <!-- v-if="show == true" -->
+
+                            <BButton v-b-toggle="'collapse-5'" class="m-1"
+                                style="position: absolute;width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px;">
+                                <i style="color: black; font-size: 15px;" class="bi bi-info-circle-fill"></i>
+                            </BButton>
+
+
+                            <!-- Element to collapse -->
+                            <BCollapse id="collapse-5" class="position-absolute" style="margin-left: 3rem;">
+                                <BCard>
+                                    <div style="max-width: 23rem;">
+                                        <b>Fórmula:</b> Somatória dos valores de requisições vinculadas a cada projeto. <br>
+                                        <b>Polaridade:</b> Quanto menor, melhor. <br>
+                                        <b>Fonte:</b> SGI <br>
+                                        <b>Descrição:</b> Valores em R$ gastos em cada projeto registrado.<br>
+                                    </div>
+                                </BCard>
+
+                            </BCollapse>
+                            <div
+                                style="display: flex; justify-content: flex-end; align-items: center; height: 2rem; text-align: center; margin-right: 0.5rem">
+                                <div
+                                    style="border: 2px rgba(129, 199, 132, 1) solid ; border-radius: 10px; padding: 0.2em ">
+                                    Filtrar valores acima de:<br>
+                                    <money3 v-model="linhaDeCorte" v-bind="config"
+                                        style="width: 8rem;border: none; border-bottom: 1px black solid; outline: none;"
+                                        @keyup.enter="definirListaDeProjetos"></money3>
+                                </div>
+                            </div>
+
+                            <canvas id="chartProjetos"></canvas>
+                        </div>
+                    </transition>
+
                 </div>
-            </div> -->
+            </div>
 
 
             <div class="card mb-3" style="max-width: 100%; border: 1px solid rgb(0, 0, 0);">
-                <div @click="mostrarClasse('Produção','iconeProdução')" style="background-color: #d50000;" class="card-header titulo">
+                <div @click="mostrarClasse('Produção', 'iconeProdução')" style="background-color: #d50000;"
+                    class="card-header titulo">
                     <i id="iconeProdução" style="margin-right: 0.5rem;" class="bi bi-arrow-right"></i>Produção
                 </div>
                 <div id="Produção" style="display: none;">
 
                     <div class="form-check form-switch" style="margin-left: 0.5rem;">
-                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked 
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked
                             @change="mostrarGrafico('ProdutosAcabados')">
                         <label class="form-check-label" for="flexSwitchCheckChecked">Produção Diária</label>
                     </div>
 
                     <transition name="slide-fade">
-                    <div style="margin-top: 1rem;" id="ProdutosAcabados">
-                        <!-- v-if="show == true" -->
-                        <div style="margin-bottom: 1rem;">
-                            <BButton v-b-toggle="'collapse-4'" class="m-1"
-                                style="position: absolute;width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px;">
-                                <i style="color: black; font-size: 15px;" class="bi bi-info-circle-fill"></i>
-                            </BButton>
+                        <div id="ProdutosAcabados">
+                            <!-- v-if="show == true" -->
+                            <div style="margin-bottom: 1rem;">
+                                <BButton v-b-toggle="'collapse-4'" class="m-1"
+                                    style="position: absolute;width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px;">
+                                    <i style="color: black; font-size: 15px;" class="bi bi-info-circle-fill"></i>
+                                </BButton>
+                            </div>
+
+                            <!-- Element to collapse -->
+                            <BCollapse id="collapse-4" class="position-absolute" style="margin-left: 3rem">
+                                <BCard>
+                                    <div style="max-width: 23rem;">
+                                        <b>Fórmula:</b> Quantidade de produtos acabados (excluido o tipo: 'conjunto') e
+                                        etapa =
+                                        disponível / 22. <br>
+                                        <b>Polaridade:</b> Quanto maior, melhor. <br>
+                                        <b>Fonte:</b> OMIE > Produção > Produto acabado. <br>
+                                        <b>Descrição:</b> Quantidade de produtos acabados feitos diariamente.<br>
+                                    </div>
+                                </BCard>
+
+                            </BCollapse>
+                            <!-- Quantidade Diaria de Produtos Acabados -->
+
+
+                            <canvas id="ChartProdutosAcabados"></canvas>
+
+                            <select v-model="produto" @change="getProdutosAcabadosAno()"
+                                style="width: 10rem; margin: 0.2rem 0 0.5rem 1rem; border-radius: 10px;">
+                                <option v-for=" p in listaProdutos" :key="p">{{ p }}</option>
+                            </select>
                         </div>
+                    </transition>
 
-                        <!-- Element to collapse -->
-                        <BCollapse id="collapse-4" class="position-absolute" style="margin-left: 4rem; margin-top: 1rem">
-                            <BCard>
-                                <div style="max-width: 23rem;">
-                                    <b>Fórmula:</b> Quantidade de produtos acabados (excluido o tipo: 'conjunto') e etapa =
-                                    disponível / 22. <br>
-                                    <b>Polaridade:</b> Quanto maior, melhor. <br>
-                                    <b>Fonte:</b> OMIE > Produção > Produto acabado. <br>
-                                    <b>Descrição:</b> Quantidade de produtos acabados feitos diariamente.<br>
-                                </div>
-                            </BCard>
+                    <!-- <canvas id="ChartTeste"></canvas>
+                    <button @click="producaoTeste" style="color: black;">
+                        teste
+                    </button> -->
 
-                        </BCollapse>
-                        <!-- Quantidade Diaria de Produtos Acabados -->
-                        
-                        
-                        <canvas id="ChartProdutosAcabados"></canvas>
-                        
-                        <select v-model="produto" @change="getProdutosAcabadosAno()"
-                        style="width: 10rem; margin: 0.2rem 0 0.5rem 1rem; border-radius: 10px;">
-                        <option v-for=" p in listaProdutos" :key="p">{{ p }}</option>
-                    </select>
-                </div>
-                </transition>
                 </div>
             </div>
-
 
             <!-- <div class="card mb-3" style="max-width: 100%; border: 1px solid rgb(0, 0, 0);">
                 <div @click="mostrarClasse('Injeção','iconeInjeção')" style="background-color: rgba(66, 165, 245, 1);" class="card-header titulo">
@@ -233,9 +278,8 @@
                 </div>
             </div> -->
 
-
-
         </div>
+
 
         <div style="overflow: auto" class="modal-mask" v-if="showModal" @click="fecharModalFora">
             <div style="max-height: 70%" class="modal-container">
@@ -253,6 +297,51 @@
             </div>
         </div>
 
+
+        <div style="overflow: auto" class="modal-mask" v-if="modalDetalheProjeto" @click="fecharModalFora">
+            <div style="max-height: 70%;" class="modal-container">
+                <div class="conteudomodal" style="width: 50rem;">
+                    <div style="text-align: center;">
+                        <h1>
+                            {{ nomeModal }} - {{ detalheProjeto[0].Projeto }}
+                        </h1>
+                        Valor total do projeto: {{ real(parseInt(detalheProjeto[0].ValorTotalProjeto)) }}
+                    </div>
+                    <br>
+
+                    <div style="position: absolute; margin-left: 41rem; margin-top: 4rem;">
+                        <input @change="this.detalheProjeto = this.detalheProjeto.sort((a, b) => parseFloat(b.ValorTotal) - parseFloat(a.ValorTotal))" type="radio" class="btn-check botoes" name="ordenação" id="decrescente" value="decrescente"
+                            v-model="ordenacaoModal" autocomplete="off">
+                        <label style="color: rgb(0, 0, 0);font-size: 25px;" class="btn botoes"
+                            for="decrescente"><i class="bi bi-sort-numeric-down-alt"></i></label>
+
+                        <input @change="this.detalheProjeto = this.detalheProjeto.sort((a, b) => parseFloat(a.ValorTotal) - parseFloat(b.ValorTotal))" type="radio" class="btn-check botoes" name="ordenação" id="crescente" value="crescente"
+                            v-model="ordenacaoModal" autocomplete="off">
+                        <label style="color: rgb(0, 0, 0);margin-left: 0.5rem; font-size: 25px;" class="btn botoes"
+                            for="crescente"><i class="bi bi-sort-numeric-up-alt"></i></label>
+                    </div>
+
+                    <div v-for="i in detalheProjeto" :key="i">
+                        <hr>
+                        <div>
+                            <h3>
+                                Requisição: {{ i.Requisição }} <h4>Valor total: {{ real(parseInt(i.ValorTotal)) }}</h4>
+                            </h3>
+                            <b>Solicitante:</b> {{ i.Solicitante }} <br>
+                            <b>Aprovação:</b> {{ i.Aprovação }} <br>
+                            <b>Data:</b> {{ extrairHoraDeString(i.Data) }} <br>
+                            <b>Fornecedor:</b> {{ i.Fornecedor }} <br><br>
+                            <h5><b>Item(s):</b></h5>
+                            <div v-for="item in i.itens" :key="item.Nome">
+                                <b>Nome:</b> {{ item.Nome }} <br>
+                                <b>Valor:</b> {{ real(parseInt(item.Valor)) }} <br>
+                                <br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
 </template>
 
@@ -260,10 +349,17 @@
 import axios from 'axios';
 import Chart from 'chart.js/auto';
 import { getRelativePosition } from 'chart.js/helpers';
+import { Money3Component } from 'v-money3'
 
 export default {
+    components: { money3: Money3Component },
     data() {
         return {
+            ordenacaoModal: "decrescente",
+            nomeModal: "",
+            linhaDeCorte: 1500000,
+            modalDetalheProjeto: false,
+            detalheProjeto: [],
             tipodegrafico: "bar",
             listaProdutos: [],
             produto: "Todos",
@@ -326,17 +422,44 @@ export default {
             datasetsProdutosAcabados: [],
             dataGraficoProdutosAcabadosTotal: [],
             dataGraficoProdutosAcabadosMediaDia: [],
+
+
+            listaDeProjetos: [],
+            custoDeProjetos: [],
+            nomesDosProjetos: [],
+
+            config: {
+                masked: false,
+                prefix: 'R$ ',
+                thousands: '.',
+                decimal: ',',
+                precision: 2,
+            }
         }
     },
-    created() {
+
+    mounted() {
         this.definirListaProdutos()
         this.getPropostaComercialAno()
         this.getProdutosAno()
         this.getClienteAno()
         this.getProdutosAcabadosAno()
-        this.definirListaProdutos()
+        this.definirListaDeProjetos()
     },
+
     methods: {
+        extrairHoraDeString(dataString) {
+            const data = new Date(dataString);
+            const dia = (data.getDate() + 1);
+            const mes = (data.getMonth() + 1);
+            const ano = (data.getFullYear());
+            return `${dia}/${mes}/${ano}`;
+        },
+
+        real(num) {
+            return num.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        },
+
         definirListaProdutos() {
             axios.get('http://192.168.0.6:8000/api/buscar/familia-produto-vendido', {
 
@@ -352,17 +475,17 @@ export default {
         },
 
         mostrarGrafico(id) {
-             var element = document.getElementById(id);
-             if (element.style.display == "none") {
-                 element.style.display = ""
-             } else {
-                 element.style.display = "none";
-             }
-         },
+            var element = document.getElementById(id);
+            if (element.style.display == "none") {
+                element.style.display = ""
+            } else {
+                element.style.display = "none";
+            }
+        },
 
         // FUNÇÃO PARA OCULTAR/MOSTRAR E MODIFICAR O ICONE DA DIV EM QUE ESTÁ O GRAFICO
-        mostrarClasse(id,icone) {
-            var setor =  document.getElementById(id)
+        mostrarClasse(id, icone) {
+            var setor = document.getElementById(id)
             var icon = document.getElementById(icone)
             if (setor.style.display != "none") {
                 setor.style.display = "none";
@@ -394,7 +517,7 @@ export default {
         fecharModalFora(event) {
             if (event.target.classList.contains('modal-mask')) {
                 this.showModal = false;
-                this.showModalSprint = false;
+                this.modalDetalheProjeto = false
             }
         },
 
@@ -1111,14 +1234,165 @@ export default {
             });
         },
 
+        producaoTeste() {
 
+            const canvas = document.getElementById('ChartTeste');
+            const ctx = canvas.getContext('2d');
+
+            if (canvas.chart) {
+                canvas.chart.destroy();
+            }
+
+            canvas.chart = new Chart(ctx, {
+                data: {
+                    labels: ['jan', 'fev', 'mar', 'abr', 'mai'],
+                    datasets: [{
+                        data: [10, 20, 10, 5, 14],
+                        type: "bar",
+                        label: 'Recebido',
+                        backgroundColor: 'green',
+                        borderColor: "black",
+                        borderWidth: 0,
+                        tension: 0.3,
+                    },
+                    {
+                        data: [1, 10, 5, 1, 9],
+                        type: "bar",
+                        label: 'Pago',
+                        backgroundColor: 'red',
+                        borderColor: "black",
+                        borderWidth: 0,
+                        tension: 0.3,
+                    },
+
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        stacked: true
+                    }
+                },
+            });
+        },
+
+        definirListaDeProjetos() {
+            this.linhaDeCorte = parseInt(this.linhaDeCorte);
+            this.listaDeProjetos = [],
+                this.nomesDosProjetos = [],
+                this.custoDeProjetos = [],
+                axios.get('http://192.168.0.6:8000/api/sgi/projeto/lista', {
+                })
+                    .then((response) => {
+                        let dadosProjetos = response.data.filter((item) => item.ValorTotal < this.linhaDeCorte);
+
+
+                        this.nomesDosProjetos = dadosProjetos.map((item) => item.Nome);
+                        this.custoDeProjetos = dadosProjetos.map((item) => item.ValorTotal);
+                        this.listaDeProjetos = dadosProjetos.map((item) => item.Projeto);
+                        this.renderChartProjetos();
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+        },
+
+        renderChartProjetos() {
+
+            const canvas = document.getElementById('chartProjetos');
+            const ctx = canvas.getContext('2d');
+
+            if (canvas.chart) {
+                canvas.chart.destroy();
+            }
+
+            canvas.chart = new Chart(ctx, {
+                data: {
+                    labels: this.listaDeProjetos,
+                    datasets: [{
+                        data: this.custoDeProjetos,
+                        type: this.tipodegrafico,
+                        label: 'Custo do projeto',
+                        backgroundColor: 'rgba(129, 199, 132, 1)',
+                        borderColor: 'rgba(129, 199, 132, 1)',
+                        borderWidth: 1.5,
+                        tension: 0.3,
+                    }],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            labels: {
+                                boxWidth: 15,
+                                boxHeight: 15,
+                                color: 'rgb(0, 0, 0)',
+                                font: {
+                                    size: 20,
+                                    weight: 'bolder'
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: (tooltipItems) => {
+                                    // O código para personalizar o título aqui
+                                    // let title = tooltipItems[0].text;
+                                    let nome = this.nomesDosProjetos[tooltipItems[0].dataIndex];
+                                    return nome
+                                },
+                                //  label: (tooltipItem) => {
+                                //      // O código para personalizar o rótulo aqui
+                                //      return tooltipItem.formattedValue;
+                                //  },
+                                // label: function (context) {
+                                //     let label = context.dataIndex || '';
+
+                                //     return label;
+                                // }
+                            },
+                        },
+                    },
+                    onClick: (e) => {
+                        const canvasPosition = getRelativePosition(e, canvas.chart);
+                        const dataX = canvas.chart.scales.x.getValueForPixel(canvasPosition.x);
+
+
+                        this.nomeModal = this.nomesDosProjetos[dataX];
+                        this.detalhesDeProjeto(this.listaDeProjetos[dataX]);
+
+
+                    }
+                },
+            });
+        },
+
+        detalhesDeProjeto(num) {
+            axios.post('http://192.168.0.6:8000/api/indicador/projeto/custo', {
+                codProjeto: num,
+            })
+                .then((response) => {
+                    //const decrescente = (a, b) => parseFloat(b.ValorTotal) - parseFloat(a.ValorTotal);
+                    //const crescente  = (a, b) => parseFloat(a.ValorTotal) - parseFloat(b.ValorTotal);
+
+                    this.detalheProjeto = response.data;
+                    this.detalheProjeto = this.detalheProjeto.sort((a, b) => parseFloat(b.ValorTotal) - parseFloat(a.ValorTotal));
+                    this.modalDetalheProjeto = !this.modalDetalheProjeto
+                })
+
+                .catch((error) => {
+                    console.error(error);
+                });
+        },
 
     }
 }
 </script>
 
 <style>
-
 .botoes:hover {
     transition: 50ms linear;
     transform: scale(1.1);
@@ -1193,7 +1467,7 @@ button {
     scroll-behavior: auto;
 }
 
-
 ::-webkit-scrollbar {
     width: 0px;
-}</style>
+}
+</style>
