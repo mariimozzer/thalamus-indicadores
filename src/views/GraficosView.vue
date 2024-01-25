@@ -310,12 +310,16 @@
                     <br>
 
                     <div style="position: absolute; margin-left: 41rem; margin-top: 4rem;">
-                        <input @change="this.detalheProjeto = this.detalheProjeto.sort((a, b) => parseFloat(b.ValorTotal) - parseFloat(a.ValorTotal))" type="radio" class="btn-check botoes" name="ordenação" id="decrescente" value="decrescente"
+                        <input
+                            @change="this.detalheProjeto = this.detalheProjeto.sort((a, b) => parseFloat(b.ValorTotal) - parseFloat(a.ValorTotal))"
+                            type="radio" class="btn-check botoes" name="ordenação" id="decrescente" value="decrescente"
                             v-model="ordenacaoModal" autocomplete="off">
-                        <label style="color: rgb(0, 0, 0);font-size: 25px;" class="btn botoes"
-                            for="decrescente"><i class="bi bi-sort-numeric-down-alt"></i></label>
+                        <label style="color: rgb(0, 0, 0);font-size: 25px;" class="btn botoes" for="decrescente"><i
+                                class="bi bi-sort-numeric-down-alt"></i></label>
 
-                        <input @change="this.detalheProjeto = this.detalheProjeto.sort((a, b) => parseFloat(a.ValorTotal) - parseFloat(b.ValorTotal))" type="radio" class="btn-check botoes" name="ordenação" id="crescente" value="crescente"
+                        <input
+                            @change="this.detalheProjeto = this.detalheProjeto.sort((a, b) => parseFloat(a.ValorTotal) - parseFloat(b.ValorTotal))"
+                            type="radio" class="btn-check botoes" name="ordenação" id="crescente" value="crescente"
                             v-model="ordenacaoModal" autocomplete="off">
                         <label style="color: rgb(0, 0, 0);margin-left: 0.5rem; font-size: 25px;" class="btn botoes"
                             for="crescente"><i class="bi bi-sort-numeric-up-alt"></i></label>
@@ -1303,6 +1307,14 @@ export default {
             const canvas = document.getElementById('chartProjetos');
             const ctx = canvas.getContext('2d');
 
+            var linha = [];
+            var quantidadeRepeticoes = this.listaDeProjetos.length;
+
+            for (var i = 0; i < quantidadeRepeticoes; i++) {
+                linha.push(this.linhaDeCorte);
+            }
+
+
             if (canvas.chart) {
                 canvas.chart.destroy();
             }
@@ -1318,11 +1330,21 @@ export default {
                         borderColor: 'rgba(129, 199, 132, 1)',
                         borderWidth: 1.5,
                         tension: 0.3,
+                    },
+                    {
+                        data: linha,
+                        type: "line",
+                        label: "",
+                        backgroundColor: 'red',
+                        borderColor: 'red',
+                        borderWidth: 2,
+                        pointRadius: 0,
                     }],
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: true,
+
                     plugins: {
                         legend: {
                             display: true,
@@ -1333,6 +1355,9 @@ export default {
                                 font: {
                                     size: 20,
                                     weight: 'bolder'
+                                },
+                                filter: function (legendItem) {
+                                    return legendItem.datasetIndex !== 1; // Oculta a legenda apenas para o conjunto de dados de índice 1 (linha de corte)
                                 }
                             }
                         },
