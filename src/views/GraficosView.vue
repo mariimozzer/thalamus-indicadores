@@ -171,7 +171,6 @@
                         <label class="form-check-label" for="flexSwitchCheckChecked">Custo de projetos</label>
                     </div>
 
-                    <transition name="slide-fade">
                         <div id="Projetos">
                             <!-- v-if="show == true" -->
 
@@ -204,17 +203,39 @@
                                 </div>
                             </div>
 
-                            <canvas id="chartProjetos"></canvas>
-
-
-                            <canvas id="ChartPagarReceber"></canvas>
-
+                            <canvas id="chartProjetos"></canvas>       
                         </div>
-                    </transition>
+                    
+                    <div class="form-check form-switch" style="margin-left: 0.5rem; margin-top: 1rem;">
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked
+                            @change="mostrarGrafico('PagosRecebidos')">
+                        <label class="form-check-label" for="flexSwitchCheckChecked">Pagos e Recebidos</label>
+                    </div>
 
+                        <div id="PagosRecebidos">
+
+                            <BButton v-b-toggle="'collapse-6'" class="m-1"
+                                style="position: absolute;width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px;">
+                                <i style="color: black; font-size: 15px;" class="bi bi-info-circle-fill"></i>
+                            </BButton>
+
+
+                            <BCollapse id="collapse-6" class="position-absolute" style="margin-left: 3rem; ">
+                                <BCard>
+                                    <div style="max-width: 23rem; color: red;">
+                                        <b>Fórmula:</b> In progress! <br>
+                                        <b>Polaridade:</b> In progress! <br>
+                                        <b>Fonte:</b> In progress! <br>
+                                        <b>Descrição:</b> In progress!<br>
+                                    </div>
+                                </BCard>
+
+                            </BCollapse>
+
+                            <canvas style="margin-top: 1rem;" id="ChartPagarReceber"></canvas>       
+                        </div>
                 </div>
             </div>
-
 
             <div class="card mb-3" style="max-width: 100%; border: 1px solid rgb(0, 0, 0);">
                 <div @click="mostrarClasse('Produção', 'iconeProdução')" style="background-color: #d50000;"
@@ -408,7 +429,7 @@ export default {
             datasets: [],
             datasetsTickets: [],
             datasetsProdutos: [],
-  
+
             mesCliente: "",
             dadosClientes: [],
             dadosFormatadosClientes: [],
@@ -1414,50 +1435,7 @@ export default {
             });
         },
 
-        // getPagarReceberMes() {
-
-        //     const canvas = document.getElementById('ChartPagarReceber');
-        //     const ctx = canvas.getContext('2d');
-
-        //     if (canvas.chart) {
-        //         canvas.chart.destroy();
-        //     }
-
-        //     canvas.chart = new Chart(ctx, {
-        //         data: {
-        //             labels: ['jan', 'fev', 'mar', 'abr', 'mai'],
-        //             datasets: [{
-        //                 data: [10, 20, 10, 5, 14],
-        //                 type: "bar",
-        //                 label: 'Recebido',
-        //                 backgroundColor: 'green',
-        //                 borderColor: "black",
-        //                 borderWidth: 0,
-        //                 tension: 0.3,
-        //             },
-        //             {
-        //                 data: [1, 10, 5, 1, 9],
-        //                 type: "bar",
-        //                 label: 'Pago',
-        //                 backgroundColor: 'red',
-        //                 borderColor: "black",
-        //                 borderWidth: 0,
-        //                 tension: 0.3,
-        //             },
-
-        //             ],
-        //         },
-        //         options: {
-        //             responsive: true,
-        //             maintainAspectRatio: true,
-        //             scales: {
-        //                 stacked: true
-        //             }
-        //         },
-        //     });
-        // },
-
-        getPagarReceberMes(){
+        getPagarReceberMes() {
             // PUXA OS DADOS DO BACKEND PASSANDO MES E ANO
             this.mes = this.mesPagarReceber
             axios.post('http://192.168.0.6:8000/api/indicador/contas/pagar-receber', {
@@ -1475,43 +1453,44 @@ export default {
                     this.labelsPagarReceber = this.dadosFormatadosPagarReceber.map((value, index) => {
                         return `${index + 1}º semana`;
                     });
-
-                    this.dataGraficoPagar = this.dadosPagarReceber.map((item) => item.valorSemanaPagar * -1);
+                    // * -1
+                    this.dataGraficoPagar = this.dadosPagarReceber.map((item) => item.valorSemanaPagar);
                     this.dataGraficoReceber = this.dadosPagarReceber.map((item) => item.valorSemanaReceber);
-                    let saldo = this.dataGraficoPagar.map((valor, indice) => valor + this.dataGraficoReceber[indice]);
+                    let saldo = this.dataGraficoReceber.map((valor, indice) => valor - this.dataGraficoPagar[indice]);
+                    //let saldo = this.dataGraficoPagar.map((valor, indice) => valor + this.dataGraficoReceber[indice]);
 
                     this.datasetsPagarReceber = [];
                     this.datasetsPagarReceber.push({
-                        data: saldo,
-                        type: "line",
-                        label: 'Saldo',
-                        backgroundColor: 'orange',
-                        borderColor: 'orange',
-                        borderWidth: 2,
-                        tension: 0.3,
-                        pointRadius: 2.2,
-                        pointHoverRadius: 5,
-                    },{
-                        data: this.dataGraficoReceber,
-                        type: this.tipodegrafico,
-                        label: 'Receber',
-                        backgroundColor: 'rgba(129, 199, 132, 1)',
-                        borderColor: 'rgba(129, 199, 132, 1)',
-                        borderWidth: 2,
-                        tension: 0.3,
-                        pointRadius: 2.2,
-                        pointHoverRadius: 5,
-                    },{
+                            data: this.dataGraficoReceber,
+                            type: this.tipodegrafico,
+                            label: 'Recebio',
+                            backgroundColor: 'rgba(129, 199, 132, 1)',
+                            borderColor: 'rgba(129, 199, 132, 1)',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            pointRadius: 2.2,
+                            pointHoverRadius: 5,
+                        }, {
                         data: this.dataGraficoPagar,
                         type: this.tipodegrafico,
-                        label: 'Pagar',
-                        backgroundColor: '#F55047',
-                        borderColor: '#F55047',
+                        label: 'Pago',
+                        backgroundColor: '#E13417',
+                        borderColor: '#E13417',
                         borderWidth: 2,
                         tension: 0.3,
                         pointRadius: 2.2,
                         pointHoverRadius: 5,
-                    })
+                    },{
+                            data: saldo,
+                            type: "line",
+                            label: 'Saldo',
+                            backgroundColor: '#E1BB22',
+                            borderColor: '#E1BB22',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            pointRadius: 2.2,
+                            pointHoverRadius: 5,
+                        },)
 
                     this.renderChartPagarReceber();
                 })
@@ -1537,6 +1516,13 @@ export default {
                 options: {
                     responsive: true,
                     maintainAspectRatio: true,
+                    scales: {
+                        y: {
+                            grid: {
+                                color: (context) => (context.tick.value === 0 ? 'black' : 'rgba(0, 0, 0, 0.1)'),
+                            },
+                        },
+                    },
                     interaction: {
                         intersect: false,
                         mode: 'nearest',
