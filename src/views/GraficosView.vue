@@ -1303,7 +1303,6 @@ export default {
         },
 
         renderChartProjetos() {
-
             const canvas = document.getElementById('chartProjetos');
             const ctx = canvas.getContext('2d');
 
@@ -1344,7 +1343,9 @@ export default {
                 options: {
                     responsive: true,
                     maintainAspectRatio: true,
-
+                    animation: {
+                        
+                    },
                     plugins: {
                         legend: {
                             display: true,
