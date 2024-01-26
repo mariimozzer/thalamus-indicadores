@@ -197,7 +197,7 @@
                                 style="display: flex; justify-content: flex-end; align-items: center; height: 2rem; text-align: center; margin-right: 0.5rem">
                                 <div
                                     style="border: 2px rgba(129, 199, 132, 1) solid ; border-radius: 10px; padding: 0.2em ">
-                                    Filtrar valores acima de:<br>
+                                    Mostrar valores abaixo de:<br>
                                     <money3 v-model="linhaDeCorte" v-bind="config"
                                         style="width: 8rem;border: none; border-bottom: 1px black solid; outline: none;"
                                         @keyup.enter="definirListaDeProjetos"></money3>
@@ -205,6 +205,10 @@
                             </div>
 
                             <canvas id="chartProjetos"></canvas>
+
+
+                            <canvas id="ChartPagarReceber"></canvas>
+
                         </div>
                     </transition>
 
@@ -261,11 +265,6 @@
                         </div>
                     </transition>
 
-                    <!-- <canvas id="ChartTeste"></canvas>
-                    <button @click="producaoTeste" style="color: black;">
-                        teste
-                    </button> -->
-
                 </div>
             </div>
 
@@ -279,7 +278,6 @@
             </div> -->
 
         </div>
-
 
         <div style="overflow: auto" class="modal-mask" v-if="showModal" @click="fecharModalFora">
             <div style="max-height: 70%" class="modal-container">
@@ -296,7 +294,6 @@
                 </div>
             </div>
         </div>
-
 
         <div style="overflow: auto" class="modal-mask" v-if="modalDetalheProjeto" @click="fecharModalFora">
             <div style="max-height: 70%;" class="modal-container">
@@ -359,6 +356,7 @@ export default {
     components: { money3: Money3Component },
     data() {
         return {
+            teste: [],
             ordenacaoModal: "decrescente",
             nomeModal: "",
             linhaDeCorte: 1500000,
@@ -410,6 +408,7 @@ export default {
             datasets: [],
             datasetsTickets: [],
             datasetsProdutos: [],
+  
             mesCliente: "",
             dadosClientes: [],
             dadosFormatadosClientes: [],
@@ -427,10 +426,17 @@ export default {
             dataGraficoProdutosAcabadosTotal: [],
             dataGraficoProdutosAcabadosMediaDia: [],
 
-
             listaDeProjetos: [],
             custoDeProjetos: [],
             nomesDosProjetos: [],
+
+            mesPagarReceber: "1",
+            dadosPagarReceber: [],
+            dadosFormatadosPagarReceber: [],
+            labelsPagarReceber: [],
+            dataGraficoPagar: [],
+            dataGraficoReceber: [],
+            datasetsPagarReceber: [],
 
             config: {
                 masked: false,
@@ -449,6 +455,7 @@ export default {
         this.getClienteAno()
         this.getProdutosAcabadosAno()
         this.definirListaDeProjetos()
+        this.getPagarReceberMes()
     },
 
     methods: {
@@ -538,7 +545,8 @@ export default {
             this.mesProdutos = this.mes;
             this.mesCliente = this.mes;
             this.mesProdutosAcabados = this.mes;
-            this.mesPropostasViabilizadas = this.mes
+            this.mesPropostasViabilizadas = this.mes;
+            this.mesPagarReceber = this.mes;
         },
 
         // GERA UM GRÁFICO
@@ -652,6 +660,10 @@ export default {
                 options: {
                     responsive: true,
                     maintainAspectRatio: true,
+                    interaction: {
+                        intersect: false,
+                        mode: 'nearest',
+                    },
                     plugins: {
                         legend: {
                             display: true,
@@ -788,6 +800,10 @@ export default {
                 options: {
                     responsive: true,
                     maintainAspectRatio: true,
+                    interaction: {
+                        intersect: false,
+                        mode: 'nearest',
+                    },
                     plugins: {
                         legend: {
                             display: true,
@@ -899,6 +915,10 @@ export default {
                 options: {
                     responsive: true,
                     maintainAspectRatio: true,
+                    interaction: {
+                        intersect: false,
+                        mode: 'nearest',
+                    },
                     plugins: {
                         legend: {
                             display: true,
@@ -1052,6 +1072,14 @@ export default {
             // DEFINE O CANVA QUE O GRÁFICO SERÁ GERADO
             const canvas = document.getElementById('ChartClientes');
             const ctx = canvas.getContext('2d');
+            const footer = (tooltipItems) => {
+                let sum = 0;
+
+                tooltipItems.forEach(function (tooltipItem) {
+                    sum += tooltipItem.parsed.y;
+                });
+                return 'Soma: ' + sum + " Clientes";
+            };
             // LIMPA O CANVA CASO ELE ESTEJA PREENCHIDO (PREVENÇÃO DE ERRO)
             if (canvas.chart) {
                 canvas.chart.destroy();
@@ -1065,7 +1093,16 @@ export default {
                 options: {
                     responsive: true,
                     maintainAspectRatio: true,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index',
+                    },
                     plugins: {
+                        tooltip: {
+                            callbacks: {
+                                footer: footer,
+                            }
+                        },
                         legend: {
                             display: true,
                             labels: {
@@ -1113,7 +1150,7 @@ export default {
                     });
 
                     this.dataGraficoProdutosAcabadosTotal = this.dadosProdutosAcabados.map((item) => item.total);
-                    this.dataGraficoProdutosAcabadosMediaDia = this.dadosProdutosAcabados.map((item) => item.mediaDia);
+                    this.dataGraficoProdutosAcabadosMediaDia = this.dadosProdutosAcabados.map((item) => item.mediaDia.slice(0, 5));
 
                     this.datasetsProdutosAcabados = [];
                     this.datasetsProdutosAcabados.push(
@@ -1160,7 +1197,7 @@ export default {
                     this.labelsProdutosAcabados = this.labelsProdutosAcabados.map((numero) => this.nomesDosMesessemid[numero - 1])
 
                     this.dataGraficoProdutosAcabadosTotal = this.dadosProdutosAcabados.map((item) => item.total);
-                    this.dataGraficoProdutosAcabadosMediaDia = this.dadosProdutosAcabados.map((item) => item.mediaDia);
+                    this.dataGraficoProdutosAcabadosMediaDia = this.dadosProdutosAcabados.map((item) => item.mediaDia.slice(0, 5));
 
                     this.datasetsProdutosAcabados = [];
                     this.datasetsProdutosAcabados.push(
@@ -1210,6 +1247,10 @@ export default {
                 options: {
                     responsive: true,
                     maintainAspectRatio: true,
+                    interaction: {
+                        intersect: false,
+                        mode: 'nearest',
+                    },
                     plugins: {
                         legend: {
                             display: true,
@@ -1238,49 +1279,6 @@ export default {
             });
         },
 
-        producaoTeste() {
-
-            const canvas = document.getElementById('ChartTeste');
-            const ctx = canvas.getContext('2d');
-
-            if (canvas.chart) {
-                canvas.chart.destroy();
-            }
-
-            canvas.chart = new Chart(ctx, {
-                data: {
-                    labels: ['jan', 'fev', 'mar', 'abr', 'mai'],
-                    datasets: [{
-                        data: [10, 20, 10, 5, 14],
-                        type: "bar",
-                        label: 'Recebido',
-                        backgroundColor: 'green',
-                        borderColor: "black",
-                        borderWidth: 0,
-                        tension: 0.3,
-                    },
-                    {
-                        data: [1, 10, 5, 1, 9],
-                        type: "bar",
-                        label: 'Pago',
-                        backgroundColor: 'red',
-                        borderColor: "black",
-                        borderWidth: 0,
-                        tension: 0.3,
-                    },
-
-                    ],
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    scales: {
-                        stacked: true
-                    }
-                },
-            });
-        },
-
         definirListaDeProjetos() {
             this.linhaDeCorte = parseInt(this.linhaDeCorte);
             this.listaDeProjetos = [],
@@ -1300,6 +1298,24 @@ export default {
                     .catch((error) => {
                         console.error(error);
                     });
+        },
+
+        detalhesDeProjeto(num) {
+            axios.post('http://192.168.0.6:8000/api/indicador/projeto/custo', {
+                codProjeto: num,
+            })
+                .then((response) => {
+                    //const decrescente = (a, b) => parseFloat(b.ValorTotal) - parseFloat(a.ValorTotal);
+                    //const crescente  = (a, b) => parseFloat(a.ValorTotal) - parseFloat(b.ValorTotal);
+
+                    this.detalheProjeto = response.data;
+                    this.detalheProjeto = this.detalheProjeto.sort((a, b) => parseFloat(b.ValorTotal) - parseFloat(a.ValorTotal));
+                    this.modalDetalheProjeto = !this.modalDetalheProjeto
+                })
+
+                .catch((error) => {
+                    console.error(error);
+                });
         },
 
         renderChartProjetos() {
@@ -1333,18 +1349,20 @@ export default {
                     {
                         data: linha,
                         type: "line",
-                        label: "",
+                        label: "Linha de corte",
                         backgroundColor: 'red',
                         borderColor: 'red',
                         borderWidth: 2,
                         pointRadius: 0,
+                        pointHoverRadius: 0,
                     }],
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: true,
-                    animation: {
-                        
+                    interaction: {
+                        intersect: false,
+                        mode: 'nearest',
                     },
                     plugins: {
                         legend: {
@@ -1396,22 +1414,159 @@ export default {
             });
         },
 
-        detalhesDeProjeto(num) {
-            axios.post('http://192.168.0.6:8000/api/indicador/projeto/custo', {
-                codProjeto: num,
+        // getPagarReceberMes() {
+
+        //     const canvas = document.getElementById('ChartPagarReceber');
+        //     const ctx = canvas.getContext('2d');
+
+        //     if (canvas.chart) {
+        //         canvas.chart.destroy();
+        //     }
+
+        //     canvas.chart = new Chart(ctx, {
+        //         data: {
+        //             labels: ['jan', 'fev', 'mar', 'abr', 'mai'],
+        //             datasets: [{
+        //                 data: [10, 20, 10, 5, 14],
+        //                 type: "bar",
+        //                 label: 'Recebido',
+        //                 backgroundColor: 'green',
+        //                 borderColor: "black",
+        //                 borderWidth: 0,
+        //                 tension: 0.3,
+        //             },
+        //             {
+        //                 data: [1, 10, 5, 1, 9],
+        //                 type: "bar",
+        //                 label: 'Pago',
+        //                 backgroundColor: 'red',
+        //                 borderColor: "black",
+        //                 borderWidth: 0,
+        //                 tension: 0.3,
+        //             },
+
+        //             ],
+        //         },
+        //         options: {
+        //             responsive: true,
+        //             maintainAspectRatio: true,
+        //             scales: {
+        //                 stacked: true
+        //             }
+        //         },
+        //     });
+        // },
+
+        getPagarReceberMes(){
+            // PUXA OS DADOS DO BACKEND PASSANDO MES E ANO
+            this.mes = this.mesPagarReceber
+            axios.post('http://192.168.0.6:8000/api/indicador/contas/pagar-receber', {
+                mes: this.mesPagarReceber,
+                ano: this.ano,
             })
                 .then((response) => {
-                    //const decrescente = (a, b) => parseFloat(b.ValorTotal) - parseFloat(a.ValorTotal);
-                    //const crescente  = (a, b) => parseFloat(a.ValorTotal) - parseFloat(b.ValorTotal);
+                    this.dadosPagarReceber = response.data;
+                    this.dadosPagarReceber.forEach((item) => {
+                        item.semana = item.semana.toString().substring(4);
+                    });
 
-                    this.detalheProjeto = response.data;
-                    this.detalheProjeto = this.detalheProjeto.sort((a, b) => parseFloat(b.ValorTotal) - parseFloat(a.ValorTotal));
-                    this.modalDetalheProjeto = !this.modalDetalheProjeto
+                    this.dadosFormatadosPagarReceber = this.dadosPagarReceber.map((item) => parseInt(item.semana, 10));
+
+                    this.labelsPagarReceber = this.dadosFormatadosPagarReceber.map((value, index) => {
+                        return `${index + 1}º semana`;
+                    });
+
+                    this.dataGraficoPagar = this.dadosPagarReceber.map((item) => item.valorSemanaPagar * -1);
+                    this.dataGraficoReceber = this.dadosPagarReceber.map((item) => item.valorSemanaReceber);
+                    let saldo = this.dataGraficoPagar.map((valor, indice) => valor + this.dataGraficoReceber[indice]);
+
+                    this.datasetsPagarReceber = [];
+                    this.datasetsPagarReceber.push({
+                        data: saldo,
+                        type: "line",
+                        label: 'Saldo',
+                        backgroundColor: 'orange',
+                        borderColor: 'orange',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        pointRadius: 2.2,
+                        pointHoverRadius: 5,
+                    },{
+                        data: this.dataGraficoReceber,
+                        type: this.tipodegrafico,
+                        label: 'Receber',
+                        backgroundColor: 'rgba(129, 199, 132, 1)',
+                        borderColor: 'rgba(129, 199, 132, 1)',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        pointRadius: 2.2,
+                        pointHoverRadius: 5,
+                    },{
+                        data: this.dataGraficoPagar,
+                        type: this.tipodegrafico,
+                        label: 'Pagar',
+                        backgroundColor: '#F55047',
+                        borderColor: '#F55047',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        pointRadius: 2.2,
+                        pointHoverRadius: 5,
+                    })
+
+                    this.renderChartPagarReceber();
                 })
-
                 .catch((error) => {
                     console.error(error);
                 });
+        },
+
+        renderChartPagarReceber() {
+
+            const canvas = document.getElementById('ChartPagarReceber');
+            const ctx = canvas.getContext('2d');
+
+            if (canvas.chart) {
+                canvas.chart.destroy();
+            }
+
+            canvas.chart = new Chart(ctx, {
+                data: {
+                    labels: this.labelsPagarReceber,
+                    datasets: this.datasetsPagarReceber,
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    interaction: {
+                        intersect: false,
+                        mode: 'nearest',
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            labels: {
+                                boxWidth: 15,
+                                boxHeight: 15,
+                                color: 'rgb(0, 0, 0)',
+                                font: {
+                                    size: 20,
+                                    weight: 'bolder'
+                                }
+                            }
+                        },
+                    },
+                    // onClick: (e) => {
+                    //     if (this.mesProdutosAcabados == "") {
+                    //         const canvasPosition = getRelativePosition(e, canvas.chart);
+                    //         const dataX = canvas.chart.scales.x.getValueForPixel(canvasPosition.x);
+
+                    //         this.mesProdutosAcabados = this.dadosFormatadosProdutosAcabados[dataX]
+                    //         this.getProdutosAcabadosMes();
+                    //     }
+
+                    // }
+                },
+            });
         },
 
     }
