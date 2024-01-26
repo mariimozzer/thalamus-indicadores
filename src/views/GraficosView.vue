@@ -232,7 +232,8 @@
 
                             </BCollapse>
 
-                            <canvas style="margin-top: 1rem;" id="ChartPagarReceber"></canvas>       
+                            <canvas style="margin-top: 1rem;" id="ChartPagarReceber"></canvas>   
+                            {{ teste }}    
                         </div>
                 </div>
             </div>
@@ -1541,16 +1542,16 @@ export default {
                             }
                         },
                     },
-                    // onClick: (e) => {
-                    //     if (this.mesProdutosAcabados == "") {
-                    //         const canvasPosition = getRelativePosition(e, canvas.chart);
-                    //         const dataX = canvas.chart.scales.x.getValueForPixel(canvasPosition.x);
+                    onClick: (e) => {
+                        //  if (this.mesPagarReceber == "") {
+                             const canvasPosition = getRelativePosition(e, canvas.chart);
+                             const dataX = canvas.chart.scales.x.getValueForPixel(canvasPosition.x);
+                            this.teste = dataX
+                            //  this.mesProdutosAcabados = this.dadosFormatadosProdutosAcabados[dataX]
+                            //  this.getProdutosAcabadosMes();
+                        //  }
 
-                    //         this.mesProdutosAcabados = this.dadosFormatadosProdutosAcabados[dataX]
-                    //         this.getProdutosAcabadosMes();
-                    //     }
-
-                    // }
+                     }
                 },
             });
         },
