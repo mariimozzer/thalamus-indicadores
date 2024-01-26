@@ -352,11 +352,11 @@
                             <b>Solicitante:</b> {{ i.Solicitante }} <br>
                             <b>Aprovação:</b> {{ i.Aprovação }} <br>
                             <b>Data:</b> {{ extrairHoraDeString(i.Data) }} <br>
-                            <b>Fornecedor:</b> {{ i.Fornecedor }} <br><br>
+                            <b>Fornecedor:</b> {{ i.Fornecedor }}<br><br>
                             <h5><b>Item(s):</b></h5>
                             <div v-for="item in i.itens" :key="item.Nome">
-                                <b>Nome:</b> {{ item.Nome }} <br>
-                                <b>Valor:</b> {{ real(parseInt(item.Valor)) }} <br>
+                                <b>Nome:</b> {{ item.Nome }}<br>
+                                <b>Valor:</b> {{ real(parseInt(item.Valor)) }}<br>
                                 <br>
                             </div>
                         </div>
