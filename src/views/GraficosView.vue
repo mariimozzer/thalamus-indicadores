@@ -3,19 +3,19 @@
         <!-- CRIA UM CABEÇALHO PARA SELEÇÃO DE MÊS E UM BOTÃO PARA EXIBIR O ANO TODO -->
         <div class="form-check cabecalho" style="align-items: center;">
             <button v-b-tooltip.hover title="Ano inteiro!" class="botoes"
-                @click="getPropostaComercialAno(), getTicketsAno(), getProdutosAno(), getClienteAno(), getClienteAno(), getProdutosAcabadosAno()">
+                @click="getPropostaComercialAno(), getTicketsAno(), getProdutosAno(), getClienteAno(), getClienteAno(), getProdutosAcabadosAno(), getPagarReceberAno()">
                 <i class="bi bi-calendar-minus"></i>
             </button>
             <div v-for="i in nomeDosMeses" :key="i">
                 <input
-                    @change="igualameses(), getPropostaComercialMes(), getTicketsMes(), getProdutosMes(), getClienteMes(), getProdutosAcabadosMes()"
+                    @change="igualameses(), getPropostaComercialMes(), getTicketsMes(), getProdutosMes(), getClienteMes(), getProdutosAcabadosMes(), getPagarReceberMes()"
                     type="radio" class="btn-check botoes" name="options-base" :id=i.id :value=i.id v-model="mes"
                     autocomplete="off">
                 <label style="color: rgba(255, 255, 255, 1);margin-left: 0.5rem; font-size: large;" class="btn botoes"
                     :for=i.id>{{ i.nome }}</label>
             </div>
             <select class="botoes ano" v-model="ano"
-                @change="getProdutosAno(), getPropostaComercialAno(), getTicketsAno(), getClienteAno(), getProdutosAcabadosAno()"
+                @change="getProdutosAno(), getPropostaComercialAno(), getTicketsAno(), getClienteAno(), getProdutosAcabadosAno(), getPagarReceberAno()"
                 style="width: 4rem; margin-left: 0.5em;margin-right: 0.5em  ;border: none; background-color: rgba(33, 37, 41, 1)">
                 <option>2023</option>
                 <option>2024</option>
@@ -171,70 +171,68 @@
                         <label class="form-check-label" for="flexSwitchCheckChecked">Custo de projetos</label>
                     </div>
 
-                        <div id="Projetos">
-                            <!-- v-if="show == true" -->
+                    <div id="Projetos">
+                        <!-- v-if="show == true" -->
 
-                            <BButton v-b-toggle="'collapse-5'" class="m-1"
-                                style="position: absolute;width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px;">
-                                <i style="color: black; font-size: 15px;" class="bi bi-info-circle-fill"></i>
-                            </BButton>
+                        <BButton v-b-toggle="'collapse-5'" class="m-1"
+                            style="position: absolute;width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px;">
+                            <i style="color: black; font-size: 15px;" class="bi bi-info-circle-fill"></i>
+                        </BButton>
 
 
-                            <!-- Element to collapse -->
-                            <BCollapse id="collapse-5" class="position-absolute" style="margin-left: 3rem;">
-                                <BCard>
-                                    <div style="max-width: 23rem;">
-                                        <b>Fórmula:</b> Somatória dos valores de requisições vinculadas a cada projeto. <br>
-                                        <b>Polaridade:</b> Quanto menor, melhor. <br>
-                                        <b>Fonte:</b> SGI <br>
-                                        <b>Descrição:</b> Valores em R$ gastos em cada projeto registrado.<br>
-                                    </div>
-                                </BCard>
-
-                            </BCollapse>
-                            <div
-                                style="display: flex; justify-content: flex-end; align-items: center; height: 2rem; text-align: center; margin-right: 0.5rem">
-                                <div
-                                    style="border: 2px rgba(129, 199, 132, 1) solid ; border-radius: 10px; padding: 0.2em ">
-                                    Mostrar valores abaixo de:<br>
-                                    <money3 v-model="linhaDeCorte" v-bind="config"
-                                        style="width: 8rem;border: none; border-bottom: 1px black solid; outline: none;"
-                                        @keyup.enter="definirListaDeProjetos"></money3>
+                        <!-- Element to collapse -->
+                        <BCollapse id="collapse-5" class="position-absolute" style="margin-left: 3rem;">
+                            <BCard>
+                                <div style="max-width: 23rem;">
+                                    <b>Fórmula:</b> Somatória dos valores de requisições vinculadas a cada projeto. <br>
+                                    <b>Polaridade:</b> Quanto menor, melhor. <br>
+                                    <b>Fonte:</b> SGI <br>
+                                    <b>Descrição:</b> Valores em R$ gastos em cada projeto registrado.<br>
                                 </div>
-                            </div>
+                            </BCard>
 
-                            <canvas id="chartProjetos"></canvas>       
+                        </BCollapse>
+                        <div
+                            style="display: flex; justify-content: flex-end; align-items: center; height: 2rem; text-align: center; margin-right: 0.5rem">
+                            <div style="border: 2px rgba(129, 199, 132, 1) solid ; border-radius: 10px; padding: 0.2em ">
+                                Mostrar valores abaixo de:<br>
+                                <money3 v-model="linhaDeCorte" v-bind="config"
+                                    style="width: 8rem;border: none; border-bottom: 1px black solid; outline: none;"
+                                    @keyup.enter="definirListaDeProjetos"></money3>
+                            </div>
                         </div>
-                    
+
+                        <canvas id="chartProjetos"></canvas>
+                    </div>
+
                     <div class="form-check form-switch" style="margin-left: 0.5rem; margin-top: 1rem;">
                         <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked
                             @change="mostrarGrafico('PagosRecebidos')">
                         <label class="form-check-label" for="flexSwitchCheckChecked">Pagos e Recebidos</label>
                     </div>
 
-                        <div id="PagosRecebidos">
+                    <div id="PagosRecebidos">
 
-                            <BButton v-b-toggle="'collapse-6'" class="m-1"
-                                style="position: absolute;width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px;">
-                                <i style="color: black; font-size: 15px;" class="bi bi-info-circle-fill"></i>
-                            </BButton>
+                        <BButton v-b-toggle="'collapse-6'" class="m-1"
+                            style="position: absolute;width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px;">
+                            <i style="color: black; font-size: 15px;" class="bi bi-info-circle-fill"></i>
+                        </BButton>
 
 
-                            <BCollapse id="collapse-6" class="position-absolute" style="margin-left: 3rem; ">
-                                <BCard>
-                                    <div style="max-width: 23rem; color: red;">
-                                        <b>Fórmula:</b> In progress! <br>
-                                        <b>Polaridade:</b> In progress! <br>
-                                        <b>Fonte:</b> In progress! <br>
-                                        <b>Descrição:</b> In progress!<br>
-                                    </div>
-                                </BCard>
+                        <BCollapse id="collapse-6" class="position-absolute" style="margin-left: 3rem; ">
+                            <BCard>
+                                <div style="max-width: 23rem; color: red;">
+                                    <b>Fórmula:</b> In progress! <br>
+                                    <b>Polaridade:</b> In progress! <br>
+                                    <b>Fonte:</b> In progress! <br>
+                                    <b>Descrição:</b> In progress!<br>
+                                </div>
+                            </BCard>
 
-                            </BCollapse>
+                        </BCollapse>
 
-                            <canvas style="margin-top: 1rem;" id="ChartPagarReceber"></canvas>   
-                            {{ teste }}    
-                        </div>
+                        <canvas style="margin-top: 1rem;" id="ChartPagarReceber"></canvas>
+                    </div>
                 </div>
             </div>
 
@@ -299,6 +297,72 @@
                 </div>
             </div> -->
 
+        </div>
+
+        <div style="overflow: auto" class="modal-mask" v-if="modalDetalhePagoeRecebido" @click="fecharModalFora">
+            <div style="max-height: 70%" class="modal-container">
+                <div class="conteudomodal" style="width: 50rem;">
+                    <div style="text-align: center;">
+                        <h1>
+                            {{ labelsPagarReceber[dataXPagosRecebidos] }} de {{ nomesDosMesessemid[mesPagarReceber - 1] }}
+                        </h1>
+                    </div>
+
+
+                    <div style="position: absolute; margin-left: 30rem; margin-top: 5rem;">
+
+                            <input v-model="PagoOuRecebidoModal" type="radio" class="btn-check" name="options-base" id="option5"
+                            autocomplete="off" checked value="pago">
+                            <label class="btn" for="option5">Pagos</label>
+                            
+                            <input v-model="PagoOuRecebidoModal" type="radio" class="btn-check" name="options-base" id="option6" 
+                            autocomplete="off" value="recebido">
+                            <label class="btn" for="option6" style="margin-right: 0.5rem;">Recebidos</label>
+
+                        <input checked @change="classificarStatus('decrescente')" type="radio" class="btn-check botoes"
+                            name="ordenação" id="decrescente" value="decrescente" autocomplete="off">
+                        <label style="color: rgb(0, 0, 0);font-size: 25px;" class="btn botoes" for="decrescente"><i
+                                class="bi bi-sort-numeric-down-alt"></i></label>
+
+                        <input @change="classificarStatus('crescente')" type="radio" class="btn-check botoes"
+                            name="ordenação" id="crescente" value="crescente" v-model="ordenacaoModal" autocomplete="off">
+                        <label style="color: rgb(0, 0, 0);margin-left: 0.5rem; font-size: 25px;" class="btn botoes"
+                            for="crescente"><i class="bi bi-sort-numeric-up-alt"></i></label>
+                    </div>
+
+                    <div v-for="i in listaPagarReceber" :key="i">
+                        <h5>
+                            <b>Total Recebido:</b> {{ real(parseInt(i.valorSemanaReceber)) }} <br>
+                            <b>Total Pago:</b> {{ real(parseInt(i.valorSemanaPagar)) }} <br>
+                            <b>Saldo da semana:</b> {{ real(parseInt(i.valorSemanaReceber - i.valorSemanaPagar)) }}
+                        </h5>
+
+                        <div style="display: flex; align-items: baseline; justify-content: flex-end;">
+
+                        </div>
+
+                        <hr>
+
+                        <div v-if="PagoOuRecebidoModal == 'pago'">
+                            <div v-for="item in i.statusPagar" :key="item.statusPagar" style="margin-top: 1rem;">
+                                <b>Nome:</b> {{ item.nome }}<br>
+                                <b>Valor:</b> {{ real(parseInt(item.valor)) }}<br>
+                                <hr>
+                            </div>
+                        </div>
+
+                        <div v-if="PagoOuRecebidoModal == 'recebido'">
+                            <div v-for="item in i.statusReceber" :key="item.statusReceber" style="margin-top: 1rem;">
+                                <b>Nome:</b> {{ item.nome }}<br>
+                                <b>Valor:</b> {{ real(parseInt(item.valor)) }}<br>
+                                <hr>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
         </div>
 
         <div style="overflow: auto" class="modal-mask" v-if="showModal" @click="fecharModalFora">
@@ -378,11 +442,14 @@ export default {
     components: { money3: Money3Component },
     data() {
         return {
+            PagoOuRecebidoModal: "pago",
             teste: [],
             ordenacaoModal: "decrescente",
             nomeModal: "",
             linhaDeCorte: 1500000,
             modalDetalheProjeto: false,
+            modalDetalhePagoeRecebido: false,
+            detalhePagoeRecebido: [],
             detalheProjeto: [],
             tipodegrafico: "bar",
             listaProdutos: [],
@@ -452,13 +519,16 @@ export default {
             custoDeProjetos: [],
             nomesDosProjetos: [],
 
-            mesPagarReceber: "1",
+            mesPagarReceber: "",
             dadosPagarReceber: [],
             dadosFormatadosPagarReceber: [],
             labelsPagarReceber: [],
             dataGraficoPagar: [],
             dataGraficoReceber: [],
             datasetsPagarReceber: [],
+            semanaPagoRecebidos: [],
+            listaPagarReceber: [],
+            dataXPagosRecebidos: 0,
 
             config: {
                 masked: false,
@@ -477,10 +547,32 @@ export default {
         this.getClienteAno()
         this.getProdutosAcabadosAno()
         this.definirListaDeProjetos()
-        this.getPagarReceberMes()
+        this.getPagarReceberAno()
     },
 
     methods: {
+        classificarStatus(ordem) {
+            if (ordem === "decrescente") {
+                this.listaPagarReceber.forEach(semana => {
+                    // Ordenar os itens em 'statusPagar' com base no valor
+                    semana.statusPagar.sort((a, b) => b.valor - a.valor);
+                });
+                this.listaPagarReceber.forEach(semana => {
+                    // Ordenar os itens em 'statusPagar' com base no valor
+                    semana.statusReceber.sort((a, b) => b.valor - a.valor);
+                });
+            } else {
+                this.listaPagarReceber.forEach(semana => {
+                    // Ordenar os itens em 'statusPagar' com base no valor
+                    semana.statusPagar.sort((a, b) => a.valor - b.valor);
+                });
+                this.listaPagarReceber.forEach(semana => {
+                    // Ordenar os itens em 'statusPagar' com base no valor
+                    semana.statusReceber.sort((a, b) => a.valor - b.valor);
+                });
+            }
+        },
+
         extrairHoraDeString(dataString) {
             const data = new Date(dataString);
             const dia = (data.getDate() + 1);
@@ -551,6 +643,7 @@ export default {
             if (event.target.classList.contains('modal-mask')) {
                 this.showModal = false;
                 this.modalDetalheProjeto = false
+                this.modalDetalhePagoeRecebido = false
             }
         },
 
@@ -1100,7 +1193,7 @@ export default {
                 tooltipItems.forEach(function (tooltipItem) {
                     sum += tooltipItem.parsed.y;
                 });
-                return 'Soma: ' + sum + " Clientes";
+                return 'Total: ' + sum + " Clientes";
             };
             // LIMPA O CANVA CASO ELE ESTEJA PREENCHIDO (PREVENÇÃO DE ERRO)
             if (canvas.chart) {
@@ -1436,6 +1529,97 @@ export default {
             });
         },
 
+        getPagarReceberAno() {
+            // PUXA OS DADOS DO BACKEND PASSANDO MES E ANO
+            this.mesPagarReceber = "";
+            // axios.post('http://192.168.0.6:8000/api/indicador/contas/pagar-receber', {
+            //     mes: this.mesPagarReceber,
+            //     ano: this.ano,
+            // })
+            //     .then((response) => {
+            //         this.dadosPagarReceber = response.data;
+            //         this.dadosPagarReceber.forEach((item) => {
+            //             item.semana = item.semana.toString().substring(4);
+            //         });
+
+            //         this.dadosFormatadosPagarReceber = this.dadosPagarReceber.map((item) => parseInt(item.semana, 10));
+
+            //         this.labelsPagarReceber = this.dadosFormatadosPagarReceber.map((value, index) => {
+            //             return `${index + 1}º semana`;
+            //         });
+            //         // * -1
+            //         this.dataGraficoPagar = this.dadosPagarReceber.map((item) => item.valorSemanaPagar);
+            //         this.dataGraficoReceber = this.dadosPagarReceber.map((item) => item.valorSemanaReceber);
+            //         let saldo = this.dataGraficoReceber.map((valor, indice) => valor - this.dataGraficoPagar[indice]);
+            //         //let saldo = this.dataGraficoPagar.map((valor, indice) => valor + this.dataGraficoReceber[indice]);
+
+            //         this.datasetsPagarReceber = [];
+            //         this.datasetsPagarReceber.push({
+            //             data: this.dataGraficoReceber,
+            //             type: this.tipodegrafico,
+            //             label: 'Recebio',
+            //             backgroundColor: 'rgba(129, 199, 132, 1)',
+            //             borderColor: 'rgba(129, 199, 132, 1)',
+            //             borderWidth: 2,
+            //             tension: 0.3,
+            //             pointRadius: 2.2,
+            //             pointHoverRadius: 5,
+            //         }, {
+            //             data: this.dataGraficoPagar,
+            //             type: this.tipodegrafico,
+            //             label: 'Pago',
+            //             backgroundColor: '#E13417',
+            //             borderColor: '#E13417',
+            //             borderWidth: 2,
+            //             tension: 0.3,
+            //             pointRadius: 2.2,
+            //             pointHoverRadius: 5,
+            //         }, {
+            //             data: saldo,
+            //             type: "line",
+            //             label: 'Saldo',
+            //             backgroundColor: '#E1BB22',
+            //             borderColor: '#E1BB22',
+            //             borderWidth: 2,
+            //             tension: 0.3,
+            //             pointRadius: 2.2,
+            //             pointHoverRadius: 5,
+            //         },)
+
+            //         this.renderChartPagarReceber();
+            //     })
+            //     .catch((error) => {
+            //         console.error(error);
+            //     });
+
+            this.labelsPagarReceber = this.nomesDosMesessemid;
+            this.dataGraficoReceber = [423200, 235324, 425253, 235345, 2345234, 2534474, 42320, 235324, 425253, 235345, 2345234, 2534474];
+            this.dataGraficoPagar = [423200, 235324, 425253, 235345, 2345234, 2534474, 42320, 235324, 425253, 235345, 2345234, 2534];
+            this.datasetsPagarReceber = [];
+            this.datasetsPagarReceber.push({
+                data: this.dataGraficoReceber,
+                type: this.tipodegrafico,
+                label: 'Recebio',
+                backgroundColor: 'rgba(129, 199, 132, 1)',
+                borderColor: 'rgba(129, 199, 132, 1)',
+                borderWidth: 2,
+                tension: 0.3,
+                pointRadius: 2.2,
+                pointHoverRadius: 5,
+            }, {
+                data: this.dataGraficoPagar,
+                type: this.tipodegrafico,
+                label: 'Pago',
+                backgroundColor: '#E13417',
+                borderColor: '#E13417',
+                borderWidth: 2,
+                tension: 0.3,
+                pointRadius: 2.2,
+                pointHoverRadius: 5,
+            });
+            this.renderChartPagarReceber();
+        },
+
         getPagarReceberMes() {
             // PUXA OS DADOS DO BACKEND PASSANDO MES E ANO
             this.mes = this.mesPagarReceber
@@ -1462,16 +1646,16 @@ export default {
 
                     this.datasetsPagarReceber = [];
                     this.datasetsPagarReceber.push({
-                            data: this.dataGraficoReceber,
-                            type: this.tipodegrafico,
-                            label: 'Recebio',
-                            backgroundColor: 'rgba(129, 199, 132, 1)',
-                            borderColor: 'rgba(129, 199, 132, 1)',
-                            borderWidth: 2,
-                            tension: 0.3,
-                            pointRadius: 2.2,
-                            pointHoverRadius: 5,
-                        }, {
+                        data: this.dataGraficoReceber,
+                        type: this.tipodegrafico,
+                        label: 'Recebio',
+                        backgroundColor: 'rgba(129, 199, 132, 1)',
+                        borderColor: 'rgba(129, 199, 132, 1)',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        pointRadius: 2.2,
+                        pointHoverRadius: 5,
+                    }, {
                         data: this.dataGraficoPagar,
                         type: this.tipodegrafico,
                         label: 'Pago',
@@ -1481,23 +1665,39 @@ export default {
                         tension: 0.3,
                         pointRadius: 2.2,
                         pointHoverRadius: 5,
-                    },{
-                            data: saldo,
-                            type: "line",
-                            label: 'Saldo',
-                            backgroundColor: '#E1BB22',
-                            borderColor: '#E1BB22',
-                            borderWidth: 2,
-                            tension: 0.3,
-                            pointRadius: 2.2,
-                            pointHoverRadius: 5,
-                        },)
+                    }, {
+                        data: saldo,
+                        type: "line",
+                        label: 'Saldo',
+                        backgroundColor: '#E1BB22',
+                        borderColor: '#E1BB22',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        pointRadius: 2.2,
+                        pointHoverRadius: 5,
+                    },)
 
                     this.renderChartPagarReceber();
                 })
                 .catch((error) => {
                     console.error(error);
                 });
+        },
+
+        mostrarDetalhePagarReceber() {
+            this.detalhePagarReceber = [];
+            axios.post('http://192.168.0.6:8000/api/indicador/contas/semana-detalhe', {
+                anoSemana: this.semanaPagoRecebidos,
+            })
+                .then((response) => {
+                    this.listaPagarReceber = response.data;
+                    this.classificarStatus('decrescente')
+                })
+
+                .catch((error) => {
+                    console.error(error);
+                });
+            this.modalDetalhePagoeRecebido = !this.modalDetalhePagoeRecebido;
         },
 
         renderChartPagarReceber() {
@@ -1543,15 +1743,22 @@ export default {
                         },
                     },
                     onClick: (e) => {
-                        //  if (this.mesPagarReceber == "") {
-                             const canvasPosition = getRelativePosition(e, canvas.chart);
-                             const dataX = canvas.chart.scales.x.getValueForPixel(canvasPosition.x);
-                            this.teste = dataX
-                            //  this.mesProdutosAcabados = this.dadosFormatadosProdutosAcabados[dataX]
-                            //  this.getProdutosAcabadosMes();
-                        //  }
+                        if (this.mesPagarReceber == "") {
+                            const canvasPosition = getRelativePosition(e, canvas.chart);
+                            const dataX = canvas.chart.scales.x.getValueForPixel(canvasPosition.x);
+                            this.mesPagarReceber = dataX + 1
+                            this.getPagarReceberMes();
+                        } else {
+                            const canvasPosition = getRelativePosition(e, canvas.chart);
+                            const dataX = canvas.chart.scales.x.getValueForPixel(canvasPosition.x);
+                            this.dataXPagosRecebidos = dataX;
 
-                     }
+                            this.semanaPagoRecebidos = this.ano + this.dadosPagarReceber.map((item) => item.semana)[dataX];
+
+                            this.mostrarDetalhePagarReceber()
+                        }
+
+                    }
                 },
             });
         },
