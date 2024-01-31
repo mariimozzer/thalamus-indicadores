@@ -22,14 +22,14 @@
             </select>
             <div style="border-left: solid 1px white;">
                 <input
-                    @change="getPropostaComercialAno(), getProdutosAno(), getTicketsAno(), getClienteAno(), getProdutosAcabadosAno(), definirListaDeProjetos()"
+                    @change="getPropostaComercialAno(), getProdutosAno(), getTicketsAno(), getClienteAno(), getProdutosAcabadosAno(), definirListaDeProjetos(), getPagarReceberAno()"
                     type="radio" class="btn-check botoes" name="tipodegrafico" id="barra" value="bar"
                     v-model="tipodegrafico" autocomplete="off">
                 <label style="color: rgba(255, 255, 255, 1);margin-left: 0.5rem; font-size: medium;" class="btn botoes"
                     for="barra"><i class="bi bi-bar-chart-line-fill"></i></label>
 
                 <input
-                    @change="getPropostaComercialAno(), getProdutosAno(), getTicketsAno(), getClienteAno(), getProdutosAcabadosAno(), definirListaDeProjetos()"
+                    @change="getPropostaComercialAno(), getProdutosAno(), getTicketsAno(), getClienteAno(), getProdutosAcabadosAno(), definirListaDeProjetos(), getPagarReceberAno()"
                     type="radio" class="btn-check botoes" name="tipodegrafico" id="linha" value="line"
                     v-model="tipodegrafico" autocomplete="off">
                 <label style="color: rgba(255, 255, 255, 1);margin-left: 0.5rem; font-size: medium;" class="btn botoes"
@@ -123,8 +123,6 @@
                             @change="mostrarGrafico('Clientes')">
                         <label class="form-check-label" for="flexSwitchCheckChecked">Clientes</label>
                     </div>
-
-
                     <div style="margin-top: 1rem; display: none;" id="Clientes">
                         <div>
                             <BButton v-b-toggle.collapse-3 class="m-1" id="descrição3"
@@ -206,12 +204,12 @@
                     </div>
 
                     <div class="form-check form-switch" style="margin-left: 0.5rem; margin-top: 1rem;">
-                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked"
                             @change="mostrarGrafico('PagosRecebidos')">
                         <label class="form-check-label" for="flexSwitchCheckChecked">Pagos e Recebidos</label>
                     </div>
 
-                    <div id="PagosRecebidos">
+                    <div id="PagosRecebidos" style="display: none;">
 
                         <BButton v-b-toggle="'collapse-6'" class="m-1"
                             style="position: absolute;width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px;">
@@ -311,13 +309,13 @@
 
                     <div style="position: absolute; margin-left: 30rem; margin-top: 5rem;">
 
-                            <input v-model="PagoOuRecebidoModal" type="radio" class="btn-check" name="options-base" id="option5"
+                        <input v-model="PagoOuRecebidoModal" type="radio" class="btn-check" name="options-base" id="option5"
                             autocomplete="off" checked value="pago">
-                            <label class="btn" for="option5">Pagos</label>
-                            
-                            <input v-model="PagoOuRecebidoModal" type="radio" class="btn-check" name="options-base" id="option6" 
+                        <label class="btn" for="option5">Pagos</label>
+
+                        <input v-model="PagoOuRecebidoModal" type="radio" class="btn-check" name="options-base" id="option6"
                             autocomplete="off" value="recebido">
-                            <label class="btn" for="option6" style="margin-right: 0.5rem;">Recebidos</label>
+                        <label class="btn" for="option6" style="margin-right: 0.5rem;">Recebidos</label>
 
                         <input checked @change="classificarStatus('decrescente')" type="radio" class="btn-check botoes"
                             name="ordenação" id="decrescente" value="decrescente" autocomplete="off">
@@ -1530,94 +1528,59 @@ export default {
         },
 
         getPagarReceberAno() {
-            // PUXA OS DADOS DO BACKEND PASSANDO MES E ANO
-            this.mesPagarReceber = "";
-            // axios.post('http://192.168.0.6:8000/api/indicador/contas/pagar-receber', {
-            //     mes: this.mesPagarReceber,
-            //     ano: this.ano,
-            // })
-            //     .then((response) => {
-            //         this.dadosPagarReceber = response.data;
-            //         this.dadosPagarReceber.forEach((item) => {
-            //             item.semana = item.semana.toString().substring(4);
-            //         });
 
-            //         this.dadosFormatadosPagarReceber = this.dadosPagarReceber.map((item) => parseInt(item.semana, 10));
+            this.mesPagarReceber = ""
+            axios.post('http://192.168.0.6:8000/api/indicador/contas/pagar-receber/ano', {
+                ano: this.ano,
+            })
+                .then((response) => {
+                    this.dadosPagarReceber = response.data;
 
-            //         this.labelsPagarReceber = this.dadosFormatadosPagarReceber.map((value, index) => {
-            //             return `${index + 1}º semana`;
-            //         });
-            //         // * -1
-            //         this.dataGraficoPagar = this.dadosPagarReceber.map((item) => item.valorSemanaPagar);
-            //         this.dataGraficoReceber = this.dadosPagarReceber.map((item) => item.valorSemanaReceber);
-            //         let saldo = this.dataGraficoReceber.map((valor, indice) => valor - this.dataGraficoPagar[indice]);
-            //         //let saldo = this.dataGraficoPagar.map((valor, indice) => valor + this.dataGraficoReceber[indice]);
+                    this.dadosFormatadosPagarReceber = this.dadosPagarReceber.map((item) => item.mes);
+                    this.labelsPagarReceber = this.dadosPagarReceber.map((item) => item.mes);
+                    this.labelsPagarReceber = this.labelsPagarReceber.map((numero) => this.nomesDosMesessemid[numero - 1])
 
-            //         this.datasetsPagarReceber = [];
-            //         this.datasetsPagarReceber.push({
-            //             data: this.dataGraficoReceber,
-            //             type: this.tipodegrafico,
-            //             label: 'Recebio',
-            //             backgroundColor: 'rgba(129, 199, 132, 1)',
-            //             borderColor: 'rgba(129, 199, 132, 1)',
-            //             borderWidth: 2,
-            //             tension: 0.3,
-            //             pointRadius: 2.2,
-            //             pointHoverRadius: 5,
-            //         }, {
-            //             data: this.dataGraficoPagar,
-            //             type: this.tipodegrafico,
-            //             label: 'Pago',
-            //             backgroundColor: '#E13417',
-            //             borderColor: '#E13417',
-            //             borderWidth: 2,
-            //             tension: 0.3,
-            //             pointRadius: 2.2,
-            //             pointHoverRadius: 5,
-            //         }, {
-            //             data: saldo,
-            //             type: "line",
-            //             label: 'Saldo',
-            //             backgroundColor: '#E1BB22',
-            //             borderColor: '#E1BB22',
-            //             borderWidth: 2,
-            //             tension: 0.3,
-            //             pointRadius: 2.2,
-            //             pointHoverRadius: 5,
-            //         },)
+                    this.dataGraficoPagar = this.dadosPagarReceber.map((item) => item.valorMesPagar);
+                    this.dataGraficoReceber = this.dadosPagarReceber.map((item) => item.valorMesReceber);
+                    let saldo = this.dataGraficoReceber.map((valor, indice) => valor - this.dataGraficoPagar[indice]);
 
-            //         this.renderChartPagarReceber();
-            //     })
-            //     .catch((error) => {
-            //         console.error(error);
-            //     });
-
-            this.labelsPagarReceber = this.nomesDosMesessemid;
-            this.dataGraficoReceber = [423200, 235324, 425253, 235345, 2345234, 2534474, 42320, 235324, 425253, 235345, 2345234, 2534474];
-            this.dataGraficoPagar = [423200, 235324, 425253, 235345, 2345234, 2534474, 42320, 235324, 425253, 235345, 2345234, 2534];
-            this.datasetsPagarReceber = [];
-            this.datasetsPagarReceber.push({
-                data: this.dataGraficoReceber,
-                type: this.tipodegrafico,
-                label: 'Recebio',
-                backgroundColor: 'rgba(129, 199, 132, 1)',
-                borderColor: 'rgba(129, 199, 132, 1)',
-                borderWidth: 2,
-                tension: 0.3,
-                pointRadius: 2.2,
-                pointHoverRadius: 5,
-            }, {
-                data: this.dataGraficoPagar,
-                type: this.tipodegrafico,
-                label: 'Pago',
-                backgroundColor: '#E13417',
-                borderColor: '#E13417',
-                borderWidth: 2,
-                tension: 0.3,
-                pointRadius: 2.2,
-                pointHoverRadius: 5,
-            });
-            this.renderChartPagarReceber();
+                    this.datasetsPagarReceber = [];
+                    this.datasetsPagarReceber.push({
+                        data: saldo,
+                        type: "line",
+                        label: 'Saldo',
+                        backgroundColor: '#E1BB22',
+                        borderColor: '#E1BB22',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        pointRadius: 2.2,
+                        pointHoverRadius: 5,
+                    },{
+                            data: this.dataGraficoReceber,
+                            type: this.tipodegrafico,
+                            label: 'Recebio',
+                            backgroundColor: 'rgba(129, 199, 132, 1)',
+                            borderColor: 'rgba(129, 199, 132, 1)',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            pointRadius: 2.2,
+                            pointHoverRadius: 5,
+                        },{
+                        data: this.dataGraficoPagar,
+                        type: this.tipodegrafico,
+                        label: 'Pago',
+                        backgroundColor: '#E13417',
+                        borderColor: '#E13417',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        pointRadius: 2.2,
+                        pointHoverRadius: 5,
+                    })
+                    this.renderChartPagarReceber()
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
         },
 
         getPagarReceberMes() {
