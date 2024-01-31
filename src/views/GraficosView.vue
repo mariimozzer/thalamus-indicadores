@@ -67,11 +67,12 @@
                         <BCollapse id="collapse" class="position-absolute" style="margin-left: 3rem">
                             <BCard>
                                 <div style="max-width: 23rem;">
-                                    <b>Fórmula:</b> Soma das oportunidade no status de "conquistados" por mês. <br>
+                                    <b>Fórmula:</b> Soma das oportunidades no status "conquistado" por mês. <br>
                                     <b>Polaridade:</b> Quanto maior, melhor. <br>
                                     <b>Fonte:</b> OMIE > CRM > Oportunidades. <br>
                                     <b>Descrição:</b> Quantidade de oportunidades que foram conquistadas em determinado
                                     mês.<br>
+
                                 </div>
                             </BCard>
 
@@ -102,9 +103,10 @@
                                 <div style="max-width: 23rem;">
                                     <b>Fórmula:</b> Soma da quantidade de itens vendidos em um mês. <br>
                                     <b>Polaridade:</b> Quanto maior, melhor. <br>
-                                    <b>Fonte:</b> OMIE > Produtos > Pedido-Compra e Codigo de etapa é igual a "faturado".
+                                    <b>Fonte:</b> OMIE > Produtos > Pedido-Compra e Código de Etapa é igual a "faturado".
                                     <br>
                                     <b>Descrição:</b> Quantidade de produtos vendidos em um mês.<br>
+
                                 </div>
                             </BCard>
 
@@ -135,14 +137,14 @@
                             <BCard>
                                 <div style="max-width: 30rem; max-height: min-content;">
                                     <b>Fórmula:</b> Soma das oportunidades quando o motivo é igual a "oportunidade
-                                    conquistada" e tipo corresponde a "Cliente novo", "Cliente reciclado" e "Cliente
-                                    recorrente".
-                                    <br>
+                                    conquistada" e o tipo corresponde a "Cliente novo", "Cliente reciclado" e "Cliente
+                                    recorrente".<br>
                                     <b>Polaridade:</b> Quanto maior, melhor. <br>
-                                    <b>Fonte:</b> OMIE > Oportunidade quando tipo é igual a Cliente novo,
-                                    Cliente reciclado e Cliente recorrente. <br>
-                                    <b>Descrição:</b> Quantidade de oportunidades conquistas classificadas por tipo de
+                                    <b>Fonte:</b> OMIE > Oportunidade quando o tipo é igual a Cliente novo, Cliente
+                                    reciclado e Cliente recorrente. <br>
+                                    <b>Descrição:</b> Quantidade de oportunidades conquistadas classificadas por tipo de
                                     Proposta Comercial.<br>
+
                                 </div>
                             </BCard>
 
@@ -182,10 +184,11 @@
                         <BCollapse id="collapse-5" class="position-absolute" style="margin-left: 3rem;">
                             <BCard>
                                 <div style="max-width: 23rem;">
-                                    <b>Fórmula:</b> Somatória dos valores de requisições vinculadas a cada projeto. <br>
+                                    <b>Fórmula:</b> Somatório dos valores das requisições vinculadas a cada projeto. <br>
                                     <b>Polaridade:</b> Quanto menor, melhor. <br>
                                     <b>Fonte:</b> SGI <br>
                                     <b>Descrição:</b> Valores em R$ gastos em cada projeto registrado.<br>
+
                                 </div>
                             </BCard>
 
@@ -219,11 +222,18 @@
 
                         <BCollapse id="collapse-6" class="position-absolute" style="margin-left: 3rem; ">
                             <BCard>
-                                <div style="max-width: 23rem; color: red;">
-                                    <b>Fórmula:</b> In progress! <br>
-                                    <b>Polaridade:</b> In progress! <br>
-                                    <b>Fonte:</b> In progress! <br>
-                                    <b>Descrição:</b> In progress!<br>
+                                <div style="max-width: 40rem;">
+                                    <b>Fórmula:</b> Somatório dos valores dos processos pagos com os status (Atrasado e
+                                    Pago), somatório dos valores recebidos com os status (Atrasado, Cancelado e
+                                    Recebido).<br>
+                                    <b>Polaridade:</b> Saldo: Quanto maior, melhor.<br>
+                                    <b>Fonte:</b> OMIE > Finanças > Contas a Pagar/Receber.<br>
+                                    <b>Descrição:</b> Barra verde: Demonstração do total de contas recebidas no período
+                                    selecionado.<br>
+                                    Barra vermelha: Demonstração do total de contas pagas no período selecionado.<br>
+                                    Linha amarela: Demonstração do saldo (valor a receber - valor a pagar) no período
+                                    selecionado.
+
                                 </div>
                             </BCard>
 
@@ -261,12 +271,13 @@
                             <BCollapse id="collapse-4" class="position-absolute" style="margin-left: 3rem">
                                 <BCard>
                                     <div style="max-width: 23rem;">
-                                        <b>Fórmula:</b> Quantidade de produtos acabados (excluido o tipo: 'conjunto') e
-                                        etapa =
-                                        disponível / 22. <br>
+                                        <b>Fórmula:</b> Quantidade de produtos acabados (excluindo o tipo 'conjunto') e
+                                        etapa = disponível / 22. <br>
                                         <b>Polaridade:</b> Quanto maior, melhor. <br>
                                         <b>Fonte:</b> OMIE > Produção > Produto acabado. <br>
-                                        <b>Descrição:</b> Quantidade de produtos acabados feitos diariamente.<br>
+                                        <b>Descrição:</b> Quantidade diária de produtos acabados, excluindo o tipo
+                                        'conjunto'.<br>
+
                                     </div>
                                 </BCard>
 
@@ -1555,17 +1566,17 @@ export default {
                         tension: 0.3,
                         pointRadius: 2.2,
                         pointHoverRadius: 5,
-                    },{
-                            data: this.dataGraficoReceber,
-                            type: this.tipodegrafico,
-                            label: 'Recebio',
-                            backgroundColor: 'rgba(129, 199, 132, 1)',
-                            borderColor: 'rgba(129, 199, 132, 1)',
-                            borderWidth: 2,
-                            tension: 0.3,
-                            pointRadius: 2.2,
-                            pointHoverRadius: 5,
-                        },{
+                    }, {
+                        data: this.dataGraficoReceber,
+                        type: this.tipodegrafico,
+                        label: 'Recebio',
+                        backgroundColor: 'rgba(129, 199, 132, 1)',
+                        borderColor: 'rgba(129, 199, 132, 1)',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        pointRadius: 2.2,
+                        pointHoverRadius: 5,
+                    }, {
                         data: this.dataGraficoPagar,
                         type: this.tipodegrafico,
                         label: 'Pago',
