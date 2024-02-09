@@ -297,14 +297,18 @@
                 </div>
             </div>
 
-            <!-- <div class="card mb-3" style="max-width: 100%; border: 1px solid rgb(0, 0, 0);">
-                <div @click="mostrarClasse('Injeção','iconeInjeção')" style="background-color: rgba(66, 165, 245, 1);" class="card-header titulo">
+            <div class="card mb-3" style="max-width: 100%; border: 1px solid rgb(0, 0, 0);">
+                <div @click="mostrarClasse('Injeção', 'iconeInjeção')" style="background-color: rgba(66, 165, 245, 1);"
+                    class="card-header titulo">
                     <i id="iconeInjeção" style="margin-right: 0.5rem;" class="bi bi-arrow-right"></i>Injeção
                 </div>
                 <div id="Injeção" style="display: none;">
-                    <canvas id=""></canvas>
+                    <iframe width="100%" height="800"
+                        src="https://lookerstudio.google.com/embed/reporting/5e19a600-c6a6-4be4-8cdf-2e4e5b32bc9b/page/YmyfD"
+                        frameborder="0" style="border:0" allowfullscreen
+                        sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
                 </div>
-            </div> -->
+            </div>
 
         </div>
 
@@ -1818,5 +1822,4 @@ button {
 
 ::-webkit-scrollbar {
     width: 0px;
-}
-</style>
+}</style>
