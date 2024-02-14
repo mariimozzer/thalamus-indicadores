@@ -1,9 +1,23 @@
 <template class="body">
 <router-view/>
+<br><br><br>
+<FooterComponent></FooterComponent>
 </template>
 
 <script>
+import FooterComponent from "@/components/footer/FooterComponent"
+export default {
+    data() {
+        return {
 
+        }
+
+    },
+
+    components: {
+    FooterComponent: FooterComponent,
+}
+}
 </script>
 
 <style>
