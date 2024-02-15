@@ -3,11 +3,13 @@ import Graficos from '../views/GraficosView.vue'
 
 
 const routes = [
+
   {
     path: '/',
     name: 'Graficos',
     component: Graficos
   },
+
 ]
 
 const router = createRouter({
