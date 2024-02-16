@@ -7,6 +7,7 @@ export default class Menu {
         this.sistema_id = obj.sistema_id;
         this.menu_pai = obj.menu_pai;
         this.filho = [];
+        this.porta = obj.porta;
 
         if (Array.isArray(obj.filho)) {
             this.filho = obj.filho.map(filho => {

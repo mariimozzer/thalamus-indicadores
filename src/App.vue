@@ -1,7 +1,9 @@
 <template class="body">
-    <div class="menu">
+      <header>
+        <div class="menu">
         <MenuComponent v-if="!$route.meta.hideMenu"></MenuComponent>
     </div>
+      </header>
     <br><br><br>
     <div class="views">
         <router-view />
@@ -43,5 +45,16 @@ body {
 }
 .views {
     margin-top: 1rem;
+}
+
+.footer {
+    position: absolute;
+}
+
+header {
+    width: 100vw;
+    margin-top: 0;
+    background-color: var( --dark-color);
+    padding: 0px;
 }
 </style>

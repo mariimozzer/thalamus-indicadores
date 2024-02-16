@@ -485,6 +485,7 @@ export default {
             dados: '',
             dadostickets: '',
             dadosProdutos: '',
+            nome: null,
             nomeDosMeses: [{ "id": 1, "nome": 'Janeiro' },
             { "id": 2, "nome": 'Fevereiro' },
             { "id": 3, "nome": 'Março' },
@@ -561,6 +562,7 @@ export default {
         this.getProdutosAcabadosAno()
         this.definirListaDeProjetos()
         this.getPagarReceberAno()
+        this.nome = sessionStorage.getItem('userName')
     },
 
     methods: {
