@@ -2,67 +2,51 @@
     <body>
         <!-- CRIA UM CABEÇALHO PARA SELEÇÃO DE MÊS E UM BOTÃO PARA EXIBIR O ANO TODO -->
         <div class="form-check cabecalho" style="align-items: center;">
-            <button v-b-tooltip.hover title="Ano inteiro!" class="botoes"
-                @click="getPropostaComercialAno(), getTicketsAno(), getProdutosAno(), getClienteAno(), getClienteAno(), getProdutosAcabadosAno(), getPagarReceberAno()">
-                <i class="bi bi-calendar-minus"></i>
-            </button>
+            <button v-b-tooltip.hover title="Ano inteiro!" class="botoes" @click="getPropostaComercialAno(), getTicketsAno(), getProdutosAno(), getClienteAno(), getClienteAno(), getProdutosAcabadosAno(), getPagarReceberAno()">
+                        <i class="bi bi-calendar-minus"></i>
+                    </button>
             <div v-for="i in nomeDosMeses" :key="i">
-                <input
-                    @change="igualameses(), getPropostaComercialMes(), getTicketsMes(), getProdutosMes(), getClienteMes(), getProdutosAcabadosMes(), getPagarReceberMes()"
-                    type="radio" class="btn-check botoes" name="options-base" :id=i.id :value=i.id v-model="mes"
+                <input @change="igualameses(), getPropostaComercialMes(), getTicketsMes(), getProdutosMes(), getClienteMes(), getProdutosAcabadosMes(), getPagarReceberMes()" type="radio" class="btn-check botoes" name="options-base" :id=i.id :value=i.id v-model="mes"
                     autocomplete="off">
-                <label style="color: rgba(255, 255, 255, 1);margin-left: 0.5rem; font-size: large;" class="btn botoes"
-                    :for=i.id>{{ i.nome }}</label>
+                <label style="color: rgba(255, 255, 255, 1);margin-left: 0.5rem; font-size: large;" class="btn botoes" :for=i.id>{{ i.nome }}</label>
             </div>
-            <select class="botoes ano" v-model="ano"
-                @change="getProdutosAno(), getPropostaComercialAno(), getTicketsAno(), getClienteAno(), getProdutosAcabadosAno(), getPagarReceberAno()"
-                style="width: 4rem; margin-left: 0.5em;margin-right: 0.5em  ;border: none; background-color: rgba(33, 37, 41, 1)">
-                <option>2023</option>
-                <option>2024</option>
-            </select>
+            <select class="botoes ano" v-model="ano" @change="getProdutosAno(), getPropostaComercialAno(), getTicketsAno(), getClienteAno(), getProdutosAcabadosAno(), getPagarReceberAno()" style="width: 4rem; margin-left: 0.5em;margin-right: 0.5em  ;border: none; background-color: rgba(33, 37, 41, 1)">
+                        <option>2023</option>
+                        <option>2024</option>
+                    </select>
             <div style="border-left: solid 1px white;">
-                <input
-                    @change="getPropostaComercialAno(), getProdutosAno(), getTicketsAno(), getClienteAno(), getProdutosAcabadosAno(), definirListaDeProjetos(), getPagarReceberAno()"
-                    type="radio" class="btn-check botoes" name="tipodegrafico" id="barra" value="bar"
+                <input @change="getPropostaComercialAno(), getProdutosAno(), getTicketsAno(), getClienteAno(), getProdutosAcabadosAno(), definirListaDeProjetos(), getPagarReceberAno()" type="radio" class="btn-check botoes" name="tipodegrafico" id="barra" value="bar"
                     v-model="tipodegrafico" autocomplete="off">
-                <label style="color: rgba(255, 255, 255, 1);margin-left: 0.5rem; font-size: medium;" class="btn botoes"
-                    for="barra"><i class="bi bi-bar-chart-line-fill"></i></label>
-
-                <input
-                    @change="getPropostaComercialAno(), getProdutosAno(), getTicketsAno(), getClienteAno(), getProdutosAcabadosAno(), definirListaDeProjetos(), getPagarReceberAno()"
-                    type="radio" class="btn-check botoes" name="tipodegrafico" id="linha" value="line"
+                <label style="color: rgba(255, 255, 255, 1);margin-left: 0.5rem; font-size: medium;" class="btn botoes" for="barra"><i class="bi bi-bar-chart-line-fill"></i></label>
+    
+                <input @change="getPropostaComercialAno(), getProdutosAno(), getTicketsAno(), getClienteAno(), getProdutosAcabadosAno(), definirListaDeProjetos(), getPagarReceberAno()" type="radio" class="btn-check botoes" name="tipodegrafico" id="linha" value="line"
                     v-model="tipodegrafico" autocomplete="off">
-                <label style="color: rgba(255, 255, 255, 1);margin-left: 0.5rem; font-size: medium;" class="btn botoes"
-                    for="linha"><i class="bi bi-graph-up"></i></label>
+                <label style="color: rgba(255, 255, 255, 1);margin-left: 0.5rem; font-size: medium;" class="btn botoes" for="linha"><i class="bi bi-graph-up"></i></label>
             </div>
-
+    
         </div>
-
+    
         <!-- CRIA DIV'S COM CANVAS QUE SERÃO PREENCHIDOS COM OS GRAFICOS GERADOS NOS METHODS SENDO IDENTIFICADOS POR ID -->
         <div style="display: flex;flex-flow: column ;width: 100%;padding: 1rem;">
             <div class="card mb-3" style="max-width: 100%; border: 1px solid rgb(0, 0, 0); margin-top: 4rem;">
-                <div @click="mostrarClasse('Comercial', 'iconeComercial')" style="background-color: #3571CD;"
-                    class="card-header titulo"><i id="iconeComercial" style="margin-right: 0.5rem;"
-                        class="bi bi-arrow-right"></i>Comercial
+                <div @click="mostrarClasse('Comercial', 'iconeComercial')" style="background-color: #3571CD;" class="card-header titulo"><i id="iconeComercial" style="margin-right: 0.5rem;" class="bi bi-arrow-right"></i>Comercial
                 </div>
                 <div id="Comercial" style="display: none;">
-
-
-
+    
+    
+    
                     <div class="form-check form-switch" style="margin-left: 0.5rem;">
-                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked
-                            @change="mostrarGrafico('canvaPropostaComercial')">
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked @change="mostrarGrafico('canvaPropostaComercial')">
                         <label class="form-check-label" for="flexSwitchCheckChecked">Propostas Comerciais</label>
                     </div>
-
+    
                     <div id="canvaPropostaComercial">
                         <div>
-                            <BButton v-b-toggle="'collapse'" class="m-1"
-                                style=" position: absolute;width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px;">
+                            <BButton v-b-toggle="'collapse'" class="m-1" style=" position: absolute;width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px;">
                                 <i style="color: black; font-size: 15px;" class="bi bi-info-circle-fill"></i>
                             </BButton>
                         </div>
-
+    
                         <!-- Element to collapse -->
                         <BCollapse id="collapse" class="position-absolute" style="margin-left: 3rem">
                             <BCard>
@@ -70,33 +54,31 @@
                                     <b>Fórmula:</b> Soma das oportunidades no status "conquistado" por mês. <br>
                                     <b>Polaridade:</b> Quanto maior, melhor. <br>
                                     <b>Fonte:</b> OMIE > CRM > Oportunidades. <br>
-                                    <b>Descrição:</b> Quantidade de oportunidades que foram conquistadas em determinado
-                                    mês.<br>
-
+                                    <b>Descrição:</b> Quantidade de oportunidades que foram conquistadas em determinado mês.
+                                    <br>
+    
                                 </div>
                             </BCard>
-
+    
                         </BCollapse>
-
-
+    
+    
                         <canvas id="ChartPropostaComercial"></canvas>
                     </div>
-
+    
                     <div class="form-check form-switch" style="margin-left: 0.5rem;">
-                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked"
-                            @change="mostrarGrafico('ProdutosVendido')">
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" @change="mostrarGrafico('ProdutosVendido')">
                         <label class="form-check-label" for="flexSwitchCheckChecked" style="color: black;">Produtos
-                            Vendidos</label>
+                                    Vendidos</label>
                     </div>
                     <div style="margin-top: 1rem; display: none;" id="ProdutosVendido">
                         <div style="padding-bottom: 0.5rem;">
                             <!-- Detalhes -->
-                            <BButton v-b-toggle="'collapse-2'" class="m-1"
-                                style="position: absolute;width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px; margin-bottom: 0.5rem;">
+                            <BButton v-b-toggle="'collapse-2'" class="m-1" style="position: absolute;width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px; margin-bottom: 0.5rem;">
                                 <i style="color: black; font-size: 15px;" class="bi bi-info-circle-fill"></i>
                             </BButton>
                         </div>
-
+    
                         <!-- Element to collapse -->
                         <BCollapse id="collapse-2" class="position-absolute" style="margin-left: 3rem">
                             <BCard>
@@ -106,80 +88,70 @@
                                     <b>Fonte:</b> OMIE > Produtos > Pedido-Compra e Código de Etapa é igual a "faturado".
                                     <br>
                                     <b>Descrição:</b> Quantidade de produtos vendidos em um mês.<br>
-
+    
                                 </div>
                             </BCard>
-
+    
                         </BCollapse>
-
-
+    
+    
                         <canvas id="ChartProdutos"></canvas>
-                        <select v-model="familiaProdutos" @change="getProdutosAno()"
-                            style="width: 10rem; margin: 0.2rem 0 0.5rem 1rem; border-radius: 10px;">
-                            <option v-for=" p in listaProdutos" :key="p">{{ p }}</option>
-                        </select>
+                        <select v-model="familiaProdutos" @change="getProdutosAno()" style="width: 10rem; margin: 0.2rem 0 0.5rem 1rem; border-radius: 10px;">
+                                    <option v-for=" p in listaProdutos" :key="p">{{ p }}</option>
+                                </select>
                     </div>
-
+    
                     <div class="form-check form-switch" style="margin-left: 0.5rem;">
-                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked"
-                            @change="mostrarGrafico('Clientes')">
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" @change="mostrarGrafico('Clientes')">
                         <label class="form-check-label" for="flexSwitchCheckChecked">Clientes</label>
                     </div>
                     <div style="margin-top: 1rem; display: none;" id="Clientes">
                         <div>
-                            <BButton v-b-toggle.collapse-3 class="m-1" id="descrição3"
-                                style="position: absolute ;width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px">
+                            <BButton v-b-toggle.collapse-3 class="m-1" id="descrição3" style="position: absolute ;width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px">
                                 <i style="color: black; font-size: 15px;" class="bi bi-info-circle-fill"></i>
                             </BButton>
                         </div>
-
+    
                         <BCollapse id="collapse-3" class="position-absolute" style="margin-left: 3rem;">
                             <BCard>
                                 <div style="max-width: 30rem; max-height: min-content;">
-                                    <b>Fórmula:</b> Soma das oportunidades quando o motivo é igual a "oportunidade
-                                    conquistada" e o tipo corresponde a "Cliente novo", "Cliente reciclado" e "Cliente
-                                    recorrente".<br>
+                                    <b>Fórmula:</b> Soma das oportunidades quando o motivo é igual a "oportunidade conquistada" e o tipo corresponde a "Cliente novo", "Cliente reciclado" e "Cliente recorrente".
+                                    <br>
                                     <b>Polaridade:</b> Quanto maior, melhor. <br>
-                                    <b>Fonte:</b> OMIE > Oportunidade quando o tipo é igual a Cliente novo, Cliente
-                                    reciclado e Cliente recorrente. <br>
-                                    <b>Descrição:</b> Quantidade de oportunidades conquistadas classificadas por tipo de
-                                    Proposta Comercial.<br>
-
+                                    <b>Fonte:</b> OMIE > Oportunidade quando o tipo é igual a Cliente novo, Cliente reciclado e Cliente recorrente. <br>
+                                    <b>Descrição:</b> Quantidade de oportunidades conquistadas classificadas por tipo de Proposta Comercial.<br>
+    
                                 </div>
                             </BCard>
-
+    
                         </BCollapse>
-
-
+    
+    
                         <canvas id="ChartClientes"></canvas>
                     </div>
-
-
+    
+    
                 </div>
             </div>
-
-
+    
+    
             <div class="card mb-3" style="max-width: 100%; border: 1px solid rgb(0, 0, 0);">
-                <div @click="mostrarClasse('Financeiro', 'iconeFinanceiro')"
-                    style="background-color: rgba(129, 199, 132, 1);" class="card-header titulo"><i id="iconeFinanceiro"
-                        style="margin-right: 0.5rem;" class="bi bi-arrow-right"></i>Financeiro</div>
+                <div @click="mostrarClasse('Financeiro', 'iconeFinanceiro')" style="background-color: rgba(129, 199, 132, 1);" class="card-header titulo"><i id="iconeFinanceiro" style="margin-right: 0.5rem;" class="bi bi-arrow-right"></i>Financeiro</div>
                 <div id="Financeiro" style="display: none;">
-
+    
                     <div class="form-check form-switch" style="margin-left: 0.5rem;">
-                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked
-                            @change="mostrarGrafico('Projetos')">
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked @change="mostrarGrafico('Projetos')">
                         <label class="form-check-label" for="flexSwitchCheckChecked">Custo de projetos</label>
                     </div>
-
+    
                     <div id="Projetos">
                         <!-- v-if="show == true" -->
-
-                        <BButton v-b-toggle="'collapse-5'" class="m-1"
-                            style="position: absolute;width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px;">
+    
+                        <BButton v-b-toggle="'collapse-5'" class="m-1" style="position: absolute;width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px;">
                             <i style="color: black; font-size: 15px;" class="bi bi-info-circle-fill"></i>
                         </BButton>
-
-
+    
+    
                         <!-- Element to collapse -->
                         <BCollapse id="collapse-5" class="position-absolute" style="margin-left: 3rem;">
                             <BCard>
@@ -188,130 +160,112 @@
                                     <b>Polaridade:</b> Quanto menor, melhor. <br>
                                     <b>Fonte:</b> SGI <br>
                                     <b>Descrição:</b> Valores em R$ gastos em cada projeto registrado.<br>
-
+    
                                 </div>
                             </BCard>
-
+    
                         </BCollapse>
-                        <div
-                            style="display: flex; justify-content: flex-end; align-items: center; height: 2rem; text-align: center; margin-right: 0.5rem">
+                        <div style="display: flex; justify-content: flex-end; align-items: center; height: 2rem; text-align: center; margin-right: 0.5rem">
                             <div style="border: 2px rgba(129, 199, 132, 1) solid ; border-radius: 10px; padding: 0.2em ">
                                 Mostrar valores abaixo de:<br>
-                                <money3 v-model="linhaDeCorte" v-bind="config"
-                                    style="width: 8rem;border: none; border-bottom: 1px black solid; outline: none;"
-                                    @keyup.enter="definirListaDeProjetos"></money3>
+                                <money3 v-model="linhaDeCorte" v-bind="config" style="width: 8rem;border: none; border-bottom: 1px black solid; outline: none;" @keyup.enter="definirListaDeProjetos"></money3>
                             </div>
                         </div>
-
+    
                         <canvas id="chartProjetos"></canvas>
                     </div>
-
+    
                     <div class="form-check form-switch" style="margin-left: 0.5rem; margin-top: 1rem;">
-                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked"
-                            @change="mostrarGrafico('PagosRecebidos')">
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" @change="mostrarGrafico('PagosRecebidos')">
                         <label class="form-check-label" for="flexSwitchCheckChecked">Pagos e Recebidos</label>
                     </div>
-
+    
                     <div id="PagosRecebidos" style="display: none;">
-
-                        <BButton v-b-toggle="'collapse-6'" class="m-1"
-                            style="position: absolute;width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px;">
+    
+                        <BButton v-b-toggle="'collapse-6'" class="m-1" style="position: absolute;width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px;">
                             <i style="color: black; font-size: 15px;" class="bi bi-info-circle-fill"></i>
                         </BButton>
-
-
+    
+    
                         <BCollapse id="collapse-6" class="position-absolute" style="margin-left: 3rem; ">
                             <BCard>
                                 <div style="max-width: 40rem;">
-                                    <b>Fórmula:</b> Somatório dos valores dos processos pagos com os status (Atrasado e
-                                    Pago), somatório dos valores recebidos com os status (Atrasado, Cancelado e
-                                    Recebido).<br>
+                                    <b>Fórmula:</b> Somatório dos valores dos processos pagos com os status (Atrasado e Pago), somatório dos valores recebidos com os status (Atrasado, Cancelado e Recebido).
+                                    <br>
                                     <b>Polaridade:</b> Saldo: Quanto maior, melhor.<br>
                                     <b>Fonte:</b> OMIE > Finanças > Contas a Pagar/Receber.<br>
-                                    <b>Descrição:</b> Barra verde: Demonstração do total de contas recebidas no período
-                                    selecionado.<br>
-                                    Barra vermelha: Demonstração do total de contas pagas no período selecionado.<br>
-                                    Linha amarela: Demonstração do saldo (valor a receber - valor a pagar) no período
-                                    selecionado.
-
+                                    <b>Descrição:</b> Barra verde: Demonstração do total de contas recebidas no período selecionado.
+                                    <br> Barra vermelha: Demonstração do total de contas pagas no período selecionado.<br> Linha amarela: Demonstração do saldo (valor a receber - valor a pagar) no período selecionado.
+    
                                 </div>
                             </BCard>
-
+    
                         </BCollapse>
-
+    
                         <canvas style="margin-top: 1rem;" id="ChartPagarReceber"></canvas>
                     </div>
                 </div>
             </div>
-
+    
             <div class="card mb-3" style="max-width: 100%; border: 1px solid rgb(0, 0, 0);">
-                <div @click="mostrarClasse('Produção', 'iconeProdução')" style="background-color: #d50000;"
-                    class="card-header titulo">
+                <div @click="mostrarClasse('Produção', 'iconeProdução')" style="background-color: #d50000;" class="card-header titulo">
                     <i id="iconeProdução" style="margin-right: 0.5rem;" class="bi bi-arrow-right"></i>Produção
                 </div>
                 <div id="Produção" style="display: none;">
-
+    
                     <div class="form-check form-switch" style="margin-left: 0.5rem;">
-                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked
-                            @change="mostrarGrafico('ProdutosAcabados')">
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked @change="mostrarGrafico('ProdutosAcabados')">
                         <label class="form-check-label" for="flexSwitchCheckChecked">Produção Diária</label>
                     </div>
-
+    
                     <transition name="slide-fade">
                         <div id="ProdutosAcabados">
                             <!-- v-if="show == true" -->
                             <div style="margin-bottom: 1rem;">
-                                <BButton v-b-toggle="'collapse-4'" class="m-1"
-                                    style="position: absolute;width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px;">
+                                <BButton v-b-toggle="'collapse-4'" class="m-1" style="position: absolute;width: min-content; height: min-content; background-color: transparent; border: none; border-radius: 100px;">
                                     <i style="color: black; font-size: 15px;" class="bi bi-info-circle-fill"></i>
                                 </BButton>
                             </div>
-
+    
                             <!-- Element to collapse -->
                             <BCollapse id="collapse-4" class="position-absolute" style="margin-left: 3rem">
                                 <BCard>
                                     <div style="max-width: 23rem;">
-                                        <b>Fórmula:</b> Quantidade de produtos acabados (excluindo o tipo 'conjunto') e
-                                        etapa = disponível / 22. <br>
+                                        <b>Fórmula:</b> Quantidade de produtos acabados (excluindo o tipo 'conjunto') e etapa = disponível / 22. <br>
                                         <b>Polaridade:</b> Quanto maior, melhor. <br>
                                         <b>Fonte:</b> OMIE > Produção > Produto acabado. <br>
-                                        <b>Descrição:</b> Quantidade diária de produtos acabados, excluindo o tipo
-                                        'conjunto'.<br>
-
+                                        <b>Descrição:</b> Quantidade diária de produtos acabados, excluindo o tipo 'conjunto'.
+                                        <br>
+    
                                     </div>
                                 </BCard>
-
+    
                             </BCollapse>
                             <!-- Quantidade Diaria de Produtos Acabados -->
-
-
+    
+    
                             <canvas id="ChartProdutosAcabados"></canvas>
-
-                            <select v-model="produto" @change="getProdutosAcabadosAno()"
-                                style="width: 10rem; margin: 0.2rem 0 0.5rem 1rem; border-radius: 10px;">
-                                <option v-for=" p in listaProdutos" :key="p">{{ p }}</option>
-                            </select>
+    
+                            <select v-model="produto" @change="getProdutosAcabadosAno()" style="width: 10rem; margin: 0.2rem 0 0.5rem 1rem; border-radius: 10px;">
+                                        <option v-for=" p in listaProdutos" :key="p">{{ p }}</option>
+                                    </select>
                         </div>
                     </transition>
-
+    
                 </div>
             </div>
-
+    
             <div class="card mb-3" style="max-width: 100%; border: 1px solid rgb(0, 0, 0);">
-                <div @click="mostrarClasse('Injeção', 'iconeInjeção')" style="background-color: rgba(66, 165, 245, 1);"
-                    class="card-header titulo">
+                <div @click="mostrarClasse('Injeção', 'iconeInjeção')" style="background-color: rgba(66, 165, 245, 1);" class="card-header titulo">
                     <i id="iconeInjeção" style="margin-right: 0.5rem;" class="bi bi-arrow-right"></i>Injeção
                 </div>
                 <div id="Injeção" style="display: none;">
-                    <iframe width="100%" height="800"
-                        src="https://lookerstudio.google.com/embed/reporting/5e19a600-c6a6-4be4-8cdf-2e4e5b32bc9b/page/YmyfD"
-                        frameborder="0" style="border:0" allowfullscreen
-                        sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
+                    <iframe width="100%" height="800" src="https://lookerstudio.google.com/embed/reporting/5e19a600-c6a6-4be4-8cdf-2e4e5b32bc9b/page/YmyfD" frameborder="0" style="border:0" allowfullscreen sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
                 </div>
             </div>
-
+    
         </div>
-
+    
         <div style="overflow: auto" class="modal-mask" v-if="modalDetalhePagoeRecebido" @click="fecharModalFora">
             <div style="max-height: 70%" class="modal-container">
                 <div class="conteudomodal" style="width: 50rem;">
@@ -320,42 +274,37 @@
                             {{ labelsPagarReceber[dataXPagosRecebidos] }} de {{ nomesDosMesessemid[mesPagarReceber - 1] }}
                         </h1>
                     </div>
-
-
+    
+    
                     <div style="position: absolute; margin-left: 30rem; margin-top: 5rem;">
-
-                        <input v-model="PagoOuRecebidoModal" type="radio" class="btn-check" name="options-base" id="option5"
-                            autocomplete="off" checked value="pago">
+    
+                        <input v-model="PagoOuRecebidoModal" type="radio" class="btn-check" name="options-base" id="option5" autocomplete="off" checked value="pago">
                         <label class="btn" for="option5">Pagos</label>
-
-                        <input v-model="PagoOuRecebidoModal" type="radio" class="btn-check" name="options-base" id="option6"
-                            autocomplete="off" value="recebido">
+    
+                        <input v-model="PagoOuRecebidoModal" type="radio" class="btn-check" name="options-base" id="option6" autocomplete="off" value="recebido">
                         <label class="btn" for="option6" style="margin-right: 0.5rem;">Recebidos</label>
-
-                        <input checked @change="classificarStatus('decrescente')" type="radio" class="btn-check botoes"
-                            name="ordenação" id="decrescente" value="decrescente" autocomplete="off">
+    
+                        <input checked @change="classificarStatus('decrescente')" type="radio" class="btn-check botoes" name="ordenação" id="decrescente" value="decrescente" autocomplete="off">
                         <label style="color: rgb(0, 0, 0);font-size: 25px;" class="btn botoes" for="decrescente"><i
-                                class="bi bi-sort-numeric-down-alt"></i></label>
-
-                        <input @change="classificarStatus('crescente')" type="radio" class="btn-check botoes"
-                            name="ordenação" id="crescente" value="crescente" v-model="ordenacaoModal" autocomplete="off">
-                        <label style="color: rgb(0, 0, 0);margin-left: 0.5rem; font-size: 25px;" class="btn botoes"
-                            for="crescente"><i class="bi bi-sort-numeric-up-alt"></i></label>
+                                        class="bi bi-sort-numeric-down-alt"></i></label>
+    
+                        <input @change="classificarStatus('crescente')" type="radio" class="btn-check botoes" name="ordenação" id="crescente" value="crescente" v-model="ordenacaoModal" autocomplete="off">
+                        <label style="color: rgb(0, 0, 0);margin-left: 0.5rem; font-size: 25px;" class="btn botoes" for="crescente"><i class="bi bi-sort-numeric-up-alt"></i></label>
                     </div>
-
+    
                     <div v-for="i in listaPagarReceber" :key="i">
                         <h5>
                             <b>Total Recebido:</b> {{ real(parseInt(i.valorSemanaReceber)) }} <br>
                             <b>Total Pago:</b> {{ real(parseInt(i.valorSemanaPagar)) }} <br>
                             <b>Saldo da semana:</b> {{ real(parseInt(i.valorSemanaReceber - i.valorSemanaPagar)) }}
                         </h5>
-
+    
                         <div style="display: flex; align-items: baseline; justify-content: flex-end;">
-
+    
                         </div>
-
+    
                         <hr>
-
+    
                         <div v-if="PagoOuRecebidoModal == 'pago'">
                             <div v-for="item in i.statusPagar" :key="item.statusPagar" style="margin-top: 1rem;">
                                 <b>Nome:</b> {{ item.nome }}<br>
@@ -363,7 +312,7 @@
                                 <hr>
                             </div>
                         </div>
-
+    
                         <div v-if="PagoOuRecebidoModal == 'recebido'">
                             <div v-for="item in i.statusReceber" :key="item.statusReceber" style="margin-top: 1rem;">
                                 <b>Nome:</b> {{ item.nome }}<br>
@@ -371,13 +320,13 @@
                                 <hr>
                             </div>
                         </div>
-
+    
                     </div>
-
+    
                 </div>
             </div>
         </div>
-
+    
         <div style="overflow: auto" class="modal-mask" v-if="showModal" @click="fecharModalFora">
             <div style="max-height: 70%" class="modal-container">
                 <div class="conteudomodal">
@@ -389,11 +338,11 @@
                             {{ c }}
                         </li>
                     </ul>
-
+    
                 </div>
             </div>
         </div>
-
+    
         <div style="overflow: auto" class="modal-mask" v-if="modalDetalheProjeto" @click="fecharModalFora">
             <div style="max-height: 70%;" class="modal-container">
                 <div class="conteudomodal" style="width: 50rem;">
@@ -404,28 +353,22 @@
                         Valor total do projeto: {{ real(parseInt(detalheProjeto[0].ValorTotalProjeto)) }}
                     </div>
                     <br>
-
+    
                     <div style="position: absolute; margin-left: 41rem; margin-top: 4rem;">
-                        <input
-                            @change="this.detalheProjeto = this.detalheProjeto.sort((a, b) => parseFloat(b.ValorTotal) - parseFloat(a.ValorTotal))"
-                            type="radio" class="btn-check botoes" name="ordenação" id="decrescente" value="decrescente"
-                            v-model="ordenacaoModal" autocomplete="off">
+                        <input @change="this.detalheProjeto = this.detalheProjeto.sort((a, b) => parseFloat(b.ValorTotal) - parseFloat(a.ValorTotal))" type="radio" class="btn-check botoes" name="ordenação" id="decrescente" value="decrescente" v-model="ordenacaoModal" autocomplete="off">
                         <label style="color: rgb(0, 0, 0);font-size: 25px;" class="btn botoes" for="decrescente"><i
-                                class="bi bi-sort-numeric-down-alt"></i></label>
-
-                        <input
-                            @change="this.detalheProjeto = this.detalheProjeto.sort((a, b) => parseFloat(a.ValorTotal) - parseFloat(b.ValorTotal))"
-                            type="radio" class="btn-check botoes" name="ordenação" id="crescente" value="crescente"
-                            v-model="ordenacaoModal" autocomplete="off">
-                        <label style="color: rgb(0, 0, 0);margin-left: 0.5rem; font-size: 25px;" class="btn botoes"
-                            for="crescente"><i class="bi bi-sort-numeric-up-alt"></i></label>
+                                        class="bi bi-sort-numeric-down-alt"></i></label>
+    
+                        <input @change="this.detalheProjeto = this.detalheProjeto.sort((a, b) => parseFloat(a.ValorTotal) - parseFloat(b.ValorTotal))" type="radio" class="btn-check botoes" name="ordenação" id="crescente" value="crescente" v-model="ordenacaoModal" autocomplete="off">
+                        <label style="color: rgb(0, 0, 0);margin-left: 0.5rem; font-size: 25px;" class="btn botoes" for="crescente"><i class="bi bi-sort-numeric-up-alt"></i></label>
                     </div>
-
+    
                     <div v-for="i in detalheProjeto" :key="i">
                         <hr>
                         <div>
                             <h3>
-                                Requisição: {{ i.Requisição }} <h4>Valor total: {{ real(parseInt(i.ValorTotal)) }}</h4>
+                                Requisição: {{ i.Requisição }}
+                                <h4>Valor total: {{ real(parseInt(i.ValorTotal)) }}</h4>
                             </h3>
                             <b>Solicitante:</b> {{ i.Solicitante }} <br>
                             <b>Aprovação:</b> {{ i.Aprovação }} <br>
@@ -487,17 +430,18 @@ export default {
             dadosProdutos: '',
             nome: null,
             nomeDosMeses: [{ "id": 1, "nome": 'Janeiro' },
-            { "id": 2, "nome": 'Fevereiro' },
-            { "id": 3, "nome": 'Março' },
-            { "id": 4, "nome": 'Abril' },
-            { "id": 5, "nome": 'Maio' },
-            { "id": 6, "nome": 'Junho' },
-            { "id": 7, "nome": 'Julho' },
-            { "id": 8, "nome": 'Agosto' },
-            { "id": 9, "nome": 'Setembro' },
-            { "id": 10, "nome": 'Outubro' },
-            { "id": 11, "nome": 'Novembro' },
-            { "id": 12, "nome": 'Dezembro' }],
+                { "id": 2, "nome": 'Fevereiro' },
+                { "id": 3, "nome": 'Março' },
+                { "id": 4, "nome": 'Abril' },
+                { "id": 5, "nome": 'Maio' },
+                { "id": 6, "nome": 'Junho' },
+                { "id": 7, "nome": 'Julho' },
+                { "id": 8, "nome": 'Agosto' },
+                { "id": 9, "nome": 'Setembro' },
+                { "id": 10, "nome": 'Outubro' },
+                { "id": 11, "nome": 'Novembro' },
+                { "id": 12, "nome": 'Dezembro' }
+            ],
             nomesDosMesessemid: [
                 "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
                 "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
@@ -562,8 +506,26 @@ export default {
         this.getProdutosAcabadosAno()
         this.definirListaDeProjetos()
         this.getPagarReceberAno()
-        this.nome = sessionStorage.getItem('userName')
+        this.nome = localStorage.getItem('userName')
     },
+
+    created() {
+        const storedToken = localStorage.getItem('token');
+        const storedUserId = localStorage.getItem('id');
+
+        if (storedToken && storedUserId) {
+            // Recuperar informações de login do Local Storage
+            const userName = localStorage.getItem('userName');
+            const userPermissions = JSON.parse(localStorage.getItem('userPermissions'));
+
+            // Atualizar o estado do Vuex
+            this.$store.dispatch('updateUser', { userName, userPermissions });
+
+            axios.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
+            axios.defaults.headers.common['X-User-Id'] = storedUserId;
+        }
+    },
+
 
     methods: {
         classificarStatus(ordem) {
@@ -603,7 +565,7 @@ export default {
         definirListaProdutos() {
             axios.get('http://192.168.0.6:8000/api/buscar/familia-produto-vendido', {
 
-            })
+                })
                 .then((response) => {
                     this.listaProdutos = response.data
                     this.listaProdutos = this.listaProdutos.map((item) => item.familia_nome.charAt(0).toUpperCase() + item.familia_nome.slice(1).toLowerCase());
@@ -641,16 +603,16 @@ export default {
                 axios.post('http://192.168.0.6:8000/api/omie/oportunidade/proposta-viabilizada/detalhe', {
                     anoSemana: this.ano + this.semana,
                 })
-                    .then((response) => {
-                        this.PropostaComercial = response.data;
-                        this.PropostaComercial = this.PropostaComercial.map((item) => item.cDesOp.slice(1).slice(0, -1));
-                        console.log(response);
-                        console.log(this.PropostaComercial);
-                    })
+                .then((response) => {
+                    this.PropostaComercial = response.data;
+                    this.PropostaComercial = this.PropostaComercial.map((item) => item.cDesOp.slice(1).slice(0, -1));
+                    console.log(response);
+                    console.log(this.PropostaComercial);
+                })
 
-                    .catch((error) => {
-                        console.error(error);
-                    });
+                .catch((error) => {
+                    console.error(error);
+                });
             this.showModal = !this.showModal;
         },
 
@@ -684,9 +646,9 @@ export default {
             // PUXA OS DADOS DO BACKEND PASSANDO MES E ANO
             this.mes = this.mesPropostasViabilizadas
             axios.post('http://192.168.0.6:8000/api/omie/oportunidade/proposta-viabilizada', {
-                mes: this.mesPropostasViabilizadas,
-                ano: this.ano,
-            })
+                    mes: this.mesPropostasViabilizadas,
+                    ano: this.ano,
+                })
                 .then((response) => {
                     this.dados = response.data;
                     this.dados.forEach((item) => {
@@ -732,8 +694,8 @@ export default {
             this.mes = ""
             this.mesPropostasViabilizadas = ""
             axios.post('http://192.168.0.6:8000/api/omie/oportunidade/proposta-viabilizada-mes', {
-                ano: this.ano,
-            })
+                    ano: this.ano,
+                })
                 .then((response) => {
                     this.dados = response.data;
 
@@ -744,18 +706,17 @@ export default {
 
                     this.dataGrafico = this.dados.map((item) => item.valor);
                     this.datasets = [];
-                    this.datasets.push(
-                        {
-                            data: [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30],
-                            type: 'line',
-                            label: 'Meta',
-                            backgroundColor: 'rgba(0, 0, 0, 1)',
-                            borderColor: 'rgba(0, 0, 0, 1)',
-                            borderWidth: 1.5,
-                            tension: 0.3,
-                            pointRadius: 0,
-                            pointHoverRadius: 0,
-                        }, {
+                    this.datasets.push({
+                        data: [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30],
+                        type: 'line',
+                        label: 'Meta',
+                        backgroundColor: 'rgba(0, 0, 0, 1)',
+                        borderColor: 'rgba(0, 0, 0, 1)',
+                        borderWidth: 1.5,
+                        tension: 0.3,
+                        pointRadius: 0,
+                        pointHoverRadius: 0,
+                    }, {
                         data: this.dataGrafico,
                         type: this.tipodegrafico,
                         label: 'Propostas Comerciais Viabilizadas',
@@ -834,9 +795,9 @@ export default {
         getTicketsMes() {
             this.mes = this.mesTickets;
             axios.post('http://192.168.0.6:8000/api/omie/oportunidade/ticket', {
-                mes: this.mesTickets,
-                ano: this.ano,
-            })
+                    mes: this.mesTickets,
+                    ano: this.ano,
+                })
                 .then((response) => {
                     this.dadosTickets = response.data;
                     this.dadosTickets.forEach((item, index) => {
@@ -877,8 +838,8 @@ export default {
         getTicketsAno() {
             this.mesTickets = ""
             axios.post('http://192.168.0.6:8000/api/omie/oportunidade/ticket-mes', {
-                ano: this.ano,
-            })
+                    ano: this.ano,
+                })
                 .then((response) => {
                     this.dadosTickets = response.data;
 
@@ -965,10 +926,10 @@ export default {
         getProdutosMes() {
             this.mes = this.mesProdutos
             axios.post('http://192.168.0.6:8000/api/indicador/produto-vendido', {
-                nome: this.familiaProdutos,
-                ano: this.ano,
-                mes: this.mesProdutos
-            })
+                    nome: this.familiaProdutos,
+                    ano: this.ano,
+                    mes: this.mesProdutos
+                })
                 .then((response) => {
                     this.dadosProdutos = response.data;
                     this.dadosProdutos.forEach((item, index) => {
@@ -999,9 +960,9 @@ export default {
         getProdutosAno() {
             this.mesProdutos = ""
             axios.post('http://192.168.0.6:8000/api/indicador/produto-vendido-mes', {
-                nome: this.familiaProdutos,
-                ano: this.ano,
-            })
+                    nome: this.familiaProdutos,
+                    ano: this.ano,
+                })
                 .then((response) => {
                     this.dadosProdutos = response.data
                     this.dadosFormatadosP = this.dadosProdutos.map((item) => item.mes)
@@ -1081,9 +1042,9 @@ export default {
             // PUXA OS DADOS DO BACKEND PASSANDO MES E ANO
             this.mes = this.mesCliente
             axios.post('http://192.168.0.6:8000/api/omie/oportunidade/cliente-alcancado', {
-                mes: this.mesCliente,
-                ano: this.ano,
-            })
+                    mes: this.mesCliente,
+                    ano: this.ano,
+                })
                 .then((response) => {
                     this.dadosClientes = response.data;
                     this.dadosClientes.forEach((item) => {
@@ -1101,18 +1062,17 @@ export default {
                     this.dataGraficoClientesReciclado = this.dadosClientes.map((item) => item.cliente_reciclado);
 
                     this.datasetsClientes = [];
-                    this.datasetsClientes.push(
-                        {
-                            data: this.dataGraficoClientesNovos,
-                            type: this.tipodegrafico,
-                            label: 'Clientes Novos',
-                            backgroundColor: '#3571cd',
-                            borderColor: '#3571cd',
-                            borderWidth: 1.5,
-                            tension: 0.3,
-                            pointRadius: 2.2,
-                            pointHoverRadius: 5,
-                        }, {
+                    this.datasetsClientes.push({
+                        data: this.dataGraficoClientesNovos,
+                        type: this.tipodegrafico,
+                        label: 'Clientes Novos',
+                        backgroundColor: '#3571cd',
+                        borderColor: '#3571cd',
+                        borderWidth: 1.5,
+                        tension: 0.3,
+                        pointRadius: 2.2,
+                        pointHoverRadius: 5,
+                    }, {
                         data: this.dataGraficoClientesRecorrente,
                         type: this.tipodegrafico,
                         label: 'Clientes Recorrentes',
@@ -1122,18 +1082,17 @@ export default {
                         tension: 0.3,
                         pointRadius: 2.2,
                         pointHoverRadius: 5,
-                    },
-                        {
-                            data: this.dataGraficoClientesReciclado,
-                            type: this.tipodegrafico,
-                            label: 'Clientes Reciclados',
-                            backgroundColor: '#00b4fc',
-                            borderColor: '#00b4fc',
-                            borderWidth: 1.5,
-                            tension: 0.3,
-                            pointRadius: 2.2,
-                            pointHoverRadius: 5,
-                        })
+                    }, {
+                        data: this.dataGraficoClientesReciclado,
+                        type: this.tipodegrafico,
+                        label: 'Clientes Reciclados',
+                        backgroundColor: '#00b4fc',
+                        borderColor: '#00b4fc',
+                        borderWidth: 1.5,
+                        tension: 0.3,
+                        pointRadius: 2.2,
+                        pointHoverRadius: 5,
+                    })
 
                     this.renderChartClientes();
                 })
@@ -1145,8 +1104,8 @@ export default {
         getClienteAno() {
             this.mesCliente = ""
             axios.post('http://192.168.0.6:8000/api/omie/oportunidade/cliente-alcancado', {
-                ano: this.ano,
-            })
+                    ano: this.ano,
+                })
                 .then((response) => {
                     this.dadosClientes = response.data;
 
@@ -1158,18 +1117,17 @@ export default {
                     this.dataGraficoClientesRecorrente = this.dadosClientes.map((item) => item.cliente_recorrente);
                     this.dataGraficoClientesReciclado = this.dadosClientes.map((item) => item.cliente_reciclado);
                     this.datasetsClientes = [];
-                    this.datasetsClientes.push(
-                        {
-                            data: this.dataGraficoClientesNovos,
-                            type: this.tipodegrafico,
-                            label: 'Clientes Novos',
-                            backgroundColor: '#3571CD',
-                            borderColor: '#3571CD',
-                            borderWidth: 1.5,
-                            tension: 0.3,
-                            pointRadius: 2.2,
-                            pointHoverRadius: 5,
-                        }, {
+                    this.datasetsClientes.push({
+                        data: this.dataGraficoClientesNovos,
+                        type: this.tipodegrafico,
+                        label: 'Clientes Novos',
+                        backgroundColor: '#3571CD',
+                        borderColor: '#3571CD',
+                        borderWidth: 1.5,
+                        tension: 0.3,
+                        pointRadius: 2.2,
+                        pointHoverRadius: 5,
+                    }, {
                         data: this.dataGraficoClientesRecorrente,
                         type: this.tipodegrafico,
                         label: 'Clientes Recorrentes',
@@ -1179,18 +1137,17 @@ export default {
                         tension: 0.3,
                         pointRadius: 2.2,
                         pointHoverRadius: 5,
-                    },
-                        {
-                            data: this.dataGraficoClientesReciclado,
-                            type: this.tipodegrafico,
-                            label: 'Clientes Reciclados',
-                            backgroundColor: '#00b4fc',
-                            borderColor: '#00b4fc',
-                            borderWidth: 1.5,
-                            tension: 0.3,
-                            pointRadius: 2.2,
-                            pointHoverRadius: 5,
-                        })
+                    }, {
+                        data: this.dataGraficoClientesReciclado,
+                        type: this.tipodegrafico,
+                        label: 'Clientes Reciclados',
+                        backgroundColor: '#00b4fc',
+                        borderColor: '#00b4fc',
+                        borderWidth: 1.5,
+                        tension: 0.3,
+                        pointRadius: 2.2,
+                        pointHoverRadius: 5,
+                    })
                     this.renderChartClientes()
                 })
                 .catch((error) => {
@@ -1205,7 +1162,7 @@ export default {
             const footer = (tooltipItems) => {
                 let sum = 0;
 
-                tooltipItems.forEach(function (tooltipItem) {
+                tooltipItems.forEach(function(tooltipItem) {
                     sum += tooltipItem.parsed.y;
                 });
                 return 'Total: ' + sum + " Clientes";
@@ -1263,10 +1220,10 @@ export default {
         getProdutosAcabadosMes() {
             this.mes = this.mesProdutosAcabados
             axios.post('http://192.168.0.6:8000/api/indicador/produto-produzido', {
-                mes: this.mesProdutosAcabados,
-                ano: this.ano,
-                produto: this.produto
-            })
+                    mes: this.mesProdutosAcabados,
+                    ano: this.ano,
+                    produto: this.produto
+                })
                 .then((response) => {
                     this.dadosProdutosAcabados = response.data;
                     this.dadosProdutosAcabados.forEach((item) => {
@@ -1283,19 +1240,18 @@ export default {
                     this.dataGraficoProdutosAcabadosMediaDia = this.dadosProdutosAcabados.map((item) => item.mediaDia.slice(0, 5));
 
                     this.datasetsProdutosAcabados = [];
-                    this.datasetsProdutosAcabados.push(
-                        {
-                            data: this.dataGraficoProdutosAcabadosTotal,
-                            type: this.tipodegrafico,
-                            label: 'Total',
-                            backgroundColor: '#d50000',
-                            borderColor: '#d50000',
-                            borderWidth: 1.5,
-                            tension: 0.3,
-                            pointRadius: 2.2,
-                            pointHoverRadius: 5,
-                            hidden: true
-                        }, {
+                    this.datasetsProdutosAcabados.push({
+                        data: this.dataGraficoProdutosAcabadosTotal,
+                        type: this.tipodegrafico,
+                        label: 'Total',
+                        backgroundColor: '#d50000',
+                        borderColor: '#d50000',
+                        borderWidth: 1.5,
+                        tension: 0.3,
+                        pointRadius: 2.2,
+                        pointHoverRadius: 5,
+                        hidden: true
+                    }, {
                         data: this.dataGraficoProdutosAcabadosMediaDia,
                         type: this.tipodegrafico,
                         label: 'Produção Diária',
@@ -1316,9 +1272,9 @@ export default {
         getProdutosAcabadosAno() {
             this.mesProdutosAcabados = ""
             axios.post('http://192.168.0.6:8000/api/indicador/produto-produzido', {
-                ano: this.ano,
-                produto: this.produto
-            })
+                    ano: this.ano,
+                    produto: this.produto
+                })
                 .then((response) => {
                     this.dadosProdutosAcabados = response.data;
 
@@ -1330,19 +1286,18 @@ export default {
                     this.dataGraficoProdutosAcabadosMediaDia = this.dadosProdutosAcabados.map((item) => item.mediaDia.slice(0, 5));
 
                     this.datasetsProdutosAcabados = [];
-                    this.datasetsProdutosAcabados.push(
-                        {
-                            data: this.dataGraficoProdutosAcabadosTotal,
-                            type: this.tipodegrafico,
-                            label: 'Total',
-                            backgroundColor: '#d50000',
-                            borderColor: '#d50000',
-                            borderWidth: 1.5,
-                            tension: 0.3,
-                            pointRadius: 2.2,
-                            pointHoverRadius: 5,
-                            hidden: true
-                        }, {
+                    this.datasetsProdutosAcabados.push({
+                        data: this.dataGraficoProdutosAcabadosTotal,
+                        type: this.tipodegrafico,
+                        label: 'Total',
+                        backgroundColor: '#d50000',
+                        borderColor: '#d50000',
+                        borderWidth: 1.5,
+                        tension: 0.3,
+                        pointRadius: 2.2,
+                        pointHoverRadius: 5,
+                        hidden: true
+                    }, {
                         data: this.dataGraficoProdutosAcabadosMediaDia,
                         type: this.tipodegrafico,
                         label: 'Produção Diária',
@@ -1414,26 +1369,25 @@ export default {
             this.listaDeProjetos = [],
                 this.nomesDosProjetos = [],
                 this.custoDeProjetos = [],
-                axios.get('http://192.168.0.6:8000/api/sgi/projeto/lista', {
+                axios.get('http://192.168.0.6:8000/api/sgi/projeto/lista', {})
+                .then((response) => {
+                    let dadosProjetos = response.data.filter((item) => item.ValorTotal < this.linhaDeCorte);
+
+
+                    this.nomesDosProjetos = dadosProjetos.map((item) => item.Nome);
+                    this.custoDeProjetos = dadosProjetos.map((item) => item.ValorTotal);
+                    this.listaDeProjetos = dadosProjetos.map((item) => item.Projeto);
+                    this.renderChartProjetos();
                 })
-                    .then((response) => {
-                        let dadosProjetos = response.data.filter((item) => item.ValorTotal < this.linhaDeCorte);
-
-
-                        this.nomesDosProjetos = dadosProjetos.map((item) => item.Nome);
-                        this.custoDeProjetos = dadosProjetos.map((item) => item.ValorTotal);
-                        this.listaDeProjetos = dadosProjetos.map((item) => item.Projeto);
-                        this.renderChartProjetos();
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                    });
+                .catch((error) => {
+                    console.error(error);
+                });
         },
 
         detalhesDeProjeto(num) {
             axios.post('http://192.168.0.6:8000/api/indicador/projeto/custo', {
-                codProjeto: num,
-            })
+                    codProjeto: num,
+                })
                 .then((response) => {
                     //const decrescente = (a, b) => parseFloat(b.ValorTotal) - parseFloat(a.ValorTotal);
                     //const crescente  = (a, b) => parseFloat(a.ValorTotal) - parseFloat(b.ValorTotal);
@@ -1468,24 +1422,25 @@ export default {
                 data: {
                     labels: this.listaDeProjetos,
                     datasets: [{
-                        data: this.custoDeProjetos,
-                        type: this.tipodegrafico,
-                        label: 'Custo do projeto',
-                        backgroundColor: 'rgba(129, 199, 132, 1)',
-                        borderColor: 'rgba(129, 199, 132, 1)',
-                        borderWidth: 1.5,
-                        tension: 0.3,
-                    },
-                    {
-                        data: linha,
-                        type: "line",
-                        label: "Linha de corte",
-                        backgroundColor: 'red',
-                        borderColor: 'red',
-                        borderWidth: 2,
-                        pointRadius: 0,
-                        pointHoverRadius: 0,
-                    }],
+                            data: this.custoDeProjetos,
+                            type: this.tipodegrafico,
+                            label: 'Custo do projeto',
+                            backgroundColor: 'rgba(129, 199, 132, 1)',
+                            borderColor: 'rgba(129, 199, 132, 1)',
+                            borderWidth: 1.5,
+                            tension: 0.3,
+                        },
+                        {
+                            data: linha,
+                            type: "line",
+                            label: "Linha de corte",
+                            backgroundColor: 'red',
+                            borderColor: 'red',
+                            borderWidth: 2,
+                            pointRadius: 0,
+                            pointHoverRadius: 0,
+                        }
+                    ],
                 },
                 options: {
                     responsive: true,
@@ -1505,7 +1460,7 @@ export default {
                                     size: 20,
                                     weight: 'bolder'
                                 },
-                                filter: function (legendItem) {
+                                filter: function(legendItem) {
                                     return legendItem.datasetIndex !== 1; // Oculta a legenda apenas para o conjunto de dados de índice 1 (linha de corte)
                                 }
                             }
@@ -1548,8 +1503,8 @@ export default {
 
             this.mesPagarReceber = ""
             axios.post('http://192.168.0.6:8000/api/indicador/contas/pagar-receber/ano', {
-                ano: this.ano,
-            })
+                    ano: this.ano,
+                })
                 .then((response) => {
                     this.dadosPagarReceber = response.data;
 
@@ -1604,9 +1559,9 @@ export default {
             // PUXA OS DADOS DO BACKEND PASSANDO MES E ANO
             this.mes = this.mesPagarReceber
             axios.post('http://192.168.0.6:8000/api/indicador/contas/pagar-receber', {
-                mes: this.mesPagarReceber,
-                ano: this.ano,
-            })
+                    mes: this.mesPagarReceber,
+                    ano: this.ano,
+                })
                 .then((response) => {
                     this.dadosPagarReceber = response.data;
                     this.dadosPagarReceber.forEach((item) => {
@@ -1655,7 +1610,7 @@ export default {
                         tension: 0.3,
                         pointRadius: 2.2,
                         pointHoverRadius: 5,
-                    },)
+                    }, )
 
                     this.renderChartPagarReceber();
                 })
@@ -1667,8 +1622,8 @@ export default {
         mostrarDetalhePagarReceber() {
             this.detalhePagarReceber = [];
             axios.post('http://192.168.0.6:8000/api/indicador/contas/semana-detalhe', {
-                anoSemana: this.semanaPagoRecebidos,
-            })
+                    anoSemana: this.semanaPagoRecebidos,
+                })
                 .then((response) => {
                     this.listaPagarReceber = response.data;
                     this.classificarStatus('decrescente')
@@ -1824,4 +1779,5 @@ button {
 
 ::-webkit-scrollbar {
     width: 0px;
-}</style>
+}
+</style>

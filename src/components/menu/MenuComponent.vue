@@ -184,7 +184,7 @@ export default {
 
 
         logout() {
-            const token = sessionStorage.getItem('token')
+            const token = localStorage.getItem('token')
             axios
                 .post('http://192.168.0.5:8000/api/logout', {}, {
                     headers: {
@@ -193,10 +193,10 @@ export default {
                 })
                 .then(() => {
                     this.$router.push('/');
-                    sessionStorage.removeItem('token')
-                    sessionStorage.removeItem('userName')
-                    sessionStorage.removeItem('id')
-                    sessionStorage.removeItem('LoggedUser')
+                    localStorage.removeItem('token')
+                    localStorage.removeItem('userName')
+                    localStorage.removeItem('id')
+                    localStorage.removeItem('LoggedUser')
 
 
                 })
@@ -231,8 +231,8 @@ export default {
     },
 
     created() {
-        this.userName = sessionStorage.getItem('userName')
-        this.id = sessionStorage.getItem('id')
+        this.userName = localStorage.getItem('userName')
+        this.id = localStorage.getItem('id')
 
         this.menuUrl = `http://192.168.0.5:8000/api/menu/usuario/${this.id}`
 
