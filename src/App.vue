@@ -51,10 +51,5 @@ body {
     position: absolute;
 }
 
-header {
-    width: 100vw;
-    margin-top: 0;
-    background-color: var( --dark-color);
-    padding: 0px;
-}
+
 </style>
